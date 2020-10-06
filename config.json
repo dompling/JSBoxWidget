@@ -1,8 +1,8 @@
 {
     "info": {
-        "name": "MyDays",
-        "url": "https://github.com/ipuppet/MyDays",
-        "version": "1.1.7",
+        "name": "EasyWidget",
+        "url": "https://github.com/ipuppet/EasyWidget",
+        "version": "1.0.0",
         "author": "ipuppet",
         "website": "https://blog.ipuppet.cn",
         "types": 15
