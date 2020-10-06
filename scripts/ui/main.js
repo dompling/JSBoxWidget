@@ -9,8 +9,8 @@ class MainUI {
     }
 
     widgetUi() {
-        const WidgetUI = require("./widget/widget")
-        new WidgetUI(this.kernel).render()
+        const WidgetBase = require("./widget/widget")
+        new WidgetBase(this.kernel).render()
     }
 
     render() {

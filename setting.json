@@ -21,6 +21,15 @@
                 "type": "color",
                 "key": "colorTone",
                 "value": "orange"
+            },
+            {
+                "icon": [
+                    "photo"
+                ],
+                "title": "PICTURE_ALBUM_COLUMN",
+                "type": "stepper",
+                "key": "picture.album.columns",
+                "value": 3
             }
         ]
     },

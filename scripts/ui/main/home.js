@@ -13,6 +13,14 @@ class HomeUI {
                 info: {
                     name: "calendar"
                 }
+            },
+            {
+                image: "/assets/icon.png",
+                title: "Picture",
+                describe: "将你最爱的照片放到桌面上！",
+                info: {
+                    name: "picture"
+                }
             }
         ]
         const template = data => {
@@ -26,7 +34,8 @@ class HomeUI {
                 describe: {
                     text: data.describe
                 },
-                info: data.info
+                info: data.info,
+                events: data.events
             }
         }
         let views = []
@@ -91,7 +100,7 @@ class HomeUI {
                             color: $color("orange"),
                             handler: (sender, indexPath) => {
                                 let widget = sender.object(indexPath).info.name
-                                $cache.set("selected", widget)
+                                $cache.set("selectedWidget", widget)
                                 $ui.toast($l10n("SELECT_SUCCESS"))
                             }
                         },
@@ -100,7 +109,6 @@ class HomeUI {
                             color: $color("#33CC33"),
                             handler: (sender, indexPath) => {
                                 $ui.toast("暂时无法预览")
-                                return
                                 // TODO 无法预览bug
                                 let widgetName = sender.object(indexPath).info.name
                                 let { Widget } = require(`../widget/${widgetName}`)
@@ -112,7 +120,10 @@ class HomeUI {
                 },
                 events: {
                     didSelect: (sender, indexPath, data) => {
-                        // TODO
+                        let widgetName = data.info.name
+                        let { Widget } = require(`../widget/${widgetName}`)
+                        let widget = new Widget(this.kernel)
+                        widget.edit()
                     }
                 },
                 layout: $layout.fill

@@ -193,6 +193,10 @@ class CalendarWidget {
         }
     }
 
+    edit(){
+        $ui.toast($l10n("NO_EDIT_PAGE"))
+    }
+
     render() {
         const midnight = new Date()
         midnight.setHours(0, 0, 0, 0)

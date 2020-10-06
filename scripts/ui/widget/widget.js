@@ -1,6 +1,10 @@
 const inputValue = $widget.inputValue
 
 class WidgetBase {
+    constructor(kernel) {
+        this.kernel = kernel
+    }
+
     noSelected() {
         const midnight = new Date()
         midnight.setHours(0, 0, 0, 0)
@@ -27,10 +31,10 @@ class WidgetBase {
     }
 
     render() {
-        let widgetName = $cache.get("selected")
+        let widgetName = $cache.get("selectedWidget")
         if (widgetName) {
             let { Widget } = require(`./${widgetName}`)
-            let widget = new Widget()
+            let widget = new Widget(this.kernel)
             widget.render()
         } else {
             this.noSelected()
