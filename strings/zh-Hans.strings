@@ -1,0 +1,56 @@
+"ALERT_INFO" = "提示";
+"OK" = "好";
+"CANCEL" = "取消";
+"BACK" = "返回";
+"SUCCESS" = "成功";
+"ERROR" = "失败";
+"NONE" = "什么都没有";
+"COPY" = "复制";
+"COPY_SUCCESS" = "复制成功";
+
+"HOME" = "首页";
+
+"DATA_ERROR" = "数据异常";
+"SAVE" = "保存";
+"SAVE_SUCCESS" = "保存成功";
+"SAVE_ERROR" = "保存失败";
+"DELETE" = "删除";
+"CONFIRM_DELETE_MSG" = "确认要删除吗？";
+"DELETE_SUCCESS" = "删除成功";
+"DELETE_ERROR" = "删除失败";
+
+"EDIT" = "编辑";
+
+"SETTING" = "设置";
+
+"GENERAL" = "一般";
+"TIPS" = "小贴士";
+"MYDAYS_LIST" = "列表";
+
+"ADVANCED" = "高级";
+
+"ABOUT" = "关于";
+"VERSION" = "Version";
+"AUTHOR" = "作者";
+
+"SUNDAY" = "日";
+"MONDAY" = "一";
+"TUESDAY" = "二";
+"WEDNESDAY" = "三";
+"THURSDAY" = "四";
+"FRIDAY" = "五";
+"SATURDAY" = "六";
+
+"MONTH" = "月";
+"JANUARY" = "一";
+"FEBRUARY" = "二";
+"MARCH" = "三";
+"APRIL" = "四";
+"MAY" = "五";
+"JUNE" = "六";
+"JULY" = "七";
+"AUGUST" = "八";
+"SEPTEMBER" = "九";
+"OCTOBER" = "十";
+"NOVEMBER" = "十一";
+"DECEMBER" = "十二";

@@ -1,0 +1,19 @@
+{
+    "info": {
+        "name": "MyDays",
+        "url": "https://github.com/ipuppet/MyDays",
+        "version": "1.1.7",
+        "author": "ipuppet",
+        "website": "https://blog.ipuppet.cn",
+        "types": 15
+    },
+    "settings": {
+        "theme": "auto",
+        "minSDKVer": "2.0.0",
+        "minOSVer": "13.0.0",
+        "idleTimerDisabled": false,
+        "autoKeyboardEnabled": true,
+        "keyboardToolbarEnabled": true,
+        "rotateDisabled": false
+    }
+}
