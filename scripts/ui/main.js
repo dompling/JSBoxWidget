@@ -19,7 +19,7 @@ class MainUI {
                 this.mainUi()
                 break
             case $env.keyboard:
-                $ui.alert("不要在键盘中使用。。。")
+                $ui.alert("不可以在键盘中使用。。。")
                 break
             case $env.widget:
                 this.widgetUi()

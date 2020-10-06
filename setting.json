@@ -4,13 +4,23 @@
         "items": [
             {
                 "icon": [
-                    "wand.and.rays",
-                    "orange"
+                    "tag",
+                    "#A569BD"
                 ],
                 "title": "TIPS",
                 "type": "script",
-                "key": "about.tips",
+                "key": "tips",
                 "value": "this.controller.tips()"
+            },
+            {
+                "icon": [
+                    "wand.and.rays",
+                    "orange"
+                ],
+                "title": "COLOR_TONE",
+                "type": "color",
+                "key": "colorTone",
+                "value": "orange"
             }
         ]
     },
@@ -24,7 +34,7 @@
                 ],
                 "title": "Github",
                 "type": "info",
-                "key": "about.github",
+                "key": "github",
                 "value": "https://github.com/ipuppet/EasyWidget"
             },
             {
@@ -34,7 +44,7 @@
                 ],
                 "title": "AUTHOR",
                 "type": "info",
-                "key": "about.author",
+                "key": "author",
                 "value": [
                     "ipuppet",
                     "https://blog.ipuppet.cn"
@@ -47,7 +57,7 @@
                 ],
                 "title": "README",
                 "type": "script",
-                "key": "about.readme",
+                "key": "readme",
                 "value": "this.controller.readme()"
             }
         ]

@@ -9,6 +9,9 @@
 "COPY_SUCCESS" = "复制成功";
 
 "HOME" = "首页";
+"SELECT" = "选用";
+"SELECT_SUCCESS" = "选用成功";
+"PREVIEW" = "预览";
 
 "DATA_ERROR" = "数据异常";
 "SAVE" = "保存";
@@ -25,7 +28,7 @@
 
 "GENERAL" = "一般";
 "TIPS" = "小贴士";
-"MYDAYS_LIST" = "列表";
+"COLOR_TONE" = "主色调";
 
 "ADVANCED" = "高级";
 

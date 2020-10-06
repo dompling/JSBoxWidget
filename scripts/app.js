@@ -10,8 +10,6 @@ class AppKernel extends Kernel {
         this.initSettingMethods()
         this.page = this._registerComponent("Page")
         this.menu = this._registerComponent("Menu")
-        // 注册插件
-        this.registerPlugin("palette")
     }
 
     /**
