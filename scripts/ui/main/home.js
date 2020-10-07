@@ -100,19 +100,29 @@ class HomeUI {
                             color: $color("orange"),
                             handler: (sender, indexPath) => {
                                 let widget = sender.object(indexPath).info.name
-                                $cache.set("selectedWidget", widget)
-                                $ui.toast($l10n("SELECT_SUCCESS"))
+                                $ui.alert({
+                                    title: $l10n("ALERT_INFO"),
+                                    message: $l10n("SELECT_AND_COPY_TO_APPLY") + `\n"${widget}"`,
+                                    actions: [
+                                        {
+                                            title: $l10n("COPY"),
+                                            handler: () => {
+                                                $clipboard.text = widget
+                                                $ui.success($l10n("SUCCESS"))
+                                            }
+                                        },
+                                        { title: $l10n("CANCEL") }
+                                    ]
+                                })
                             }
                         },
                         {
                             title: $l10n("PREVIEW"),
                             color: $color("#33CC33"),
                             handler: (sender, indexPath) => {
-                                $ui.toast("暂时无法预览")
-                                // TODO 无法预览bug
                                 let widgetName = sender.object(indexPath).info.name
                                 let { Widget } = require(`../widget/${widgetName}`)
-                                let widget = new Widget()
+                                let widget = new Widget(this.kernel)
                                 widget.render()
                             }
                         }

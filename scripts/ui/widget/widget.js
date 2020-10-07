@@ -23,7 +23,7 @@ class WidgetBase {
                 return {
                     type: "text",
                     props: {
-                        text: "去主程序选择一个Widget？"
+                        text: "去主程序选择一个Widget，或者参数有误？\n注意，不需要引号"
                     }
                 }
             }
@@ -31,8 +31,8 @@ class WidgetBase {
     }
 
     render() {
-        let widgetName = $cache.get("selectedWidget")
-        if (widgetName) {
+        let widgetName = inputValue
+        if ($file.exists(`/scripts/ui/widget/${widgetName}.js`)) {
             let { Widget } = require(`./${widgetName}`)
             let widget = new Widget(this.kernel)
             widget.render()

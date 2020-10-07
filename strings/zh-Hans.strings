@@ -10,7 +10,7 @@
 
 "HOME" = "首页";
 "SELECT" = "选用";
-"SELECT_SUCCESS" = "选用成功";
+"SELECT_AND_COPY_TO_APPLY" = "复制以下内容到小部件参数以选用";
 "PREVIEW" = "预览";
 
 "EDIT" = "编辑";
