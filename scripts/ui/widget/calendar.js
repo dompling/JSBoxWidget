@@ -1,7 +1,7 @@
 class CalendarWidget {
     constructor(kernel) {
         this.kernel = kernel
-        this.colorTone = this.kernel.setting.get("colorTone")
+        this.colorTone = this.kernel.setting.get("calendar.colorTone")
     }
 
     localizedWeek(index) {
@@ -200,6 +200,16 @@ class CalendarWidget {
         $ui.toast($l10n("NO_EDIT_PAGE"))
     }
 
+    holiday() {
+        // TODO 节假日
+        let holiday = $cache.get("calendar.holiday")
+        if (holiday) {
+            this.holiday = holiday.holiday
+        } else {
+            $ui.alert($l10n("NEED_HOLIDAY_DATA"))
+        }
+    }
+
     view2x2(ctx) {
         return this.calendarView(ctx)
     }
@@ -221,7 +231,7 @@ class CalendarWidget {
                 {
                     type: "text",
                     props: {
-                        text: "aaa"
+                        text: "Hello World!"
                     }
                 },
                 this.calendarView(ctx)

@@ -27,14 +27,15 @@
 
 "GENERAL" = "一般";
 "TIPS" = "小贴士";
-"COLOR_TONE" = "主色调";
-"PICTURE_ALBUM_COLUMN" = "相册图片列数";
 
 "ADVANCED" = "高级";
 
 "ABOUT" = "关于";
 "VERSION" = "Version";
 "AUTHOR" = "作者";
+"AT_BOTTOM" = "已经到底啦~";
+
+"CALENDAR" = "日历";
 
 "SUNDAY" = "日";
 "MONDAY" = "一";
@@ -57,3 +58,10 @@
 "OCTOBER" = "十";
 "NOVEMBER" = "十一";
 "DECEMBER" = "十二";
+
+"COLOR_TONE" = "主色调";
+"HOLIDAY" = "节假日";
+"NEED_HOLIDAY_DATA" = "需要节假日数据，请去编辑页面获取。";
+
+"PICTURE" = "相册";
+"PICTURE_ALBUM_COLUMN" = "相册图片列数";

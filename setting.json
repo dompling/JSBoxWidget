@@ -11,7 +11,12 @@
                 "type": "script",
                 "key": "tips",
                 "value": "this.controller.tips()"
-            },
+            }
+        ]
+    },
+    {
+        "title": "CALENDAR",
+        "items": [
             {
                 "icon": [
                     "wand.and.rays",
@@ -19,9 +24,23 @@
                 ],
                 "title": "COLOR_TONE",
                 "type": "color",
-                "key": "colorTone",
+                "key": "calendar.colorTone",
                 "value": "orange"
             },
+            {
+                "icon": [
+                    "photo"
+                ],
+                "title": "HOLIDAY",
+                "type": "script",
+                "key": "calendar.holiday",
+                "value": "$ui.alert('next version...')"
+            }
+        ]
+    },
+    {
+        "title": "PICTURE",
+        "items": [
             {
                 "icon": [
                     "photo"
