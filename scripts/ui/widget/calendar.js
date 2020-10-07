@@ -61,7 +61,7 @@ class CalendarWidget {
 
     formatCalendar(ctx, calendarInfo) {
         let min = ctx.displaySize.width >= ctx.displaySize.height ? ctx.displaySize.height : ctx.displaySize.width
-        let titleHeight = 20 + 10 // +10为标题padding
+        let titleHeight = 20 + 15 // +10为标题padding
         let padding = 10 // 自身表格边距
         let minWidth = parseInt(min / 7 - 10)
         let line = calendarInfo.calendar.length + 1 // 日历行数
@@ -145,7 +145,7 @@ class CalendarWidget {
             type: "hstack",
             props: {
                 alignment: $widget.horizontalAlignment.center,
-                padding: $insets(5, 13, 5, 13),
+                padding: $insets(10, 13, 5, 13),
                 columns: Array(2).fill({
                     flexible: {
                         minimum: 10,
