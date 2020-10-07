@@ -32,6 +32,7 @@ class WidgetBase {
 
     render() {
         let widgetName = inputValue
+        widgetName = "calendar"
         if ($file.exists(`/scripts/ui/widget/${widgetName}.js`)) {
             let { Widget } = require(`./${widgetName}`)
             let widget = new Widget(this.kernel)

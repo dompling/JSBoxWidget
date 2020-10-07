@@ -14,6 +14,8 @@ class MainUI {
     }
 
     render() {
+        this.widgetUi()
+        return
         switch ($app.env) {
             case $env.app:
                 this.mainUi()

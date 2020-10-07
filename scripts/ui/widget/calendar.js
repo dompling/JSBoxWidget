@@ -59,7 +59,13 @@ class CalendarWidget {
         }
     }
 
-    formatCalendar(calendarInfo) {
+    formatCalendar(ctx, calendarInfo) {
+        let min = ctx.displaySize.width >= ctx.displaySize.height ? ctx.displaySize.height : ctx.displaySize.width
+        let titleHeight = 20 + 10 // +10为标题padding
+        let padding = 10 // 自身表格边距
+        let minWidth = parseInt(min / 7 - 10)
+        let line = calendarInfo.calendar.length + 1 // 日历行数
+        let height = parseInt((min - titleHeight - padding) / line)
         const template = (text, props = {}) => {
             return {
                 type: "hstack",
@@ -73,14 +79,15 @@ class CalendarWidget {
                     props: Object.assign({
                         text: text,
                         font: $font(12),
+                        minimumScaleFactor: 0.5,
                         color: $color("primaryText"),
                         background: $color("clear"),
+                        padding: $insets(0, 3, 0, 3),
                         frame: {
-                            width: 16,
-                            height: 20,
+                            minWidth: minWidth,
+                            height: height,
                             alignment: $widget.alignment.center
                         },
-                        padding: $insets(0, 3, 0, 3)
                     }, props)
                 }]
             }
@@ -124,29 +131,30 @@ class CalendarWidget {
             props: {
                 columns: Array(7).fill({
                     flexible: {
-                        minimum: 12,
+                        minimum: 10,
                         maximum: Infinity
                     },
                     spacing: 0,
-                    alignment: $widget.alignment.center
+                    padding: 0,
                 }),
-                padding: $insets(0, 5, 0, 5),
-                spacing: 0,
-                alignment: $widget.horizontalAlignment.center
+                padding: $insets(0, 10, 10, 10),
             },
-            views: this.formatCalendar(calendarInfo)
+            views: this.formatCalendar(ctx, calendarInfo)
         }
         let titleBar = {
             type: "hstack",
             props: {
                 alignment: $widget.horizontalAlignment.center,
-                spacing: 20,
+                padding: $insets(5, 13, 5, 13),
                 columns: Array(2).fill({
                     flexible: {
                         minimum: 10,
                         maximum: Infinity
                     }
-                })
+                }),
+                frame: {
+                    height: 20
+                }
             },
             views: [
                 {
@@ -155,28 +163,23 @@ class CalendarWidget {
                         text: this.localizedMonth(calendarInfo.month),
                         color: $color(this.colorTone),
                         font: $font("blur", 14),
+                        minimumScaleFactor: 0.5,
                         frame: {
-                            maxWidth: Infinity,
-                            width: 60,
+                            minWidth: 30,
                             height: 20
                         }
                     }
                 },
-                {
-                    type: "spacer",
-                    props: {
-                        minLength: 10
-                    }
-                },
+                { type: "spacer" },
                 {
                     type: "text",
                     props: {
                         text: String(calendarInfo.year),
                         color: $color(this.colorTone),
                         font: $font("blur", 14),
+                        minimumScaleFactor: 0.5,
                         frame: {
-                            maxWidth: Infinity,
-                            width: 60,
+                            minWidth: 30,
                             height: 20
                         }
                     }
@@ -193,8 +196,47 @@ class CalendarWidget {
         }
     }
 
-    edit(){
+    edit() {
         $ui.toast($l10n("NO_EDIT_PAGE"))
+    }
+
+    view2x2(ctx) {
+        return this.calendarView(ctx)
+    }
+
+    view2x4(ctx) {
+        return {
+            type: "vgrid",
+            props: {
+                columns: Array(2).fill({
+                    flexible: {
+                        minimum: 10,
+                        maximum: Infinity
+                    },
+                    spacing: 10,
+                }),
+                spacing: 10,
+            },
+            views: [
+                {
+                    type: "text",
+                    props: {
+                        text: "aaa"
+                    }
+                },
+                this.calendarView(ctx)
+            ]
+        }
+    }
+
+    view4x4(ctx) {
+        return this.calendarView(ctx)
+        return {
+            type: "text",
+            props: {
+                text: "对的，现在只有2x2"
+            }
+        }
     }
 
     render() {
@@ -214,21 +256,11 @@ class CalendarWidget {
             render: ctx => {
                 switch (ctx.family) {
                     case 0:// 2x2
-                        return this.calendarView(ctx)
-                    case 1:// 4x2
-                        return {
-                            type: "text",
-                            props: {
-                                text: "对的，现在只有2x2"
-                            }
-                        }
+                        return this.view2x2(ctx)
+                    case 1:// 2x4
+                        return this.view2x4(ctx)
                     case 2:// 4x4
-                        return {
-                            type: "text",
-                            props: {
-                                text: "对的，现在只有2x2"
-                            }
-                        }
+                        return this.view4x4(ctx)
                 }
             }
         })
