@@ -1,0 +1,41 @@
+[
+    {
+        "title": "GENERAL",
+        "items": [
+            {
+                "icon": [
+                    "book.fill",
+                    "#A569BD"
+                ],
+                "title": "ALBUM",
+                "type": "script",
+                "key": "album",
+                "value": "this.controller.readme()"
+            }
+        ]
+    },
+    {
+        "title": "ADVANCED",
+        "items": [
+            {
+                "icon": [
+                    "square.grid.2x2.fill"
+                ],
+                "title": "ALBUM_COLUMN",
+                "type": "stepper",
+                "key": "album.columns",
+                "value": 3
+            },
+            {
+                "icon": [
+                    "photo",
+                    "#A569BD"
+                ],
+                "title": "ALBUM",
+                "type": "script",
+                "key": "album.manager",
+                "value": "this.controller.album()"
+            }
+        ]
+    }
+]

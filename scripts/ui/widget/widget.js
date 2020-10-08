@@ -32,9 +32,8 @@ class WidgetBase {
 
     render() {
         let widgetName = inputValue
-        if ($file.exists(`/scripts/ui/widget/${widgetName}.js`)) {
-            let { Widget } = require(`./${widgetName}`)
-            let widget = new Widget(this.kernel)
+        let widget = this.kernel.widgetInstance(widgetName)
+        if (widget) {
             widget.render()
         } else {
             this.noSelected()

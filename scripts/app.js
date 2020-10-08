@@ -6,7 +6,7 @@ class AppKernel extends Kernel {
         super()
         // 注册组件
         this.settingComponent = this._registerComponent("Setting")
-        this.setting = this.settingComponent.controller.init()
+        this.setting = this.settingComponent.controller
         this.initSettingMethods()
         this.page = this._registerComponent("Page")
         this.menu = this._registerComponent("Menu")
@@ -17,7 +17,7 @@ class AppKernel extends Kernel {
      */
     initSettingMethods() {
         this.setting.readme = () => {
-            const content = $file.read("/README.md").string
+            let content = $file.read("/README.md").string
             this.settingComponent.view.push([{
                 type: "markdown",
                 props: { content: content },
@@ -29,6 +29,20 @@ class AppKernel extends Kernel {
 
         this.setting.tips = () => {
             $ui.alert("什么都没有~")
+        }
+    }
+
+    fistLetterUpper(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1)
+    }
+
+    widgetInstance(widget) {
+        if ($file.exists(`/scripts/ui/widget/${this.fistLetterUpper(widget)}/index.js`)) {
+            let path = `./ui/widget/${this.fistLetterUpper(widget)}/index.js`
+            let { Widget } = require(path)
+            return new Widget(this)
+        } else {
+            return false
         }
     }
 }

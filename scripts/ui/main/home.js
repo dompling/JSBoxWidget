@@ -11,15 +11,15 @@ class HomeUI {
                 title: "Calendar",
                 describe: "日历小组件",
                 info: {
-                    name: "calendar"
+                    name: "Calendar"
                 }
             },
             {
                 image: "/assets/icon.png",
-                title: "Picture",
+                title: "Album",
                 describe: "将你最爱的照片放到桌面上！",
                 info: {
-                    name: "picture"
+                    name: "Album"
                 }
             }
         ]
@@ -121,9 +121,10 @@ class HomeUI {
                             color: $color("#33CC33"),
                             handler: (sender, indexPath) => {
                                 let widgetName = sender.object(indexPath).info.name
-                                let { Widget } = require(`../widget/${widgetName}`)
-                                let widget = new Widget(this.kernel)
-                                widget.render()
+                                let widget = this.kernel.widgetInstance(widgetName)
+                                if (widget) {
+                                    widget.render()
+                                }
                             }
                         }
                     ]
@@ -131,9 +132,10 @@ class HomeUI {
                 events: {
                     didSelect: (sender, indexPath, data) => {
                         let widgetName = data.info.name
-                        let { Widget } = require(`../widget/${widgetName}`)
-                        let widget = new Widget(this.kernel)
-                        widget.edit()
+                        let widget = this.kernel.widgetInstance(widgetName)
+                        if (widget) {
+                            widget.custom()
+                        }
                     }
                 },
                 layout: $layout.fill

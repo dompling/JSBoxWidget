@@ -1,0 +1,67 @@
+"ALERT_INFO" = "Alert";
+"OK" = "Ok";
+"CANCEL" = "Cancel";
+"BACK" = "Back";
+"SUCCESS" = "Success";
+"ERROR" = "Error";
+"NONE" = "None";
+"COPY" = "Copy";
+"COPY_SUCCESS" = "Copy success";
+
+"HOME" = "Home";
+"SELECT" = "Select";
+"SELECT_AND_COPY_TO_APPLY" = "Copy the following to the widget parameters for selection.";
+"PREVIEW" = "Preview";
+
+"CUSTOM" = "Custom";
+"CANNOT_CUSTOM" = "This widget cannot be customized.";
+"SAVE" = "Save";
+"SAVE_SUCCESS" = "Save success";
+"SAVE_ERROR" = "Save failed";
+"DELETE" = "Delete";
+"CONFIRM_DELETE_MSG" = "Are you sure you want to delete?";
+"DELETE_SUCCESS" = "Delete success";
+"DELETE_ERROR" = "Delete failed";
+
+"SETTING" = "Setting";
+
+"GENERAL" = "General";
+"TIPS" = "Tips";
+
+"ADVANCED" = "Advanced";
+
+"ABOUT" = "About";
+"VERSION" = "Version";
+"AUTHOR" = "Author";
+"AT_BOTTOM" = "It's the end~";
+
+"CALENDAR" = "Calendar";
+
+"SUNDAY" = "Sun";
+"MONDAY" = "Mon";
+"TUESDAY" = "Tue";
+"WEDNESDAY" = "Wed";
+"THURSDAY" = "Thu";
+"FRIDAY" = "Fri";
+"SATURDAY" = "Sat";
+
+"MONTH" = " ";
+"JANUARY" = "January";
+"FEBRUARY" = "February";
+"MARCH" = "March";
+"APRIL" = "April";
+"MAY" = "May";
+"JUNE" = "June";
+"JULY" = "July";
+"AUGUST" = "August";
+"SEPTEMBER" = "September";
+"OCTOBER" = "October";
+"NOVEMBER" = "November";
+"DECEMBER" = "December";
+
+"COLOR_TONE" = "Color Tone";
+"HOLIDAY" = "Holiday";
+"NEED_HOLIDAY_DATA" = "需要节假日数据，请去编辑页面获取。";
+
+"ALBUM" = "Picture";
+"ALBUM_COLUMN" = "Album column number";

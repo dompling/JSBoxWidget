@@ -13,8 +13,8 @@
 "SELECT_AND_COPY_TO_APPLY" = "复制以下内容到小部件参数以选用";
 "PREVIEW" = "预览";
 
-"EDIT" = "编辑";
-"NO_EDIT_PAGE" = "没有编辑页面";
+"CUSTOM" = "定制";
+"CANNOT_CUSTOM" = "该组件无法定制";
 "SAVE" = "保存";
 "SAVE_SUCCESS" = "保存成功";
 "SAVE_ERROR" = "保存失败";
@@ -63,5 +63,5 @@
 "HOLIDAY" = "节假日";
 "NEED_HOLIDAY_DATA" = "需要节假日数据，请去编辑页面获取。";
 
-"PICTURE" = "相册";
-"PICTURE_ALBUM_COLUMN" = "相册图片列数";
+"ALBUM" = "相册";
+"ALBUM_COLUMN" = "相册图片列数";

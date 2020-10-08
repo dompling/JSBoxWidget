@@ -1,7 +1,10 @@
+kconst CalendarSetting = require("./setting")
+
 class CalendarWidget {
     constructor(kernel) {
         this.kernel = kernel
-        this.colorTone = this.kernel.setting.get("calendar.colorTone")
+        this.setting = new CalendarSetting(this.kernel)
+        this.colorTone = this.setting.get("calendar.colorTone")
     }
 
     localizedWeek(index) {
@@ -196,8 +199,8 @@ class CalendarWidget {
         }
     }
 
-    edit() {
-        $ui.toast($l10n("NO_EDIT_PAGE"))
+    custom() {
+        this.setting.push()
     }
 
     holiday() {
@@ -241,12 +244,6 @@ class CalendarWidget {
 
     view4x4(ctx) {
         return this.calendarView(ctx)
-        return {
-            type: "text",
-            props: {
-                text: "对的，现在只有2x2"
-            }
-        }
     }
 
     render() {

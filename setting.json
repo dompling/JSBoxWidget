@@ -15,44 +15,6 @@
         ]
     },
     {
-        "title": "CALENDAR",
-        "items": [
-            {
-                "icon": [
-                    "wand.and.rays",
-                    "orange"
-                ],
-                "title": "COLOR_TONE",
-                "type": "color",
-                "key": "calendar.colorTone",
-                "value": "orange"
-            },
-            {
-                "icon": [
-                    "photo"
-                ],
-                "title": "HOLIDAY",
-                "type": "script",
-                "key": "calendar.holiday",
-                "value": "$ui.alert('next version...')"
-            }
-        ]
-    },
-    {
-        "title": "PICTURE",
-        "items": [
-            {
-                "icon": [
-                    "photo"
-                ],
-                "title": "PICTURE_ALBUM_COLUMN",
-                "type": "stepper",
-                "key": "picture.album.columns",
-                "value": 3
-            }
-        ]
-    },
-    {
         "title": "ABOUT",
         "items": [
             {
