@@ -51,7 +51,7 @@ class PictureSetting extends Setting {
                                     })
                                     // 同时保留一份压缩后的图片
                                     $file.write({
-                                        data: data.image.resized($size(300, 300)),
+                                        data: data.image.jpg(0.5),
                                         path: `${this.albumPath}/archive/${fileName}`
                                     })
                                     $("picture-edit-matrix").insert({
@@ -67,9 +67,15 @@ class PictureSetting extends Setting {
                                 if (idx === 0) {// 从系统相册选取图片
                                     $photo.pick({
                                         format: "data",
+                                        multi: true,
                                         handler: resp => {
-                                            let image = resp.data
-                                            saveImageAction(image)
+                                            if (!resp.status) {
+                                                $ui.error($l10n("ERROR"))
+                                                return
+                                            }
+                                            for (let image of resp.results) {
+                                                saveImageAction(image.data)
+                                            }
                                         }
                                     })
                                 } else if (idx === 1) {// 从iCloud选取图片
@@ -144,6 +150,9 @@ class PictureSetting extends Setting {
                                                 title: $l10n("DELETE"),
                                                 handler: () => {
                                                     $file.delete(data.image.src)
+                                                    // 同时删除压缩过的文件
+                                                    let name = data.image.src.slice(data.image.src.lastIndexOf("/"))
+                                                    $file.delete(`${this.albumPath}/archive/${name}`)
                                                     sender.delete(indexPath)
                                                 }
                                             }, style),

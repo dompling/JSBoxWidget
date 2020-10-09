@@ -84,6 +84,7 @@
                 "type": "stepper",
                 "key": "album.switchInterval",
                 "min": 10,
+                "max": 60,
                 "value": 10
             }
         ]
