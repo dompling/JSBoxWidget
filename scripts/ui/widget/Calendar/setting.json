@@ -21,6 +21,15 @@
                 "type": "color",
                 "key": "calendar.colorTone",
                 "value": "orange"
+            },
+            {
+                "icon": [
+                    "calendar"
+                ],
+                "title": "LUNAR_OTHER",
+                "type": "switch",
+                "key": "calendar.lunar_other",
+                "value": true
             }
         ]
     },

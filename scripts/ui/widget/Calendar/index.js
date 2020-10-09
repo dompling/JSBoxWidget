@@ -11,6 +11,7 @@ class CalendarWidget {
         if (this.hasHoliday && $file.exists(this.setting.holidayPath)) {
             this.holiday = JSON.parse($file.read(this.setting.holidayPath).string).holiday
         }
+        this.sloarToLunar = this.kernel.registerPlugin("sloarToLunar")
     }
 
     localizedWeek(index) {
@@ -78,15 +79,15 @@ class CalendarWidget {
                 // 只有当firstDay为0时才开始放入数据，之前的用0补位
                 let formatDate = firstDay === 0 ? (date > dates ? 0 : { date: date, day: day }) : 0
                 // 农历
+                if (date === dateNow && this.setting.get("calendar.lunar_other")) {
+                    // 保存农历信息
+                    this.lunar = this.sloarToLunar(year, month + 1, date)
+                }
                 if (ctx.family === 2 && formatDate !== 0) {
-                    if (!this.sloarToLunar)// 只注册一次
-                        this.sloarToLunar = this.kernel.registerPlugin("sloarToLunar")
-                    if (date === dateNow) {
-                        // 保存农历信息
-                        this.lunar = this.sloarToLunar(year, month, date)
+                    if (date === dateNow && this.setting.get("calendar.lunar_other")) {
                         formatDate["lunar"] = this.lunar
                     } else {
-                        formatDate["lunar"] = this.sloarToLunar(year, month, date)
+                        formatDate["lunar"] = this.sloarToLunar(year, month + 1, date)
                     }
                 }
                 // 节假日
@@ -244,6 +245,11 @@ class CalendarWidget {
                 left: calendarInfo.year + $l10n("YEAR") + this.localizedMonth(calendarInfo.month),
                 right: this.lunar.lunarYear + $l10n("YEAR") + this.lunar.lunarMonth + $l10n("MONTH") + this.lunar.lunarDay
             }
+        } else if (this.setting.get("calendar.lunar_other")) {
+            content = {
+                left: calendarInfo.year + $l10n("YEAR") + this.localizedMonth(calendarInfo.month),
+                right: this.lunar.lunarMonth + $l10n("MONTH") + this.lunar.lunarDay
+            }
         }
         let titleBar = {
             type: "hstack",
@@ -269,7 +275,7 @@ class CalendarWidget {
                         font: $font("blur", 14),
                         minimumScaleFactor: 0.5,
                         frame: {
-                            minWidth: 30,
+                            minWidth: 50,
                             height: 20
                         }
                     }
@@ -283,7 +289,7 @@ class CalendarWidget {
                         font: $font("blur", 14),
                         minimumScaleFactor: 0.5,
                         frame: {
-                            minWidth: 30,
+                            minWidth: 50,
                             height: 20
                         }
                     }
@@ -293,6 +299,7 @@ class CalendarWidget {
         return {
             type: "vstack",
             props: {
+                link: "jsbox://run?name=EasyWidget",
                 alignment: $widget.verticalAlignment.center,
                 spacing: 0
             },
@@ -304,7 +311,7 @@ class CalendarWidget {
         this.setting.push()
     }
 
-    view2x4(ctx) {
+    view2x4(ctx, calendar) {
         return {
             type: "vgrid",
             props: {
@@ -324,7 +331,7 @@ class CalendarWidget {
                         text: "Hello World!"
                     }
                 },
-                this.calendarView(ctx)
+                calendar
             ]
         }
     }
@@ -344,8 +351,9 @@ class CalendarWidget {
                 afterDate: expireDate
             },
             render: ctx => {
-                if (ctx.family === 1) return this.view2x4(ctx)
-                return this.calendarView(ctx)
+                let calendar = this.calendarView(ctx)
+                if (ctx.family === 1) return this.view2x4(ctx, calendar)
+                return calendar
             }
         })
     }

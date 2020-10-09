@@ -58,6 +58,7 @@
 "OCTOBER" = "October";
 "NOVEMBER" = "November";
 "DECEMBER" = "December";
+"YEAR" = " ";
 
 "COLOR_TONE" = "Color Tone";
 "HOLIDAY" = "Holiday";

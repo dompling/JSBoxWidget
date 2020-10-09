@@ -63,7 +63,7 @@
 "YEAR" = "年";
 
 "COLOR_TONE" = "主色调";
-"LUNAR_4X4" = "在4x4中显示农历";
+"LUNAR_OTHER" = "小尺寸显示农历";
 "HOLIDAT_COLOR" = "节假日颜色";
 "HOLIDAT_REST_NO_COLOR" = "调休颜色";
 "HOLIDAY" = "节假日";
