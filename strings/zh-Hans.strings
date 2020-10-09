@@ -1,6 +1,7 @@
 "ALERT_INFO" = "提示";
 "OK" = "好";
 "CANCEL" = "取消";
+"CLEAR" = "清除";
 "BACK" = "返回";
 "SUCCESS" = "成功";
 "ERROR" = "发生错误";
@@ -61,8 +62,12 @@
 
 "COLOR_TONE" = "主色调";
 "HOLIDAT_COLOR" = "节假日颜色";
+"HOLIDAT_REST_NO_COLOR" = "调休颜色";
 "HOLIDAY" = "节假日";
+"CLEAR_HOLIDAY_DATA" = "清除节假日数据";
 "GET_HOLIDAY" = "获取节假日";
+"NO_NEED_TO_OBTAIN_MANUALLY" = "通常情况下不需要手动获取";
+"HOLIDAY_API_ERROR" = "节假日网络接口返回错误";
 "NEED_HOLIDAY_DATA" = "需要节假日数据，请去编辑页面获取。";
 "HOLIDAY_ALREADY_EXISTS" = "节假日数据已经存在，是否覆盖数据？";
 

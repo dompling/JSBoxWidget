@@ -5,8 +5,12 @@ class CalendarWidget {
         this.kernel = kernel
         this.setting = new CalendarSetting(this.kernel)
         this.colorTone = this.setting.get("calendar.colorTone")
-        this.hasHoliday = true
+        this.hasHoliday = this.setting.get("calendar.holiday")
         this.holidayColor = this.setting.get("calendar.holidayColor")
+        this.holidayNoRestColor = this.setting.get("calendar.holidayNoRestColor")// 调休
+        if (this.hasHoliday && $file.exists(this.setting.holidayPath)) {
+            this.holiday = JSON.parse($file.read(this.setting.holidayPath).string).holiday
+        }
     }
 
     localizedWeek(index) {
@@ -39,14 +43,24 @@ class CalendarWidget {
     }
 
     isHoliday(year, month, date) {
-        // TODO 判断节假日
-        if (date === 0) return false
-        let holiday = $file.read(this.setting.holidayPath).string
-        if (!holiday) {
-            $ui.toast($l10n("NEED_HOLIDAY_DATA"))
+        /**
+         * 数字补0
+         */
+        const toString = number => {
+            if (number < 10) {
+                number = "0" + number
+            }
+            return String(number)
+        }
+        if (!this.holiday) {
             return false
         }
-        return true
+        let key = toString(month) + "-" + toString(date)
+        let holiday = this.holiday[key]
+        if (holiday && holiday.date === year + "-" + key) {
+            return holiday
+        }
+        return false
     }
 
     getCalendar() {
@@ -64,10 +78,14 @@ class CalendarWidget {
                 // 只有当firstDay为0时才开始放入数据，之前的用0补位
                 let formatDate = firstDay === 0 ? (date > dates ? 0 : { date: date, day: day }) : 0
                 if (this.hasHoliday) {// 判断是否需要展示节假日
-                    // 节假日用负值表示
-                    formatDate = this.isHoliday(year, month, formatDate) ? {
-                        date: -1 * date, day: day
-                    } : formatDate
+                    // 节假日
+                    if (formatDate !== 0) {
+                        // month是0-11，故+1
+                        let holiday = this.isHoliday(year, month + 1, formatDate.date)
+                        if (holiday) {
+                            formatDate["holiday"] = holiday
+                        }
+                    }
                 }
                 week.push(formatDate)
                 if (firstDay === 0) date++
@@ -120,30 +138,31 @@ class CalendarWidget {
         let days = []
         for (let line of calendar) {
             for (let date of line) {
-                let props = { color: $color("white") }
+                let props = {
+                    color: $color("primaryText"),
+                    background: $color("clear")
+                }
+                // 当天会有背景色
+                if (Math.abs(date.date) === calendarInfo.date) {
+                    props.color = $color("white")
+                    props.background = $color(this.colorTone)
+                }
                 // 周六周天显示灰色
                 if (date.day === 0 || date.day === 6) {
-                    Object.assign(props, {
-                        color: $color("systemGray2")
-                    })
+                    props.color = $color("systemGray2")
                 }
                 // 节假日会以不同颜色的字体显示
-                if (date.date < 0) {
-                    Object.assign(props, {
-                        color: $color(this.holidayColor)
-                    })
-                    date.date = -1 * date.date
-                }
-                // 当天会有红色背景
-                if (date.date === calendarInfo.date) {
-                    Object.assign(props, {
-                        background: $color(this.colorTone)
-                    })
+                if (date.holiday) {
+                    if (date.holiday.holiday) {
+                        props.color = $color(this.holidayColor)
+                    } else {
+                        props.color = $color(this.holidayNoRestColor)
+                    }
                 }
                 days.push(template(date === 0 ? "" : String(date.date), props))
             }
         }
-        // 加入标题
+        // 加入星期指示器
         let title = []
         for (let i = 0; i < 7; i++) {
             title.push(template(this.localizedWeek(i), {
@@ -227,16 +246,6 @@ class CalendarWidget {
 
     custom() {
         this.setting.push()
-    }
-
-    holiday() {
-        // TODO 节假日
-        let holiday = $cache.get("calendar.holiday")
-        if (holiday) {
-            this.holiday = holiday.holiday
-        } else {
-            $ui.alert($l10n("NEED_HOLIDAY_DATA"))
-        }
     }
 
     view2x2(ctx) {

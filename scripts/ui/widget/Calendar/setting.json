@@ -11,12 +11,7 @@
                 "type": "script",
                 "key": "calendar",
                 "value": "this.controller.readme()"
-            }
-        ]
-    },
-    {
-        "title": "ADVANCED",
-        "items": [
+            },
             {
                 "icon": [
                     "wand.and.rays",
@@ -26,6 +21,20 @@
                 "type": "color",
                 "key": "calendar.colorTone",
                 "value": "orange"
+            }
+        ]
+    },
+    {
+        "title": "HOLIDAY",
+        "items": [
+            {
+                "icon": [
+                    "photo"
+                ],
+                "title": "HOLIDAY",
+                "type": "switch",
+                "key": "calendar.holiday",
+                "value": true
             },
             {
                 "icon": [
@@ -35,26 +44,37 @@
                 "title": "HOLIDAT_COLOR",
                 "type": "color",
                 "key": "calendar.holidayColor",
-                "value": "green"
+                "value": "#0099CC"
             },
             {
                 "icon": [
-                    "photo"
+                    "wand.and.rays",
+                    "#FF6600"
                 ],
-                "title": "HOLIDAY",
-                "type": "script",
-                "key": "calendar.holiday",
-                "value": "this.controller.holiday()"
+                "title": "HOLIDAT_REST_NO_COLOR",
+                "type": "color",
+                "key": "calendar.holidayNoRestColor",
+                "value": "red"
             },
             {
                 "icon": [
                     "cloud",
-                    "#FF6666"
+                    "#996699"
                 ],
                 "title": "GET_HOLIDAY",
                 "type": "script",
                 "key": "calendar.get_holiday",
                 "value": "this.controller.getHoliday()"
+            },
+            {
+                "icon": [
+                    "trash",
+                    "#FF6666"
+                ],
+                "title": "CLEAR_HOLIDAY_DATA",
+                "type": "script",
+                "key": "calendar.clear_holiday",
+                "value": "this.controller.clearHoliday()"
             }
         ]
     }
