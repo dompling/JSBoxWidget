@@ -17,6 +17,7 @@ class AppKernel extends Kernel {
      */
     initSettingMethods() {
         this.setting.readme = () => {
+            this.settingComponent.view.touchHighlightStart()
             let content = $file.read("/README.md").string
             this.settingComponent.view.push([{
                 type: "markdown",
@@ -24,10 +25,13 @@ class AppKernel extends Kernel {
                 layout: (make, view) => {
                     make.size.equalTo(view.super)
                 }
-            }])
+            }], $l10n("BACK"), [], () => {
+                this.settingComponent.view.touchHighlightEnd()
+            })
         }
 
         this.setting.tips = () => {
+            this.settingComponent.view.touchHighlight()
             $ui.alert("什么都没有~")
         }
     }

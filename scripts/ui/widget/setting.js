@@ -33,6 +33,7 @@ class Setting {
 
     defaultSettingMethods() {
         this.setting.readme = () => {
+            this.settingComponent.view.touchHighlightStart()
             let content = $file.read(`/scripts/ui/widget/${this.widget}/README.md`).string
             this.settingComponent.view.push([{
                 type: "markdown",
@@ -40,7 +41,9 @@ class Setting {
                 layout: (make, view) => {
                     make.size.equalTo(view.super)
                 }
-            }])
+            }], $l10n("BACK"), [], () => {
+                this.settingComponent.view.touchHighlightEnd()
+            })
         }
     }
 
