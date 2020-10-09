@@ -137,6 +137,18 @@ class HomeUI {
                                     $ui.error($l10n("ERROR"))
                                 }
                             }
+                        },
+                        {
+                            title: $l10n("SETTING"),
+                            handler: (sender, indexPath) => {
+                                let widgetName = sender.object(indexPath).name
+                                let widget = this.kernel.widgetInstance(widgetName)
+                                if (widget) {
+                                    widget.custom()
+                                } else {
+                                    $ui.error($l10n("ERROR"))
+                                }
+                            }
                         }
                     ]
                 },

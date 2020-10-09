@@ -63,7 +63,7 @@ class CalendarWidget {
         return false
     }
 
-    getCalendar() {
+    getCalendar(ctx) {
         let date = new Date()
         let year = date.getFullYear()
         let month = date.getMonth()
@@ -77,14 +77,24 @@ class CalendarWidget {
                 if (day === firstDay) firstDay = 0
                 // 只有当firstDay为0时才开始放入数据，之前的用0补位
                 let formatDate = firstDay === 0 ? (date > dates ? 0 : { date: date, day: day }) : 0
-                if (this.hasHoliday) {// 判断是否需要展示节假日
-                    // 节假日
-                    if (formatDate !== 0) {
-                        // month是0-11，故+1
-                        let holiday = this.isHoliday(year, month + 1, formatDate.date)
-                        if (holiday) {
-                            formatDate["holiday"] = holiday
-                        }
+                // 农历
+                if (ctx.family === 2 && formatDate !== 0) {
+                    if (!this.sloarToLunar)// 只注册一次
+                        this.sloarToLunar = this.kernel.registerPlugin("sloarToLunar")
+                    if (date === dateNow) {
+                        // 保存农历信息
+                        this.lunar = this.sloarToLunar(year, month, date)
+                        formatDate["lunar"] = this.lunar
+                    } else {
+                        formatDate["lunar"] = this.sloarToLunar(year, month, date)
+                    }
+                }
+                // 节假日
+                if (this.hasHoliday && formatDate !== 0) {// 判断是否需要展示节假日
+                    // month是0-11，故+1
+                    let holiday = this.isHoliday(year, month + 1, date)
+                    if (holiday) {
+                        formatDate["holiday"] = holiday
                     }
                 }
                 week.push(formatDate)
@@ -101,26 +111,41 @@ class CalendarWidget {
     }
 
     formatCalendar(ctx, calendarInfo) {
-        let min = ctx.displaySize.width >= ctx.displaySize.height ? ctx.displaySize.height : ctx.displaySize.width
-        let titleHeight = 20 + 15 // +10为标题padding
-        let padding = 10 // 自身表格边距
-        let minWidth = parseInt(min / 7 - 10)
-        let line = calendarInfo.calendar.length + 1 // 日历行数
-        let height = parseInt((min - titleHeight - padding) / line)
-        const template = (text, props = {}) => {
+        const min = ctx.displaySize.width >= ctx.displaySize.height ? ctx.displaySize.height : ctx.displaySize.width
+        const titleHeight = 20 + 15 // +10为标题padding
+        const padding = 10 // 自身表格边距
+        const minWidth = parseInt(min / 7 - 10)
+        const line = calendarInfo.calendar.length + 1 // 日历行数
+        const height = parseInt((min - titleHeight - padding) / line)
+        const template = (text, props = {}, ext = undefined) => {
+            let views = [{
+                type: "text",
+                props: Object.assign({
+                    text: text,
+                    font: $font(12),
+                    minimumScaleFactor: 0.5
+                }, props.text)
+            }]
+            if (ext) {
+                views.push({
+                    type: "text",
+                    props: Object.assign({
+                        text: ext,
+                        font: $font(12),
+                        minimumScaleFactor: 0.5
+                    }, props.ext)
+                })
+            }
             return {
                 type: "hstack",
                 props: {
                     clipped: true,
-                    cornerRadius: 5,
-                    alignment: $widget.verticalAlignment.center
+                    cornerRadius: 5
                 },
                 views: [{
-                    type: "text",
+                    type: "vstack",
                     props: Object.assign({
-                        text: text,
-                        font: $font(12),
-                        minimumScaleFactor: 0.5,
+                        alignment: $widget.verticalAlignment.center,
                         color: $color("primaryText"),
                         background: $color("clear"),
                         padding: $insets(0, 3, 0, 3),
@@ -128,8 +153,9 @@ class CalendarWidget {
                             minWidth: minWidth,
                             height: height,
                             alignment: $widget.alignment.center
-                        },
-                    }, props)
+                        }
+                    }, props.box),
+                    views: views
                 }]
             }
         }
@@ -138,42 +164,61 @@ class CalendarWidget {
         let days = []
         for (let line of calendar) {
             for (let date of line) {
-                let props = {
-                    color: $color("primaryText"),
-                    background: $color("clear")
+                if (date === 0) {// 空白直接跳过
+                    days.push(template(""))
+                    continue
                 }
-                // 当天会有背景色
+                // 初始样式
+                let props = {
+                    text: { color: $color("primaryText") },
+                    ext: { color: $color("primaryText") },// 额外信息样式，如农历等
+                    box: { background: $color("clear") }
+                }
+                // 当天
                 if (Math.abs(date.date) === calendarInfo.date) {
-                    props.color = $color("white")
-                    props.background = $color(this.colorTone)
+                    props.text.color = $color("white")
+                    props.ext.color = $color("white")
+                    props.box.background = $color(this.colorTone)
                 }
                 // 周六周天显示灰色
                 if (date.day === 0 || date.day === 6) {
-                    props.color = $color("systemGray2")
+                    props.ext.color = props.text.color = $color("systemGray2")
                 }
-                // 节假日会以不同颜色的字体显示
+                // 节假日
                 if (date.holiday) {
                     if (date.holiday.holiday) {
-                        props.color = $color(this.holidayColor)
+                        props.ext.color = props.text.color = $color(this.holidayColor)
                     } else {
-                        props.color = $color(this.holidayNoRestColor)
+                        props.ext.color = props.text.color = $color(this.holidayNoRestColor)
                     }
                 }
-                days.push(template(date === 0 ? "" : String(date.date), props))
+                // 4x4 widget 可显示额外信息
+                let ext
+                if (ctx.family === 2) {
+                    ext = date.holiday ? date.holiday.name : date.lunar.lunarDay
+                }
+                days.push(template(String(date.date), props, ext))
             }
         }
         // 加入星期指示器
         let title = []
         for (let i = 0; i < 7; i++) {
             title.push(template(this.localizedWeek(i), {
-                color: $color(this.colorTone)
+                text: { color: $color(this.colorTone) },
+                box: {
+                    frame: {
+                        minWidth: minWidth,
+                        height: ctx.family === 2 ? height / 2 : height,// 4x4 widget 日期指示器高度减半
+                        alignment: $widget.alignment.center
+                    }
+                }
             }))
         }
         return title.concat(days)
     }
 
     calendarView(ctx) {
-        let calendarInfo = this.getCalendar()
+        let calendarInfo = this.getCalendar(ctx)
         let calendar = {
             type: "vgrid",
             props: {
@@ -188,6 +233,17 @@ class CalendarWidget {
                 padding: $insets(0, 10, 10, 10),
             },
             views: this.formatCalendar(ctx, calendarInfo)
+        }
+        // 标题栏文字内容
+        let content = {
+            left: this.localizedMonth(calendarInfo.month),
+            right: String(calendarInfo.year)
+        }
+        if (ctx.family === 2) {
+            content = {
+                left: calendarInfo.year + $l10n("YEAR") + this.localizedMonth(calendarInfo.month),
+                right: this.lunar.lunarYear + $l10n("YEAR") + this.lunar.lunarMonth + $l10n("MONTH") + this.lunar.lunarDay
+            }
         }
         let titleBar = {
             type: "hstack",
@@ -208,7 +264,7 @@ class CalendarWidget {
                 {
                     type: "text",
                     props: {
-                        text: this.localizedMonth(calendarInfo.month),
+                        text: content.left,
                         color: $color(this.colorTone),
                         font: $font("blur", 14),
                         minimumScaleFactor: 0.5,
@@ -222,7 +278,7 @@ class CalendarWidget {
                 {
                     type: "text",
                     props: {
-                        text: String(calendarInfo.year),
+                        text: content.right,
                         color: $color(this.colorTone),
                         font: $font("blur", 14),
                         minimumScaleFactor: 0.5,
@@ -246,10 +302,6 @@ class CalendarWidget {
 
     custom() {
         this.setting.push()
-    }
-
-    view2x2(ctx) {
-        return this.calendarView(ctx)
     }
 
     view2x4(ctx) {
@@ -277,10 +329,6 @@ class CalendarWidget {
         }
     }
 
-    view4x4(ctx) {
-        return this.calendarView(ctx)
-    }
-
     render() {
         const midnight = new Date()
         midnight.setHours(0, 0, 0, 0)
@@ -296,14 +344,8 @@ class CalendarWidget {
                 afterDate: expireDate
             },
             render: ctx => {
-                switch (ctx.family) {
-                    case 0:// 2x2
-                        return this.view2x2(ctx)
-                    case 1:// 2x4
-                        return this.view2x4(ctx)
-                    case 2:// 4x4
-                        return this.view4x4(ctx)
-                }
+                if (ctx.family === 1) return this.view2x4(ctx)
+                return this.calendarView(ctx)
             }
         })
     }
