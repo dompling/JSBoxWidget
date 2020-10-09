@@ -77,5 +77,10 @@
 "ALBUM" = "相册";
 "ALBUM_COLUMN" = "相册图片列数";
 "URL_SCHEME" = "URL scheme";
+"USE_COMPRESSED_IMAGE" = "使用压缩后的图片";
+"SWITCH_METHOD" = "切换方式";
+"RANDOM" = "随机";
+"SEQUENCE" = "顺序";
+"SWITCH_INTERVAL" = "切换间隔";
 "SYSTEM_ALBUM" = "系统相册";
 "SAVE_TO_SYSTEM_ALBUM" = "保存到系统相册";

@@ -7,6 +7,21 @@ class PictureSetting extends Setting {
         if (!$file.exists(this.albumPath)) {
             $file.mkdir(this.albumPath)
         }
+        if (!$file.exists(`${this.albumPath}/archive`)) {
+            $file.mkdir(`${this.albumPath}/archive`)
+        }
+    }
+
+    getImages(isCompress) {
+        if (isCompress) return $file.list(`${this.albumPath}/archive`)
+        let list = $file.list(this.albumPath)
+        for (let i = 0; i < list.length; i++) {
+            if ($file.isDirectory(`${this.albumPath}/${list[i]}`)) {
+                list.splice(i, 1)
+                return list
+            }
+        }
+        return list
     }
 
     initSettingMethods() {
@@ -28,11 +43,16 @@ class PictureSetting extends Setting {
                             items: [$l10n("SYSTEM_ALBUM"), "iCloud"],
                             handler: (title, idx) => {
                                 const saveImageAction = data => {
-                                    let length = $file.list(this.albumPath).length
+                                    let length = this.getImages().length
                                     let fileName = "img-" + length + data.fileName.slice(data.fileName.lastIndexOf("."))
                                     $file.write({
                                         data: data,
                                         path: `${this.albumPath}/${fileName}`
+                                    })
+                                    // 同时保留一份压缩后的图片
+                                    $file.write({
+                                        data: data.image.resized($size(300, 300)),
+                                        path: `${this.albumPath}/archive/${fileName}`
                                     })
                                     $("picture-edit-matrix").insert({
                                         indexPath: $indexPath(0, 0),
@@ -65,7 +85,7 @@ class PictureSetting extends Setting {
                     }
                 }
             }]
-            let pictures = $file.list(this.albumPath)
+            let pictures = this.getImages()
             let data = []
             if (pictures)
                 for (let picture of pictures) {

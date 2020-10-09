@@ -11,20 +11,11 @@
                 "type": "script",
                 "key": "album",
                 "value": "this.controller.readme()"
-            },
-            {
-                "icon": [
-                    "link"
-                ],
-                "title": "URL_SCHEME",
-                "type": "string",
-                "key": "album.urlScheme",
-                "value": ""
             }
         ]
     },
     {
-        "title": "ADVANCED",
+        "title": "ALBUM",
         "items": [
             {
                 "icon": [
@@ -44,6 +35,56 @@
                 "type": "script",
                 "key": "album.manager",
                 "value": "this.controller.album()"
+            }
+        ]
+    },
+    {
+        "title": "ADVANCED",
+        "items": [
+            {
+                "icon": [
+                    "link",
+                    "#CC6699"
+                ],
+                "title": "URL_SCHEME",
+                "type": "string",
+                "key": "album.urlScheme",
+                "value": ""
+            },
+            {
+                "icon": [
+                    "archivebox",
+                    "#336699"
+                ],
+                "title": "USE_COMPRESSED_IMAGE",
+                "type": "switch",
+                "key": "album.useCompressedImage",
+                "value": false
+            },
+            {
+                "icon": [
+                    "shuffle",
+                    "#999933"
+                ],
+                "title": "SWITCH_METHOD",
+                "type": "tab",
+                "key": "album.imageSwitchMethod",
+                "items": [
+                    "RANDOM",
+                    "SEQUENCE"
+                ],
+                "value": 0
+            },
+            {
+                "icon": [
+                    "rectangle.split.3x1.fill",
+                    "#FF6666"
+                ],
+                "title": "SWITCH_INTERVAL",
+                "type": "stepper",
+                "key": "album.switchInterval",
+                "min": 10,
+                "value": 10
             }
         ]
     }
