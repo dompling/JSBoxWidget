@@ -7,26 +7,20 @@ class HomeUI {
     getViews() {
         let data = [
             {
-                image: "/assets/icon.png",
                 title: "Calendar",
                 describe: "日历小组件",
-                info: {
-                    name: "Calendar"
-                }
+                name: "Calendar"
             },
             {
-                image: "/assets/icon.png",
                 title: "Album",
                 describe: "将你最爱的照片放到桌面上！",
-                info: {
-                    name: "Album"
-                }
+                name: "Album"
             }
         ]
         const template = data => {
             return {
-                image: {
-                    src: data.image
+                image: {// 如果不设置image属性，默认为小组件目录下的icon.png
+                    src: data.image ? data.image : `/scripts/ui/widget/${data.name}/icon.png`
                 },
                 title: {
                     text: data.title
@@ -34,7 +28,7 @@ class HomeUI {
                 describe: {
                     text: data.describe
                 },
-                info: data.info,
+                name: data.name,
                 events: data.events
             }
         }
@@ -48,6 +42,21 @@ class HomeUI {
                 props: {
                     rowHeight: 100,
                     data: views,
+                    header: {
+                        type: "view",
+                        props: { height: 80 },
+                        views: [{
+                            type: "label",
+                            props: {
+                                text: "EasyWidget",
+                                font: $font(36)
+                            },
+                            layout: (make, view) => {
+                                make.left.inset(20)
+                                make.centerY.equalTo(view.super)
+                            }
+                        }]
+                    },
                     template: {
                         props: {
                             bgcolor: $color("clear")
@@ -99,7 +108,7 @@ class HomeUI {
                             title: $l10n("SELECT"),
                             color: $color("orange"),
                             handler: (sender, indexPath) => {
-                                let widget = sender.object(indexPath).info.name
+                                let widget = sender.object(indexPath).name
                                 $ui.alert({
                                     title: $l10n("ALERT_INFO"),
                                     message: $l10n("SELECT_AND_COPY_TO_APPLY") + `\n"${widget}"`,
@@ -120,10 +129,12 @@ class HomeUI {
                             title: $l10n("PREVIEW"),
                             color: $color("#33CC33"),
                             handler: (sender, indexPath) => {
-                                let widgetName = sender.object(indexPath).info.name
+                                let widgetName = sender.object(indexPath).name
                                 let widget = this.kernel.widgetInstance(widgetName)
                                 if (widget) {
                                     widget.render()
+                                } else {
+                                    $ui.error($l10n("ERROR"))
                                 }
                             }
                         }
@@ -131,10 +142,12 @@ class HomeUI {
                 },
                 events: {
                     didSelect: (sender, indexPath, data) => {
-                        let widgetName = data.info.name
+                        let widgetName = data.name
                         let widget = this.kernel.widgetInstance(widgetName)
                         if (widget) {
                             widget.custom()
+                        } else {
+                            $ui.error($l10n("ERROR"))
                         }
                     }
                 },

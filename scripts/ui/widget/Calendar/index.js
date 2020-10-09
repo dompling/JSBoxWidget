@@ -1,4 +1,4 @@
-kconst CalendarSetting = require("./setting")
+const CalendarSetting = require("./setting")
 
 class CalendarWidget {
     constructor(kernel) {
