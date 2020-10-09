@@ -76,5 +76,6 @@
 
 "ALBUM" = "相册";
 "ALBUM_COLUMN" = "相册图片列数";
+"URL_SCHEME" = "URL scheme";
 "SYSTEM_ALBUM" = "系统相册";
 "SAVE_TO_SYSTEM_ALBUM" = "保存到系统相册";

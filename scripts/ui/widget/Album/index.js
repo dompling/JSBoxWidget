@@ -42,6 +42,7 @@ class PictureWidget {
                 return {
                     type: "image",
                     props: {
+                        widgetURL: "jsbox://run?name=EasyWidget&url-scheme=" + this.setting.get("album.urlScheme"),
                         image: $image(`${this.albumPath}/${image}`),
                         resizable: true,
                         scaledToFill: true

@@ -4,6 +4,11 @@ const MainUI = require("./ui/main")
 class AppKernel extends Kernel {
     constructor() {
         super()
+        // 检查是否携带URL scheme
+        let query = $context.query
+        if (query["url-scheme"]) {
+            $app.openURL(query["url-scheme"])
+        }
         // 注册组件
         this.settingComponent = this._registerComponent("Setting")
         this.setting = this.settingComponent.controller
