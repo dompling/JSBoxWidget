@@ -5,6 +5,8 @@ class CalendarWidget {
         this.kernel = kernel
         this.setting = new CalendarSetting(this.kernel)
         this.colorTone = this.setting.get("calendar.colorTone")
+        this.hasHoliday = true
+        this.holidayColor = this.setting.get("calendar.holidayColor")
     }
 
     localizedWeek(index) {
@@ -36,6 +38,17 @@ class CalendarWidget {
         return month[index] + $l10n("MONTH")
     }
 
+    isHoliday(year, month, date) {
+        // TODO 判断节假日
+        if (date === 0) return false
+        let holiday = $file.read(this.setting.holidayPath).string
+        if (!holiday) {
+            $ui.toast($l10n("NEED_HOLIDAY_DATA"))
+            return false
+        }
+        return true
+    }
+
     getCalendar() {
         let date = new Date()
         let year = date.getFullYear()
@@ -48,8 +61,15 @@ class CalendarWidget {
             let week = []
             for (let day = 0; day <= 6; day++) {
                 if (day === firstDay) firstDay = 0
-                // 只有当firstDay为0时才开始放入数据，之前的用-1补位
-                week.push(firstDay === 0 ? (date > dates ? -1 : { date: date, day: day }) : -1)
+                // 只有当firstDay为0时才开始放入数据，之前的用0补位
+                let formatDate = firstDay === 0 ? (date > dates ? 0 : { date: date, day: day }) : 0
+                if (this.hasHoliday) {// 判断是否需要展示节假日
+                    // 节假日用负值表示
+                    formatDate = this.isHoliday(year, month, formatDate) ? {
+                        date: -1 * date, day: day
+                    } : formatDate
+                }
+                week.push(formatDate)
                 if (firstDay === 0) date++
             }
             calendar.push(week)
@@ -100,21 +120,27 @@ class CalendarWidget {
         let days = []
         for (let line of calendar) {
             for (let date of line) {
-                let props = {}
-                // 当天会有红色背景
-                if (date.date === calendarInfo.date) {
-                    props = {
-                        color: $color("white"),
-                        background: $color(this.colorTone),
-                    }
-                }
+                let props = { color: $color("white") }
                 // 周六周天显示灰色
                 if (date.day === 0 || date.day === 6) {
-                    props = Object.assign(props, {
-                        color: $color("systemGray2"),
+                    Object.assign(props, {
+                        color: $color("systemGray2")
                     })
                 }
-                days.push(template(date === -1 ? "" : String(date.date), props))
+                // 节假日会以不同颜色的字体显示
+                if (date.date < 0) {
+                    Object.assign(props, {
+                        color: $color(this.holidayColor)
+                    })
+                    date.date = -1 * date.date
+                }
+                // 当天会有红色背景
+                if (date.date === calendarInfo.date) {
+                    Object.assign(props, {
+                        background: $color(this.colorTone)
+                    })
+                }
+                days.push(template(date === 0 ? "" : String(date.date), props))
             }
         }
         // 加入标题

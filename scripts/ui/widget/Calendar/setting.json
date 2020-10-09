@@ -7,7 +7,7 @@
                     "book.fill",
                     "#A569BD"
                 ],
-                "title": "CALENDAR",
+                "title": "README",
                 "type": "script",
                 "key": "calendar",
                 "value": "this.controller.readme()"
@@ -29,12 +29,32 @@
             },
             {
                 "icon": [
+                    "wand.and.rays",
+                    "#0099CC"
+                ],
+                "title": "HOLIDAT_COLOR",
+                "type": "color",
+                "key": "calendar.holidayColor",
+                "value": "green"
+            },
+            {
+                "icon": [
                     "photo"
                 ],
                 "title": "HOLIDAY",
                 "type": "script",
                 "key": "calendar.holiday",
                 "value": "this.controller.holiday()"
+            },
+            {
+                "icon": [
+                    "cloud",
+                    "#FF6666"
+                ],
+                "title": "GET_HOLIDAY",
+                "type": "script",
+                "key": "calendar.get_holiday",
+                "value": "this.controller.getHoliday()"
             }
         ]
     }

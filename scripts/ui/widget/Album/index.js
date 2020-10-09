@@ -4,10 +4,7 @@ class PictureWidget {
     constructor(kernel) {
         this.kernel = kernel
         this.setting = new PictureSetting(this.kernel)
-        this.albumPath = "/assets/widget/Album/pictures"
-        if (!$file.exists(this.albumPath)) {
-            $file.mkdir(this.albumPath)
-        }
+        this.albumPath = this.setting.albumPath
     }
 
     custom() {

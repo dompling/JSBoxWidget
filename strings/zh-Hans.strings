@@ -60,8 +60,13 @@
 "DECEMBER" = "十二";
 
 "COLOR_TONE" = "主色调";
+"HOLIDAT_COLOR" = "节假日颜色";
 "HOLIDAY" = "节假日";
+"GET_HOLIDAY" = "获取节假日";
 "NEED_HOLIDAY_DATA" = "需要节假日数据，请去编辑页面获取。";
+"HOLIDAY_ALREADY_EXISTS" = "节假日数据已经存在，是否覆盖数据？";
 
 "ALBUM" = "相册";
 "ALBUM_COLUMN" = "相册图片列数";
+"SYSTEM_ALBUM" = "系统相册";
+"SAVE_TO_SYSTEM_ALBUM" = "保存到系统相册";
