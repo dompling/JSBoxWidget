@@ -1,9 +1,10 @@
+const NAME = "Calendar"
 const Setting = require("../setting")
 
 class CalendarSetting extends Setting {
     constructor(kernel) {
-        super(kernel, "Calendar")
-        this.calendarPath = "/assets/widget/Calendar"
+        super(kernel, NAME)
+        this.calendarPath = `/assets/widget/${NAME}`
         if (!$file.exists(this.calendarPath)) {
             $file.mkdir(this.calendarPath)
         }

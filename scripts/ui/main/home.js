@@ -5,7 +5,7 @@ class HomeUI {
         this.widgetRootPath = "/scripts/ui/widget"
     }
 
-    getViews() {
+    getWidgetViews() {
         let data = []
         let widgets = $file.list(this.widgetRootPath)
         for (let widget of widgets) {
@@ -40,11 +40,16 @@ class HomeUI {
                 name: data.name
             }
         }
-        let views = data.map(item => template(item))
+        return data.map(item => template(item))
+    }
+
+    getViews() {
+        let views = this.getWidgetViews()
         return [
             {
                 type: "list",
                 props: {
+                    id: "EasyWidget-home-list",
                     rowHeight: 100,
                     data: views,
                     header: {
@@ -111,7 +116,7 @@ class HomeUI {
                     actions: [
                         {
                             title: $l10n("SELECT"),
-                            color: $color("orange"),
+                            color: $color("#00CC00"),
                             handler: (sender, indexPath) => {
                                 let widget = sender.object(indexPath).name
                                 $ui.alert({
@@ -131,28 +136,62 @@ class HomeUI {
                             }
                         },
                         {
-                            title: $l10n("PREVIEW"),
-                            color: $color("#33CC33"),
+                            title: $l10n("COPY"),
+                            color: $color("orange"),
                             handler: (sender, indexPath) => {
                                 let widgetName = sender.object(indexPath).name
-                                let widget = this.kernel.widgetInstance(widgetName)
-                                if (widget) {
-                                    widget.render()
-                                } else {
-                                    $ui.error($l10n("ERROR"))
+                                if (!$file.exists(`${this.widgetRootPath}/${widgetName}/setting.js`) || !$file.exists(`${this.widgetRootPath}/${widgetName}/config.json`)) {
+                                    $ui.error($l10n("CANNOT_COPY_THIS_WIDGET"))
+                                    return
                                 }
+                                $file.copy({
+                                    src: `${this.widgetRootPath}/${widgetName}`,
+                                    dst: `${this.widgetRootPath}/${widgetName}Copy`
+                                })
+                                // 更新设置文件中的NAME常量
+                                let settingjs = $file.read(`${this.widgetRootPath}/${widgetName}Copy/setting.js`).string
+                                let firstLine = settingjs.split("\n")[0]
+                                let newFirstLine = `const NAME = "${widgetName}Copy"`
+                                settingjs = settingjs.replace(firstLine, newFirstLine)
+                                $file.write({
+                                    data: $data({ string: settingjs }),
+                                    path: `${this.widgetRootPath}/${widgetName}Copy/setting.js`
+                                })
+                                // 更新config.json
+                                let config = JSON.parse($file.read(`${this.widgetRootPath}/${widgetName}Copy/config.json`).string)
+                                config.title = `${widgetName}Copy`
+                                $file.write({
+                                    data: $data({ string: JSON.stringify(config) }),
+                                    path: `${this.widgetRootPath}/${widgetName}Copy/config.json`
+                                })
+                                // 更新列表
+                                setTimeout(() => { $("EasyWidget-home-list").data = this.getWidgetViews() }, 200)
                             }
                         },
                         {
-                            title: $l10n("SETTING"),
+                            title: $l10n("DELETE"),
+                            color: $color("red"),
                             handler: (sender, indexPath) => {
                                 let widgetName = sender.object(indexPath).name
-                                let widget = this.kernel.widgetInstance(widgetName)
-                                if (widget) {
-                                    widget.custom()
-                                } else {
-                                    $ui.error($l10n("ERROR"))
+                                let style = {}
+                                if ($alertActionType) {
+                                    style = { style: $alertActionType.destructive }
                                 }
+                                $ui.alert({
+                                    title: $l10n("CONFIRM_DELETE_MSG"),
+                                    actions: [
+                                        Object.assign({
+                                            title: $l10n("DELETE"),
+                                            handler: () => {
+                                                $file.delete(`${this.widgetRootPath}/${widgetName}`)
+                                                // 删除assets
+                                                $file.delete(`/assets/widget/${widgetName}`)
+                                                sender.delete(indexPath)
+                                            }
+                                        }, style),
+                                        { title: $l10n("CANCEL") }
+                                    ]
+                                })
                             }
                         }
                     ]

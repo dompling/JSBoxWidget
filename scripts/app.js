@@ -41,13 +41,9 @@ class AppKernel extends Kernel {
         }
     }
 
-    fistLetterUpper(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1)
-    }
-
     widgetInstance(widget) {
-        if ($file.exists(`/scripts/ui/widget/${this.fistLetterUpper(widget)}/index.js`)) {
-            let path = `./ui/widget/${this.fistLetterUpper(widget)}/index.js`
+        if ($file.exists(`/scripts/ui/widget/${widget}/index.js`)) {
+            let path = `./ui/widget/${widget}/index.js`
             let { Widget } = require(path)
             return new Widget(this)
         } else {
