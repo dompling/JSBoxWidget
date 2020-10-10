@@ -26,6 +26,7 @@ class PictureSetting extends Setting {
 
     initSettingMethods() {
         this.setting.album = () => {
+            this.settingComponent.view.touchHighlightStart()
             let buttons = [{
                 type: "button",
                 props: {
@@ -166,7 +167,9 @@ class PictureSetting extends Setting {
                 },
                 layout: $layout.fill
             }]
-            this.kernel.page.view.push(views, $l10n("BACK"), buttons)
+            this.kernel.page.view.push(views, $l10n("BACK"), buttons, () => {
+                this.settingComponent.view.touchHighlightEnd()
+            })
         }
     }
 }
