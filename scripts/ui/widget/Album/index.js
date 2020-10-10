@@ -23,7 +23,7 @@ class PictureWidget {
     }
 
     render() {
-        let switchInterval = 1000 * 60 * 60 * this.setting.get("album.switchInterval")
+        let switchInterval = 1000 * 60 * this.setting.get("album.switchInterval")
         const midnight = new Date()
         midnight.setHours(0, 0, 0, 0)
         const expireDate = new Date(midnight.getTime() + switchInterval)
@@ -39,28 +39,32 @@ class PictureWidget {
             },
             render: ctx => {
                 let pictures = this.setting.getImages()
-                let image
-                // 0随机切换，1顺序切换
-                if (this.setting.get("album.imageSwitchMethod") === 0) {
-                    image = pictures[this.randomNum(0, pictures.length - 1)]
-                } else {
-                    let data = $cache.get("album.switch.data")
-                    if (!data) {// 首次写入缓存
+                let data = $cache.get("album.switch.data")
+                let index // 图片索引
+                if (!data) {// 首次写入缓存
+                    $cache.set("album.switch.data", {
+                        date: new Date().getTime(),
+                        index: 0
+                    })
+                    index = 0
+                } else if (new Date().getTime() - data.date > switchInterval) {// 下一张
+                    if (this.setting.get("album.imageSwitchMethod") === 0) {// 0随机切换，1顺序切换
+                        index = this.randomNum(0, pictures.length - 1)
+                    } else {
                         $cache.set("album.switch.data", {
                             date: new Date().getTime(),
-                            index: 0
+                            index: data.index + 1
                         })
-                        image = pictures[0]
-                    } else if (new Date().getTime() - data.date > switchInterval) {// 下一张
-                        image = pictures[data.index + 1]
-                    } else {// 维持不变
-                        image = pictures[data.index]
+                        index = data.index + 1
                     }
+                } else {// 维持不变
+                    index = data.index
                 }
-                if (this.setting.get("album.useCompressedImage")) {
-                    image = $image(`${this.albumPath}/archive/${image}`)
+                let image // 获取图片
+                if (this.setting.get("album.useCompressedImage")) {// 检查是否使用压缩后的图片
+                    image = $image(`${this.albumPath}/archive/${pictures[index]}`)
                 } else {
-                    image = $image(`${this.albumPath}/${image}`)
+                    image = $image(`${this.albumPath}/${pictures[index]}`)
                 }
                 return {
                     type: "image",
