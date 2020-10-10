@@ -13,16 +13,6 @@
             },
             {
                 "icon": [
-                    "book.fill",
-                    "#A569BD"
-                ],
-                "title": "README",
-                "type": "script",
-                "key": "calendar",
-                "value": "this.controller.readme()"
-            },
-            {
-                "icon": [
                     "wand.and.rays",
                     "orange"
                 ],
@@ -33,26 +23,52 @@
             },
             {
                 "icon": [
-                    "calendar"
-                ],
-                "title": "LUNAR_OTHER",
-                "type": "switch",
-                "key": "calendar.lunar_other",
-                "value": true
-            },
-            {
-                "icon": [
                     "flag.fill",
                     "#FFCC00"
                 ],
                 "title": "FIRST_DAY_OF_WEEK",
                 "type": "tab",
                 "key": "calendar.firstDayOfWeek",
-                "items":[
+                "items": [
                     "_SUNDAY",
                     "_MONDAY"
                 ],
                 "value": 0
+            },
+            {
+                "icon": [
+                    "wand.and.rays",
+                    "#0099CC"
+                ],
+                "title": "MONTH_DISPLAY_MODE",
+                "type": "tab",
+                "key": "calendar.monthDisplayMode",
+                "items": [
+                    "CHINESE_CHARACTERS",
+                    "NUMBER"
+                ],
+                "value": 1
+            }
+        ]
+    },
+    {
+        "title": "2x2",
+        "items": [
+            {
+                "title": "SHOW_YEAR",
+                "type": "switch",
+                "key": "calendar.2x2.title.year",
+                "value": true
+            },
+            {
+                "icon": [
+                    "rectangle.and.paperclip",
+                    "#FFCC00"
+                ],
+                "title": "LUNAR_2x2",
+                "type": "switch",
+                "key": "calendar.lunar2x2",
+                "value": true
             }
         ]
     },
@@ -107,6 +123,21 @@
                 "type": "script",
                 "key": "calendar.clear_holiday",
                 "value": "this.controller.clearHoliday()"
+            }
+        ]
+    },
+    {
+        "title": "ABOUT",
+        "items": [
+            {
+                "icon": [
+                    "book.fill",
+                    "#A569BD"
+                ],
+                "title": "README",
+                "type": "script",
+                "key": "calendar",
+                "value": "this.controller.readme()"
             }
         ]
     }

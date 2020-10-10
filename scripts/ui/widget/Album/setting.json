@@ -10,16 +10,6 @@
                 "type": "script",
                 "key": "preview",
                 "value": "this.controller.preview()"
-            },
-            {
-                "icon": [
-                    "book.fill",
-                    "#A569BD"
-                ],
-                "title": "README",
-                "type": "script",
-                "key": "album",
-                "value": "this.controller.readme()"
             }
         ]
     },
@@ -68,7 +58,7 @@
                 "title": "USE_COMPRESSED_IMAGE",
                 "type": "switch",
                 "key": "album.useCompressedImage",
-                "value": false
+                "value": true
             },
             {
                 "icon": [
@@ -95,6 +85,21 @@
                 "min": 10,
                 "max": 60,
                 "value": 10
+            }
+        ]
+    },
+    {
+        "title": "ABOUT",
+        "items": [
+            {
+                "icon": [
+                    "book.fill",
+                    "#A569BD"
+                ],
+                "title": "README",
+                "type": "script",
+                "key": "calendar",
+                "value": "this.controller.readme()"
             }
         ]
     }
