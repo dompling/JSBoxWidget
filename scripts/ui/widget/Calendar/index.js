@@ -16,22 +16,16 @@ class CalendarWidget {
 
     localizedWeek(index) {
         let week = []
-        if (this.setting.get("calendar.firstDayOfWeek") === 0) {
-            week[0] = $l10n("SUNDAY")
-            week[1] = $l10n("MONDAY")
-            week[2] = $l10n("TUESDAY")
-            week[3] = $l10n("WEDNESDAY")
-            week[4] = $l10n("THURSDAY")
-            week[5] = $l10n("FRIDAY")
-            week[6] = $l10n("SATURDAY")
-        } else if (this.setting.get("calendar.firstDayOfWeek") === 1) {
-            week[0] = $l10n("MONDAY")
-            week[1] = $l10n("TUESDAY")
-            week[2] = $l10n("WEDNESDAY")
-            week[3] = $l10n("THURSDAY")
-            week[4] = $l10n("FRIDAY")
-            week[5] = $l10n("SATURDAY")
-            week[6] = $l10n("SUNDAY")
+        week[0] = $l10n("SUNDAY")
+        week[1] = $l10n("MONDAY")
+        week[2] = $l10n("TUESDAY")
+        week[3] = $l10n("WEDNESDAY")
+        week[4] = $l10n("THURSDAY")
+        week[5] = $l10n("FRIDAY")
+        week[6] = $l10n("SATURDAY")
+        if (this.setting.get("calendar.firstDayOfWeek") === 1) {
+            index += 1
+            if (index > 6) index = 0
         }
         return week[index]
     }
@@ -81,7 +75,7 @@ class CalendarWidget {
         let dateNow = date.getDate()// 当前日期
         let dates = new Date(year, month + 1, 0).getDate()// 总天数
         let firstDay = new Date(year, month, 1).getDay()// 本月第一天是周几
-        if (this.setting.get("calendar.firstDayOfWeek") === 1) {
+        if (this.setting.get("calendar.firstDayOfWeek") === 1) {// 设置中设定每周第一天是周几
             firstDay -= 1
             if (firstDay < 0) firstDay = 6
         }
@@ -90,8 +84,13 @@ class CalendarWidget {
             let week = []
             for (let day = 0; day <= 6; day++) {
                 if (day === firstDay) firstDay = 0
-                // 只有当firstDay为0时才开始放入数据，之前的用0补位
-                let formatDate = firstDay === 0 ? (date > dates ? 0 : { date: date, day: day }) : 0
+                // 只有当firstDay为this.firstDay时才开始放入数据，之前的用0补位
+                let formatDay = this.setting.get("calendar.firstDayOfWeek") === 1 ? day + 1 : day
+                if (formatDay > 6) formatDay = 0
+                let formatDate = firstDay === 0 ? (date > dates ? 0 : {
+                    date: date,
+                    day: formatDay
+                }) : 0
                 // 农历
                 if (date === dateNow && this.setting.get("calendar.lunar_other")) {
                     // 保存农历信息
@@ -189,15 +188,8 @@ class CalendarWidget {
                     ext: { color: $color("primaryText") },// 额外信息样式，如农历等
                     box: { background: $color("clear") }
                 }
-                // 周六周天显示灰色
-                if (this.setting.get("calendar.firstDayOfWeek") === 0) {
-                    if (date.day === 0 || date.day === 6) {
-                        props.ext.color = props.text.color = $color("systemGray2")
-                    }
-                } else {
-                    if (date.day === 5 || date.day === 6) {
-                        props.ext.color = props.text.color = $color("systemGray2")
-                    }
+                if (date.day === 0 || date.day === 6) {
+                    props.ext.color = props.text.color = $color("systemGray2")
                 }
                 // 节假日
                 if (date.holiday) {
