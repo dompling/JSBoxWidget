@@ -4,14 +4,18 @@ class CalendarWidget {
     constructor(kernel) {
         this.kernel = kernel
         this.setting = new CalendarSetting(this.kernel)
+        this.sloarToLunar = this.kernel.registerPlugin("sloarToLunar")
         this.colorTone = this.setting.get("calendar.colorTone")
         this.hasHoliday = this.setting.get("calendar.holiday")
         this.holidayColor = this.setting.get("calendar.holidayColor")
         this.holidayNoRestColor = this.setting.get("calendar.holidayNoRestColor")// 调休
-        if (this.hasHoliday && $file.exists(this.setting.holidayPath)) {
+        if (this.hasHoliday && $file.exists(this.setting.holidayPath)) {// 假期信息
             this.holiday = JSON.parse($file.read(this.setting.holidayPath).string).holiday
         }
-        this.sloarToLunar = this.kernel.registerPlugin("sloarToLunar")
+        this.monthDisplayMode = this.setting.get("calendar.monthDisplayMode")// 月份显示模式
+        this.widget2x2TitleYear = this.setting.get("calendar.2x2.title.year")// 2x2标题是否显示年
+        this.firstDayOfWeek = this.setting.get("calendar.firstDayOfWeek")// 每周第一天
+        this.lunar2x2 = this.setting.get("calendar.lunar2x2")// 2x2是否显示农历
     }
 
     localizedWeek(index) {
@@ -23,7 +27,7 @@ class CalendarWidget {
         week[4] = $l10n("THURSDAY")
         week[5] = $l10n("FRIDAY")
         week[6] = $l10n("SATURDAY")
-        if (this.setting.get("calendar.firstDayOfWeek") === 1) {
+        if (this.firstDayOfWeek === 1) {
             index += 1
             if (index > 6) index = 0
         }
@@ -31,19 +35,20 @@ class CalendarWidget {
     }
 
     localizedMonth(index) {
+        let mode = this.monthDisplayMode === 0 ? "_C" : "_N"
         let month = []
-        month[0] = $l10n("JANUARY")
-        month[1] = $l10n("FEBRUARY")
-        month[2] = $l10n("MARCH")
-        month[3] = $l10n("APRIL")
-        month[4] = $l10n("MAY")
-        month[5] = $l10n("JUNE")
-        month[6] = $l10n("JULY")
-        month[7] = $l10n("AUGUST")
-        month[8] = $l10n("SEPTEMBER")
-        month[9] = $l10n("OCTOBER")
-        month[10] = $l10n("NOVEMBER")
-        month[11] = $l10n("DECEMBER")
+        month[0] = $l10n("JANUARY" + mode)
+        month[1] = $l10n("FEBRUARY" + mode)
+        month[2] = $l10n("MARCH" + mode)
+        month[3] = $l10n("APRIL" + mode)
+        month[4] = $l10n("MAY" + mode)
+        month[5] = $l10n("JUNE" + mode)
+        month[6] = $l10n("JULY" + mode)
+        month[7] = $l10n("AUGUST" + mode)
+        month[8] = $l10n("SEPTEMBER" + mode)
+        month[9] = $l10n("OCTOBER" + mode)
+        month[10] = $l10n("NOVEMBER" + mode)
+        month[11] = $l10n("DECEMBER" + mode)
         return month[index] + $l10n("MONTH")
     }
 
@@ -75,7 +80,7 @@ class CalendarWidget {
         let dateNow = date.getDate()// 当前日期
         let dates = new Date(year, month + 1, 0).getDate()// 总天数
         let firstDay = new Date(year, month, 1).getDay()// 本月第一天是周几
-        if (this.setting.get("calendar.firstDayOfWeek") === 1) {// 设置中设定每周第一天是周几
+        if (this.firstDayOfWeek === 1) {// 设置中设定每周第一天是周几
             firstDay -= 1
             if (firstDay < 0) firstDay = 6
         }
@@ -85,19 +90,21 @@ class CalendarWidget {
             for (let day = 0; day <= 6; day++) {
                 if (day === firstDay) firstDay = 0
                 // 只有当firstDay为this.firstDay时才开始放入数据，之前的用0补位
-                let formatDay = this.setting.get("calendar.firstDayOfWeek") === 1 ? day + 1 : day
+                let formatDay = this.firstDayOfWeek === 1 ? day + 1 : day
                 if (formatDay > 6) formatDay = 0
                 let formatDate = firstDay === 0 ? (date > dates ? 0 : {
                     date: date,
                     day: formatDay
                 }) : 0
                 // 农历
-                if (date === dateNow && this.setting.get("calendar.lunar_other")) {
+                if (date === dateNow && this.lunar2x2) {
                     // 保存农历信息
                     this.lunar = this.sloarToLunar(year, month + 1, date)
                 }
                 if (ctx.family === 2 && formatDate !== 0) {
-                    if (date === dateNow && this.setting.get("calendar.lunar_other")) {
+                    if (date === dateNow) {
+                        // 如果2x2显示农历，则在上面的代码中已经计算过一次了
+                        this.lunar = this.lunar2x2 ? this.lunar : this.sloarToLunar(year, month + 1, date)
                         formatDate["lunar"] = this.lunar
                     } else {
                         formatDate["lunar"] = this.sloarToLunar(year, month + 1, date)
@@ -255,21 +262,19 @@ class CalendarWidget {
             views: this.formatCalendar(ctx, calendarInfo)
         }
         // 标题栏文字内容
-        let content = {
-            left: this.localizedMonth(calendarInfo.month),
-            right: String(calendarInfo.year),
-            size: 12
-        }
+        let content
         if (ctx.family === 2) {
             content = {
                 left: calendarInfo.year + $l10n("YEAR") + this.localizedMonth(calendarInfo.month),
                 right: this.lunar.lunarYear + $l10n("YEAR") + this.lunar.lunarMonth + $l10n("MONTH") + this.lunar.lunarDay,
                 size: 18
             }
-        } else if (this.setting.get("calendar.lunar_other")) {
+        } else {
+            let year = this.widget2x2TitleYear ? String(calendarInfo.year).slice(-2) + $l10n("YEAR") : ""
+            let right = this.lunar2x2 ? this.lunar.lunarMonth + $l10n("MONTH") + this.lunar.lunarDay : ""
             content = {
-                left: String(calendarInfo.year).slice(-2) + $l10n("YEAR") + this.localizedMonth(calendarInfo.month),
-                right: this.lunar.lunarMonth + $l10n("MONTH") + this.lunar.lunarDay
+                left: year + this.localizedMonth(calendarInfo.month),
+                right: right
             }
         }
         let width = ctx.displaySize.width / 2
