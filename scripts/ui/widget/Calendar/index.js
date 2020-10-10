@@ -190,8 +190,14 @@ class CalendarWidget {
                     box: { background: $color("clear") }
                 }
                 // 周六周天显示灰色
-                if (date.day === 0 || date.day === 6) {
-                    props.ext.color = props.text.color = $color("systemGray2")
+                if (this.setting.get("calendar.firstDayOfWeek") === 0) {
+                    if (date.day === 0 || date.day === 6) {
+                        props.ext.color = props.text.color = $color("systemGray2")
+                    }
+                } else {
+                    if (date.day === 5 || date.day === 6) {
+                        props.ext.color = props.text.color = $color("systemGray2")
+                    }
                 }
                 // 节假日
                 if (date.holiday) {
