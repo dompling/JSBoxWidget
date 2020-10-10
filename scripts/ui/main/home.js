@@ -2,25 +2,34 @@ class HomeUI {
     constructor(kernel, factory) {
         this.kernel = kernel
         this.factory = factory
+        this.widgetRootPath = "/scripts/ui/widget"
     }
 
     getViews() {
-        let data = [
-            {
-                title: "Calendar",
-                describe: "日历小组件",
-                name: "Calendar"
-            },
-            {
-                title: "Album",
-                describe: "将你最爱的照片放到桌面上！",
-                name: "Album"
+        let data = []
+        let widgets = $file.list(this.widgetRootPath)
+        for (let widget of widgets) {
+            let widgetPath = `${this.widgetRootPath}/${widget}`
+            if ($file.exists(`${widgetPath}/config.json`)) {
+                let config = JSON.parse($file.read(`${widgetPath}/config.json`).string)
+                if (typeof config.icon !== "object") {
+                    config.icon = [config.icon, config.icon]
+                }
+                config.icon = config.icon.map(icon => icon[0] === "@" ? icon.replace("@", widgetPath) : icon)
+                data.push({
+                    title: config.title,
+                    describe: config.describe,
+                    name: widget,
+                    icon: config.icon
+                })
+            } else {// 没有config.json文件则跳过
+                continue
             }
-        ]
+        }
         const template = data => {
             return {
-                image: {// 如果不设置image属性，默认为小组件目录下的icon.png
-                    src: data.image ? data.image : `/scripts/ui/widget/${data.name}/icon.png`
+                icon: {// 如果不设置image属性，默认为小组件目录下的icon.png
+                    image: $image(data.icon[0], data.icon[1])
                 },
                 title: {
                     text: data.title
@@ -28,14 +37,10 @@ class HomeUI {
                 describe: {
                     text: data.describe
                 },
-                name: data.name,
-                events: data.events
+                name: data.name
             }
         }
-        let views = []
-        for (let item of data) {
-            views.push(template(item))
-        }
+        let views = data.map(item => template(item))
         return [
             {
                 type: "list",
@@ -66,7 +71,7 @@ class HomeUI {
                             {
                                 type: "image",
                                 props: {
-                                    id: "image",
+                                    id: "icon",
                                     bgcolor: $color("clear"),
                                     clipsToBounds: true,
                                     cornerRadius: 10,
