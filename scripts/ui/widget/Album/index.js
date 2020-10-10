@@ -23,10 +23,16 @@ class PictureWidget {
     }
 
     render() {
+        let data = $cache.get("album.switch.data")
+        if (!data) {// 首次写入缓存
+            data = {
+                date: new Date().getTime(),
+                index: 0
+            }
+            $cache.set("album.switch.data", data)
+        }
         let switchInterval = 1000 * 60 * this.setting.get("album.switchInterval")
-        const midnight = new Date()
-        midnight.setHours(0, 0, 0, 0)
-        const expireDate = new Date(midnight.getTime() + switchInterval)
+        const expireDate = new Date(data.date + switchInterval)
         $widget.setTimeline({
             entries: [
                 {
@@ -39,22 +45,17 @@ class PictureWidget {
             },
             render: ctx => {
                 let pictures = this.setting.getImages()
-                let data = $cache.get("album.switch.data")
-                let index // 图片索引
-                if (!data) {// 首次写入缓存
+                let index = 0 // 图片索引
+                console.log(switchInterval)
+                console.log(new Date().getTime() - data.date)
+                if (new Date().getTime() - data.date > switchInterval) {// 下一张
                     $cache.set("album.switch.data", {
                         date: new Date().getTime(),
-                        index: 0
+                        index: data.index + 1
                     })
-                    index = 0
-                } else if (new Date().getTime() - data.date > switchInterval) {// 下一张
                     if (this.setting.get("album.imageSwitchMethod") === 0) {// 0随机切换，1顺序切换
                         index = this.randomNum(0, pictures.length - 1)
                     } else {
-                        $cache.set("album.switch.data", {
-                            date: new Date().getTime(),
-                            index: data.index + 1
-                        })
                         index = data.index + 1
                     }
                 } else {// 维持不变
