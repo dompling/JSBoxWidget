@@ -38,6 +38,9 @@
 
 "CALENDAR" = "日历";
 
+"_SUNDAY" = "周日";
+"_MONDAY" = "周一";
+
 "SUNDAY" = "日";
 "MONDAY" = "一";
 "TUESDAY" = "二";
@@ -64,6 +67,8 @@
 
 "COLOR_TONE" = "主色调";
 "LUNAR_OTHER" = "小尺寸显示农历";
+"FIRST_DAY_OF_WEEK" = "周第一天";
+
 "HOLIDAT_COLOR" = "节假日颜色";
 "HOLIDAT_REST_NO_COLOR" = "调休颜色";
 "HOLIDAY" = "节假日";

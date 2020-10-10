@@ -16,13 +16,23 @@ class CalendarWidget {
 
     localizedWeek(index) {
         let week = []
-        week[0] = $l10n("SUNDAY")
-        week[1] = $l10n("MONDAY")
-        week[2] = $l10n("TUESDAY")
-        week[3] = $l10n("WEDNESDAY")
-        week[4] = $l10n("THURSDAY")
-        week[5] = $l10n("FRIDAY")
-        week[6] = $l10n("SATURDAY")
+        if (this.setting.get("calendar.firstDayOfWeek") === 0) {
+            week[0] = $l10n("SUNDAY")
+            week[1] = $l10n("MONDAY")
+            week[2] = $l10n("TUESDAY")
+            week[3] = $l10n("WEDNESDAY")
+            week[4] = $l10n("THURSDAY")
+            week[5] = $l10n("FRIDAY")
+            week[6] = $l10n("SATURDAY")
+        } else if (this.setting.get("calendar.firstDayOfWeek") === 1) {
+            week[0] = $l10n("MONDAY")
+            week[1] = $l10n("TUESDAY")
+            week[2] = $l10n("WEDNESDAY")
+            week[3] = $l10n("THURSDAY")
+            week[4] = $l10n("FRIDAY")
+            week[5] = $l10n("SATURDAY")
+            week[6] = $l10n("SUNDAY")
+        }
         return week[index]
     }
 
@@ -71,6 +81,10 @@ class CalendarWidget {
         let dateNow = date.getDate()// 当前日期
         let dates = new Date(year, month + 1, 0).getDate()// 总天数
         let firstDay = new Date(year, month, 1).getDay()// 本月第一天是周几
+        if (this.setting.get("calendar.firstDayOfWeek") === 1) {
+            firstDay -= 1
+            if (firstDay < 0) firstDay = 6
+        }
         let calendar = []
         for (let date = 1; date <= dates;) {
             let week = []

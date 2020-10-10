@@ -30,6 +30,19 @@
                 "type": "switch",
                 "key": "calendar.lunar_other",
                 "value": true
+            },
+            {
+                "icon": [
+                    "calendar"
+                ],
+                "title": "FIRST_DAY_OF_WEEK",
+                "type": "tab",
+                "key": "calendar.firstDayOfWeek",
+                "items":[
+                    "_SUNDAY",
+                    "_MONDAY"
+                ],
+                "value": 0
             }
         ]
     },
