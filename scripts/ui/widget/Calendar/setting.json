@@ -33,7 +33,8 @@
             },
             {
                 "icon": [
-                    "calendar"
+                    "flag.fill",
+                    "#FFCC00"
                 ],
                 "title": "FIRST_DAY_OF_WEEK",
                 "type": "tab",
