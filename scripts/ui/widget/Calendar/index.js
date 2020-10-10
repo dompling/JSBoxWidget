@@ -175,12 +175,6 @@ class CalendarWidget {
                     ext: { color: $color("primaryText") },// 额外信息样式，如农历等
                     box: { background: $color("clear") }
                 }
-                // 当天
-                if (Math.abs(date.date) === calendarInfo.date) {
-                    props.text.color = $color("white")
-                    props.ext.color = $color("white")
-                    props.box.background = $color(this.colorTone)
-                }
                 // 周六周天显示灰色
                 if (date.day === 0 || date.day === 6) {
                     props.ext.color = props.text.color = $color("systemGray2")
@@ -191,6 +185,19 @@ class CalendarWidget {
                         props.ext.color = props.text.color = $color(this.holidayColor)
                     } else {
                         props.ext.color = props.text.color = $color(this.holidayNoRestColor)
+                    }
+                }
+                // 当天
+                if (date.date === calendarInfo.date) {
+                    props.text.color = $color("white")
+                    props.ext.color = $color("white")
+                    if (!date.holiday) {
+                        props.box.background = $color(this.colorTone)
+                    } else {
+                        if (date.holiday.holiday)
+                            props.box.background = $color(this.holidayColor)
+                        else
+                            props.box.background = $color(this.holidayNoRestColor)
                     }
                 }
                 // 4x4 widget 可显示额外信息
@@ -238,31 +245,28 @@ class CalendarWidget {
         // 标题栏文字内容
         let content = {
             left: this.localizedMonth(calendarInfo.month),
-            right: String(calendarInfo.year)
+            right: String(calendarInfo.year),
+            size: 12
         }
         if (ctx.family === 2) {
             content = {
                 left: calendarInfo.year + $l10n("YEAR") + this.localizedMonth(calendarInfo.month),
-                right: this.lunar.lunarYear + $l10n("YEAR") + this.lunar.lunarMonth + $l10n("MONTH") + this.lunar.lunarDay
+                right: this.lunar.lunarYear + $l10n("YEAR") + this.lunar.lunarMonth + $l10n("MONTH") + this.lunar.lunarDay,
+                size: 18
             }
         } else if (this.setting.get("calendar.lunar_other")) {
             content = {
-                left: calendarInfo.year + $l10n("YEAR") + this.localizedMonth(calendarInfo.month),
+                left: String(calendarInfo.year).slice(-2) + $l10n("YEAR") + this.localizedMonth(calendarInfo.month),
                 right: this.lunar.lunarMonth + $l10n("MONTH") + this.lunar.lunarDay
             }
         }
+        let width = ctx.displaySize.width / 2
         let titleBar = {
             type: "hstack",
             props: {
-                alignment: $widget.horizontalAlignment.center,
                 padding: $insets(10, 13, 5, 13),
-                columns: Array(2).fill({
-                    flexible: {
-                        minimum: 10,
-                        maximum: Infinity
-                    }
-                }),
                 frame: {
+                    width: Infinity,
                     height: 20
                 }
             },
@@ -272,24 +276,23 @@ class CalendarWidget {
                     props: {
                         text: content.left,
                         color: $color(this.colorTone),
-                        font: $font("blur", 14),
-                        minimumScaleFactor: 0.5,
+                        font: $font("bold", content.size),
                         frame: {
-                            minWidth: 50,
+                            alignment: $widget.alignment.leading,
+                            maxWidth: width,
                             height: 20
                         }
                     }
                 },
-                { type: "spacer" },
                 {
                     type: "text",
                     props: {
                         text: content.right,
                         color: $color(this.colorTone),
-                        font: $font("blur", 14),
-                        minimumScaleFactor: 0.5,
+                        font: $font("bold", content.size),
                         frame: {
-                            minWidth: 50,
+                            alignment: $widget.alignment.trailing,
+                            maxWidth: width,
                             height: 20
                         }
                     }
