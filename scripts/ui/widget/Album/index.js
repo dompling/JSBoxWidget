@@ -46,8 +46,6 @@ class PictureWidget {
             render: ctx => {
                 let pictures = this.setting.getImages()
                 let index = 0 // 图片索引
-                console.log(switchInterval)
-                console.log(new Date().getTime() - data.date)
                 if (new Date().getTime() - data.date > switchInterval) {// 下一张
                     $cache.set("album.switch.data", {
                         date: new Date().getTime(),
