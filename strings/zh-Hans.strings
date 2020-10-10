@@ -81,6 +81,6 @@
 "SWITCH_METHOD" = "切换方式";
 "RANDOM" = "随机";
 "SEQUENCE" = "顺序";
-"SWITCH_INTERVAL" = "切换间隔";
+"SWITCH_INTERVAL" = "切换间隔(min)";
 "SYSTEM_ALBUM" = "系统相册";
 "SAVE_TO_SYSTEM_ALBUM" = "保存到系统相册";
