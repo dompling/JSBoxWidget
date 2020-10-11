@@ -93,12 +93,22 @@
         "items": [
             {
                 "icon": [
+                    "trash",
+                    "#CC3333"
+                ],
+                "title": "CLEAR_CACHE",
+                "type": "script",
+                "key": "album.clearCache",
+                "value": "this.controller.clearCache()"
+            },
+            {
+                "icon": [
                     "book.fill",
                     "#A569BD"
                 ],
                 "title": "README",
                 "type": "script",
-                "key": "calendar",
+                "key": "album",
                 "value": "this.controller.readme()"
             }
         ]

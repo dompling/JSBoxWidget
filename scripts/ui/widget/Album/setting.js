@@ -172,6 +172,13 @@ class PictureSetting extends Setting {
                 this.settingComponent.view.touchHighlightEnd()
             })
         }
+
+        this.setting.clearCache = () => {
+            this.settingComponent.view.touchHighlight()
+            this.settingComponent.view.start()
+            $cache.remove("album.switch.data")
+            this.settingComponent.view.done()
+        }
     }
 }
 
