@@ -80,7 +80,7 @@
 "YEAR" = "年";
 
 "COLOR_TONE" = "主色调";
-"FIRST_DAY_OF_WEEK" = "周第一天";
+"FIRST_DAY_OF_WEEK" = "每周第一天";
 
 "HOLIDAT_COLOR" = "节假日颜色";
 "HOLIDAT_REST_NO_COLOR" = "调休颜色";
@@ -93,10 +93,13 @@
 "HOLIDAY_ALREADY_EXISTS" = "节假日数据已经存在，是否覆盖数据？";
 
 "SHOW_YEAR" = "显示年";
-"LUNAR_2x2" = "显示农历";
+"SHOW_LUNAR" = "显示农历";
 "MONTH_DISPLAY_MODE" = "月份显示模式";
 "CHINESE_CHARACTERS" = "汉字";
 "NUMBER" = "数字";
+
+"FAMILY_SMALL" = "小尺寸Widget";
+"SHOW_MODE" = "显示模式";
 
 "ALBUM" = "相册";
 "ALBUM_COLUMN" = "相册图片列数";
@@ -110,3 +113,5 @@
 "SAVE_TO_SYSTEM_ALBUM" = "保存到系统相册";
 "NO_IMAGE" = "无该图片";
 "CLEAR_CACHE" = "清除缓存";
+
+"TIME_SPAN" = "时间跨度(天)";
