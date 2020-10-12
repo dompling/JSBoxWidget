@@ -1,0 +1,61 @@
+[
+    {
+        "title": "GENERAL",
+        "items": [
+            {
+                "icon": [
+                    "rectangle.3.offgrid.fill"
+                ],
+                "title": "PREVIEW",
+                "type": "script",
+                "key": "preview",
+                "value": "this.controller.preview()"
+            },
+            {
+                "icon": [
+                    "wand.and.rays",
+                    "#FF9933"
+                ],
+                "title": "COLOR_TONE",
+                "type": "color",
+                "key": "colorTone",
+                "value": "#FF9933"
+            },
+            {
+                "icon": [
+                    "wand.and.rays",
+                    "#3366CC"
+                ],
+                "title": "REMINDER_COLOR",
+                "type": "color",
+                "key": "colorReminder",
+                "value": "#3366CC"
+            },
+            {
+                "icon": [
+                    "rectangle.split.3x1.fill",
+                    "#FF6666"
+                ],
+                "title": "TIME_SPAN",
+                "type": "number",
+                "key": "timeSpan",
+                "value": 10
+            }
+        ]
+    },
+    {
+        "title": "ABOUT",
+        "items": [
+            {
+                "icon": [
+                    "book.fill",
+                    "#A569BD"
+                ],
+                "title": "README",
+                "type": "script",
+                "key": "calendar",
+                "value": "this.controller.readme()"
+            }
+        ]
+    }
+]

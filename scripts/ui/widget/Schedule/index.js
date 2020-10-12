@@ -1,0 +1,88 @@
+const ScheduleSetting = require("./setting")
+const Schedule = require("./schedule")
+
+class CalendarWidget {
+    constructor(kernel) {
+        this.kernel = kernel
+        this.setting = new ScheduleSetting(this.kernel)
+        this.schedule = new Schedule(this.kernel, this.setting)
+    }
+
+    custom() {
+        this.setting.push()
+    }
+
+    async view2x2() {
+        return this.schedule.scheduleView(this.setTimeLine)
+    }
+
+    async view2x4() {
+        return {
+            type: "vgrid",
+            props: {
+                columns: Array(2).fill({
+                    flexible: {
+                        minimum: 10,
+                        maximum: Infinity
+                    },
+                    spacing: 10,
+                }),
+                spacing: 10,
+            },
+            views: [
+                {
+                    type: "text",
+                    props: {
+                        text: "Hello World!"
+                    }
+                },
+                this.schedule.scheduleView(this.setTimeLine)
+            ]
+        }
+    }
+
+    async view4x4() {
+        return this.schedule.scheduleView(this.setTimeLine)
+    }
+
+    /**
+     * 将会作为函数传递
+     * @param {CallableFunction} view 视图处理函数
+     */
+    setTimeLine(view) {
+        let switchInterval = 1000 * 60 * 10 // 10分钟
+        let nowDate = new Date()
+        const expireDate = new Date(nowDate + switchInterval)
+        $widget.setTimeline({
+            entries: [
+                {
+                    date: nowDate,
+                    info: {}
+                }
+            ],
+            policy: {
+                afterDate: expireDate
+            },
+            render: ctx => {
+                return view(ctx)
+            }
+        })
+    }
+
+    render() {
+        switch ($widget.family) {
+            case 0:
+                return this.view2x2()
+            case 1:
+                return this.view2x4()
+            case 2:
+                return this.view4x4()
+            default:
+                return this.view2x2()
+        }
+    }
+}
+
+module.exports = {
+    Widget: CalendarWidget
+}

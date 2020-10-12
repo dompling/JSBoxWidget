@@ -115,3 +115,9 @@
 "CLEAR_CACHE" = "清除缓存";
 
 "TIME_SPAN" = "时间跨度(天)";
+"REMINDER_COLOR" = "提醒事项颜色";
+"DATE" = "日";
+"NO_DATE" = "无日期";
+"TODAY" = "今天";
+"ALL_DAY" = "全天";
+"NO_CALENDAR&REMINDER" = "最近无安排";
