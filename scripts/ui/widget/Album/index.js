@@ -75,7 +75,7 @@ class PictureWidget {
                     view = {
                         type: "text",
                         props: {
-                            widgetURL: `jsbox://run?name=EasyWidget&widget=${this.setting.widget}`,
+                            widgetURL: this.settingUrlScheme,
                             text: `${$l10n("NO_IMAGE")}:\n${imagePath}`
                         }
                     }
@@ -83,7 +83,7 @@ class PictureWidget {
                     view = {
                         type: "image",
                         props: {
-                            widgetURL: this.urlScheme,
+                            widgetURL: this.urlScheme ? this.urlScheme : this.settingUrlScheme,
                             image: $image(imagePath),
                             resizable: true,
                             scaledToFill: true

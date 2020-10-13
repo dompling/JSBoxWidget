@@ -318,7 +318,7 @@ class Calendar {
         return {
             type: "vstack",
             props: {
-                widgetURL: `jsbox://run?name=EasyWidget&widget=${this.setting.widget}`,
+                widgetURL: this.settingUrlScheme,
                 alignment: $widget.verticalAlignment.center,
                 spacing: 0
             },
