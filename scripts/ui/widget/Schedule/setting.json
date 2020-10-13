@@ -40,6 +40,20 @@
                 "type": "number",
                 "key": "timeSpan",
                 "value": 10
+            },
+            {
+                "icon": [
+                    "paperplane.fill"
+                ],
+                "title": "CLICK_EVENT",
+                "type": "menu",
+                "key": "clickEvent",
+                "items":[
+                    "SETTING",
+                    "REMINDER",
+                    "CALENDAR"
+                ],
+                "value": 0
             }
         ]
     },

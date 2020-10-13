@@ -5,6 +5,17 @@ class Schedule {
         this.timeSpan = this.setting.get("timeSpan")
         this.colorTone = this.setting.get("colorTone")
         this.colorReminder = this.setting.get("colorReminder")
+        switch (this.setting.get("clickEvent")) {
+            case 0:
+                this.urlScheme = this.settingUrlScheme
+                break
+            case 1:
+                this.urlScheme = "x-apple-reminderkit://"
+                break
+            case 2:
+                this.urlScheme = "calshow://"
+                break
+        }
     }
 
     async getSchedule() {
@@ -218,7 +229,7 @@ class Schedule {
             return {
                 type: "vstack",
                 props: {
-                    widgetURL: `jsbox://run?name=EasyWidget&widget=${this.setting.widget}`,
+                    widgetURL: this.urlScheme,
                     alignment: $widget.verticalAlignment.firstTextBaseline,
                     spacing: 15
                 },
