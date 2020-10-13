@@ -5,9 +5,9 @@ class AppKernel extends Kernel {
     constructor() {
         super()
         // 检查是否携带URL scheme
-        let query = $context.query
-        if (query["url-scheme"]) {
-            $app.openURL(query["url-scheme"])
+        this.query = $context.query
+        if (this.query["url-scheme"]) {
+            $app.openURL(this.query["url-scheme"])
         }
         // 注册组件
         this.settingComponent = this._registerComponent("Setting")

@@ -3,6 +3,17 @@ class HomeUI {
         this.kernel = kernel
         this.factory = factory
         this.widgetRootPath = "/scripts/ui/widget"
+        // 检查是否携带widget参数，携带则打开设置页面
+        if (this.kernel.query["widget"]) {
+            setTimeout(() => {
+                let widget = this.kernel.widgetInstance(this.kernel.query["widget"])
+                if (widget) {
+                    widget.custom()
+                    // 清空参数
+                    this.kernel.query["widget"] = undefined
+                }
+            }, 500)
+        }
     }
 
     getWidgetViews() {

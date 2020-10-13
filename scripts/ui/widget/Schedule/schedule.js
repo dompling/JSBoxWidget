@@ -218,6 +218,7 @@ class Schedule {
             return {
                 type: "vstack",
                 props: {
+                    widgetURL: `jsbox://run?name=EasyWidget&widget=${this.setting.widget}`,
                     alignment: $widget.verticalAlignment.firstTextBaseline,
                     spacing: 15
                 },
