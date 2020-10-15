@@ -242,10 +242,8 @@ class Calendar {
                         minimum: 10,
                         maximum: Infinity
                     },
-                    spacing: 0,
-                    padding: 0,
-                }),
-                padding: $insets(0, 10, 10, 10),
+                    spacing: 0
+                })
             },
             views: this.formatCalendar(family, calendarInfo)
         }
@@ -268,10 +266,10 @@ class Calendar {
         let titleBar = {
             type: "hstack",
             props: {
-                padding: $insets(10, 13, 5, 13),
+                padding: $insets(0, 0, 10, 0),
                 frame: {
                     width: Infinity,
-                    height: 20
+                    height: Infinity
                 }
             },
             views: [
@@ -279,12 +277,12 @@ class Calendar {
                     type: "text",
                     props: {
                         text: content.left,
+                        lineLimit: 1,
                         color: $color(this.colorTone),
                         font: $font("bold", content.size),
                         frame: {
                             alignment: $widget.alignment.leading,
-                            maxWidth: Infinity,
-                            height: 20
+                            maxWidth: Infinity
                         }
                     }
                 },
@@ -292,12 +290,12 @@ class Calendar {
                     type: "text",
                     props: {
                         text: content.right,
+                        lineLimit: 1,
                         color: $color(this.colorTone),
                         font: $font("bold", content.size),
                         frame: {
                             alignment: $widget.alignment.trailing,
-                            maxWidth: Infinity,
-                            height: 20
+                            maxWidth: Infinity
                         }
                     }
                 }
@@ -307,8 +305,10 @@ class Calendar {
             type: "vstack",
             props: {
                 widgetURL: this.setting.settingUrlScheme,
-                alignment: $widget.verticalAlignment.center,
-                spacing: 0
+                maxWidth: Infinity,
+                maxHeight: Infinity,
+                spacing: 0,
+                padding: 10
             },
             views: [titleBar, calendar]
         }
