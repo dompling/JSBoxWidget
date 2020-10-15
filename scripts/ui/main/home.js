@@ -42,6 +42,7 @@ class HomeUI {
                 props: {
                     id: "EasyWidget-home-list",
                     rowHeight: 100,
+                    indicatorInsets: $insets(30, 0, 50, 0),
                     data: views,
                     header: {
                         type: "view",
@@ -57,6 +58,10 @@ class HomeUI {
                                 make.centerY.equalTo(view.super)
                             }
                         }]
+                    },
+                    footer: {// 防止list被菜单遮挡
+                        type: "view",
+                        props: { height: 50 }
                     },
                     template: {
                         props: {
