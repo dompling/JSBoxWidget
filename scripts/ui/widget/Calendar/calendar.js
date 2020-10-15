@@ -14,10 +14,6 @@ class Calendar {
         this.widget2x2TitleYear = this.setting.get("calendar.small.title.year")// 2x2标题是否显示年
         this.firstDayOfWeek = this.setting.get("calendar.firstDayOfWeek")// 每周第一天
         this.lunar2x2 = this.setting.get("calendar.small.lunar")// 2x2是否显示农历
-        this.family = {
-            small: 0,
-            large: 2
-        }
     }
 
     setCtx(ctx) {
@@ -221,7 +217,7 @@ class Calendar {
                 }
                 // 4x4 widget 可显示额外信息
                 let ext
-                if (family === this.family.large) {
+                if (family === this.setting.family.large) {
                     ext = date.holiday ? date.holiday.name : date.lunar.lunarDay
                 }
                 days.push(template(String(date.date), props, ext))
@@ -235,7 +231,7 @@ class Calendar {
                 box: {
                     frame: {
                         minWidth: minWidth,
-                        height: family === this.family.large ? height / 2 : height,// 4x4 widget 日期指示器高度减半
+                        height: family === this.setting.family.large ? height / 2 : height,// 4x4 widget 日期指示器高度减半
                         alignment: $widget.alignment.center
                     }
                 }
@@ -245,7 +241,7 @@ class Calendar {
     }
 
     calendarView(family) {
-        let calendarInfo = this.getCalendar(family === this.family.large)
+        let calendarInfo = this.getCalendar(family === this.setting.family.large)
         let calendar = {
             type: "vgrid",
             props: {
@@ -263,7 +259,7 @@ class Calendar {
         }
         // 标题栏文字内容
         let content
-        if (family === this.family.large) {
+        if (family === this.setting.family.large) {
             content = {
                 left: calendarInfo.year + $l10n("YEAR") + this.localizedMonth(calendarInfo.month),
                 right: this.lunar.lunarYear + $l10n("YEAR") + this.lunar.lunarMonth + $l10n("MONTH") + this.lunar.lunarDay,

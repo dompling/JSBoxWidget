@@ -12,6 +12,11 @@ class Setting {
         this.defaultSettingMethods()
         this.initSettingMethods()
         this.settingUrlScheme = `jsbox://run?name=EasyWidget&widget=${this.widget}`
+        this.family = {
+            small: 0,
+            medium: 1,
+            large: 2
+        }
     }
 
     push() {

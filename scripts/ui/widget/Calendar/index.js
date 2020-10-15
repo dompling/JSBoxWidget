@@ -13,7 +13,7 @@ class CalendarWidget {
     }
 
     view2x2() {
-        return this.calendar.calendarView(this.calendar.family.small)
+        return this.calendar.calendarView(this.setting.family.small)
     }
 
     view2x4() {
@@ -24,7 +24,7 @@ class CalendarWidget {
     }
 
     view4x4() {
-        return this.calendar.calendarView(this.calendar.family.large)
+        return this.calendar.calendarView(this.setting.family.large)
     }
 
     render() {
