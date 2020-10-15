@@ -642,7 +642,7 @@ class View extends BaseView {
         }
     }
 
-    createMenu(key, icon, title, items, events) {
+    createMenu(key, icon, title, items, events, withTitle) {
         let id = `setting-menu-${this.dataCenter.get("name")}-${key}`
         return {
             type: "view",
@@ -665,7 +665,10 @@ class View extends BaseView {
                                     $ui.menu({
                                         items: items,
                                         handler: (title, idx) => {
-                                            this.updateSetting(key, idx)
+                                            if (withTitle)
+                                                this.updateSetting(key, [idx, title])
+                                            else
+                                                this.updateSetting(key, idx)
                                             if (events) eval(`(()=>{return ${events}})()`)
                                             $(id).text = $l10n(title)
                                         },
@@ -873,7 +876,7 @@ class View extends BaseView {
                         if (typeof item.items === "string") {
                             item.items = eval(`(()=>{return ${item.items}})()`)
                         }
-                        row = this.createMenu(item.key, item.icon, $l10n(item.title), item.items, item.events)
+                        row = this.createMenu(item.key, item.icon, $l10n(item.title), item.items, item.events, item.withTitle)
                         break
                     default:
                         continue
