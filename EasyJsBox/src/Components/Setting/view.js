@@ -732,30 +732,144 @@ class View extends BaseView {
                 if (typeof item.items === "object") item.items = item.items.map(item => $l10n(item))
                 switch (item.type) {
                     case "switch":
+                        /**
+                         * {
+                                "icon": [
+                                    "archivebox",
+                                    "#336699"
+                                ],
+                                "title": "USE_COMPRESSED_IMAGE",
+                                "type": "switch",
+                                "key": "album.useCompressedImage",
+                                "value": true
+                            }
+                         */
                         row = this.createSwitch(item.key, item.icon, $l10n(item.title), item.events)
                         break
                     case "stepper":
+                        /**
+                         * {
+                                "icon": [
+                                    "rectangle.split.3x1.fill",
+                                    "#FF6666"
+                                ],
+                                "title": "SWITCH_INTERVAL",
+                                "type": "stepper",
+                                "key": "album.switchInterval",
+                                "min": 10,
+                                "max": 60,
+                                "value": 10
+                            }
+                         */
                         row = this.createStepper(item.key, item.icon, $l10n(item.title), item.min ? item.min : 1, item.max ? item.max : 12, item.events)
                         break
                     case "string":
+                        /**
+                         * {
+                                "icon": [
+                                    "link",
+                                    "#CC6699"
+                                ],
+                                "title": "URL_SCHEME",
+                                "type": "string",
+                                "key": "album.urlScheme",
+                                "value": ""
+                            }
+                         */
                         row = this.createString(item.key, item.icon, $l10n(item.title), item.events)
                         break
                     case "number":
+                        /**
+                         * {
+                                "icon": [
+                                    "rectangle.split.3x1.fill",
+                                    "#FF6666"
+                                ],
+                                "title": "TIME_SPAN",
+                                "type": "number",
+                                "key": "timeSpan",
+                                "value": 10
+                            }
+                         */
                         row = this.createNumber(item.key, item.icon, $l10n(item.title), item.events)
                         break
                     case "info":
+                        /**
+                         * {
+                                "icon": [
+                                    "book.fill",
+                                    "#A569BD"
+                                ],
+                                "title": "README",
+                                "type": "script",
+                                "key": "readme",
+                                "value": "this.controller.readme()"
+                            }
+                         */
                         row = this.createInfo(item.icon, $l10n(item.title), value)
                         break
                     case "script":
+                        /**
+                         * {
+                                "icon": [
+                                    "book.fill",
+                                    "#A569BD"
+                                ],
+                                "title": "README",
+                                "type": "script",
+                                "key": "calendar",
+                                "value": "this.controller.readme()"
+                            }
+                         */
                         row = this.createScript(item.key, item.icon, $l10n(item.title), value)
                         break
                     case "tab":
+                        /**
+                         * {
+                                "icon": [
+                                    "flag.fill",
+                                    "#FFCC00"
+                                ],
+                                "title": "FIRST_DAY_OF_WEEK",
+                                "type": "tab",
+                                "key": "calendar.firstDayOfWeek",
+                                "items": [
+                                    "_SUNDAY",
+                                    "_MONDAY"
+                                ],
+                                "value": 0
+                            }
+                         */
                         row = this.createTab(item.key, item.icon, $l10n(item.title), item.items, item.events)
                         break
                     case "color":
+                        /**
+                         * {
+                                "icon": [
+                                    "wand.and.rays",
+                                    "orange"
+                                ],
+                                "title": "COLOR_TONE",
+                                "type": "color",
+                                "key": "calendar.colorTone",
+                                "value": "orange"
+                            }
+                         */
                         row = this.createColor(item.key, item.icon, $l10n(item.title), item.events)
                         break
                     case "menu":
+                        /**
+                         * {
+                                "icon": [
+                                    "rectangle.3.offgrid.fill"
+                                ],
+                                "title": "RIGHT",
+                                "type": "menu",
+                                "key": "right",
+                                "items": "this.controller.getMenu()",
+                                "value": 0
+                            }
+                         */
                         if (typeof item.items === "string") {
                             item.items = eval(`(()=>{return ${item.items}})()`)
                         }
