@@ -127,7 +127,7 @@ class View extends BaseView {
         }
     }
 
-    createSwitch(key, icon, title) {
+    createSwitch(key, icon, title, events) {
         return {
             type: "view",
             views: [
@@ -142,6 +142,8 @@ class View extends BaseView {
                         changed: sender => {
                             if (!this.updateSetting(key, sender.on)) {
                                 sender.on = !sender.on
+                            } else {
+                                if (events) eval(`(()=>{return ${events}})()`)
                             }
                         }
                     },
@@ -155,7 +157,7 @@ class View extends BaseView {
         }
     }
 
-    createString(key, icon, title) {
+    createString(key, icon, title, events) {
         return {
             type: "view",
             views: [
@@ -205,6 +207,7 @@ class View extends BaseView {
                                             tapped: () => {
                                                 if (this.updateSetting(key, $(key).text)) {
                                                     popover.dismiss()
+                                                    if (events) eval(`(()=>{return ${events}})()`)
                                                 }
                                             }
                                         }
@@ -224,7 +227,7 @@ class View extends BaseView {
         }
     }
 
-    createNumber(key, icon, title) {
+    createNumber(key, icon, title, events) {
         return {
             type: "view",
             views: [
@@ -253,6 +256,7 @@ class View extends BaseView {
                                     }
                                     if (this.updateSetting(key, text)) {
                                         $(key).text = text
+                                        if (events) eval(`(()=>{return ${events}})()`)
                                     }
                                 }
                             })
@@ -270,7 +274,7 @@ class View extends BaseView {
         }
     }
 
-    createStepper(key, icon, title, min = 1, max = 12) {
+    createStepper(key, icon, title, min = 1, max = 12, events) {
         return {
             type: "view",
             views: [
@@ -300,6 +304,8 @@ class View extends BaseView {
                             $(key).text = sender.value
                             if (!this.updateSetting(key, sender.value)) {
                                 $(key).text = this.controller.get(key)
+                            } else {
+                                if (events) eval(`(()=>{return ${events}})()`)
                             }
                         }
                     },
@@ -516,7 +522,7 @@ class View extends BaseView {
                                     this.touchHighlightStart = touchHighlightStart
                                     this.touchHighlightEnd = touchHighlightEnd
                                     // 执行代码
-                                    eval(script)
+                                    eval(`(()=>{return ${script}})()`)
                                 }
                             },
                             layout: (make, view) => {
@@ -536,7 +542,7 @@ class View extends BaseView {
         }
     }
 
-    createTab(key, icon, title, items) {
+    createTab(key, icon, title, items, events) {
         return {
             type: "view",
             views: [
@@ -555,6 +561,7 @@ class View extends BaseView {
                     events: {
                         changed: (sender) => {
                             this.updateSetting(key, sender.index)
+                            if (events) eval(`(()=>{return ${events}})()`)
                         }
                     }
                 }
@@ -563,7 +570,7 @@ class View extends BaseView {
         }
     }
 
-    createColor(key, icon, title) {
+    createColor(key, icon, title, events) {
         return {
             type: "view",
             views: [
@@ -605,6 +612,7 @@ class View extends BaseView {
                                                     let rgb = palette.rgb
                                                     let newColor = Palette.RGB2HEX(rgb[0], rgb[1], rgb[2])
                                                     this.updateSetting(key, newColor)
+                                                    if (events) eval(`(()=>{return ${events}})()`)
                                                     $(`setting-${this.dataCenter.get("name")}-color-${key}`).bgcolor = $color(newColor)
                                                     $ui.pop()
                                                 }
@@ -634,7 +642,7 @@ class View extends BaseView {
         }
     }
 
-    createMenu(key, icon, title, items) {
+    createMenu(key, icon, title, items, events) {
         let id = `setting-menu-${this.dataCenter.get("name")}-${key}`
         return {
             type: "view",
@@ -658,6 +666,7 @@ class View extends BaseView {
                                         items: items,
                                         handler: (title, idx) => {
                                             this.updateSetting(key, idx)
+                                            if (events) eval(`(()=>{return ${events}})()`)
                                             $(id).text = $l10n(title)
                                         },
                                         finished: () => {
@@ -720,19 +729,19 @@ class View extends BaseView {
                 let value = this.controller.get(item.key)
                 let row = null
                 if (!item.icon) item.icon = ["square.grid.2x2.fill", "#00CC00"]
-                if (item.items) item.items = item.items.map(item => $l10n(item))
+                if (typeof item.items === "object") item.items = item.items.map(item => $l10n(item))
                 switch (item.type) {
                     case "switch":
-                        row = this.createSwitch(item.key, item.icon, $l10n(item.title))
+                        row = this.createSwitch(item.key, item.icon, $l10n(item.title), item.events)
                         break
                     case "stepper":
-                        row = this.createStepper(item.key, item.icon, $l10n(item.title), item.min ? item.min : 1, item.max ? item.max : 12)
+                        row = this.createStepper(item.key, item.icon, $l10n(item.title), item.min ? item.min : 1, item.max ? item.max : 12, item.events)
                         break
                     case "string":
-                        row = this.createString(item.key, item.icon, $l10n(item.title))
+                        row = this.createString(item.key, item.icon, $l10n(item.title), item.events)
                         break
                     case "number":
-                        row = this.createNumber(item.key, item.icon, $l10n(item.title))
+                        row = this.createNumber(item.key, item.icon, $l10n(item.title), item.events)
                         break
                     case "info":
                         row = this.createInfo(item.icon, $l10n(item.title), value)
@@ -741,13 +750,16 @@ class View extends BaseView {
                         row = this.createScript(item.key, item.icon, $l10n(item.title), value)
                         break
                     case "tab":
-                        row = this.createTab(item.key, item.icon, $l10n(item.title), item.items)
+                        row = this.createTab(item.key, item.icon, $l10n(item.title), item.items, item.events)
                         break
                     case "color":
-                        row = this.createColor(item.key, item.icon, $l10n(item.title))
+                        row = this.createColor(item.key, item.icon, $l10n(item.title), item.events)
                         break
                     case "menu":
-                        row = this.createMenu(item.key, item.icon, $l10n(item.title), item.items)
+                        if (typeof item.items === "string") {
+                            item.items = eval(`(()=>{return ${item.items}})()`)
+                        }
+                        row = this.createMenu(item.key, item.icon, $l10n(item.title), item.items, item.events)
                         break
                     default:
                         continue
