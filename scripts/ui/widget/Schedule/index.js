@@ -13,7 +13,7 @@ class CalendarWidget {
     }
 
     async view2x2() {
-        return this.schedule.scheduleView(this.setTimeLine)
+        return await this.schedule.scheduleView()
     }
 
     async view2x4() {
@@ -70,7 +70,37 @@ class CalendarWidget {
         })
     }
 
-    render() {
+    async render() {
+        let switchInterval = 1000 * 60 * 10 // 10分钟
+        let nowDate = new Date()
+        const expireDate = new Date(nowDate + switchInterval)
+        // 获取视图
+        let view2x2 = await this.view2x2()
+        //console.log(view2x2)
+        $widget.setTimeline({
+            entries: [
+                {
+                    date: nowDate,
+                    info: {}
+                }
+            ],
+            policy: {
+                afterDate: expireDate
+            },
+            render: ctx => {
+                switch (ctx.family) {
+                    case 0:
+                        return view2x2
+                    /* case 1:
+                        return this.view2x4()
+                    case 2:
+                        return this.view4x4() */
+                    default:
+                        return view2x2
+                }
+            }
+        })
+        return
         switch ($widget.family) {
             case 0:
                 return this.view2x2()

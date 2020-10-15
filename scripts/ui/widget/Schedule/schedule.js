@@ -93,14 +93,15 @@ class Schedule {
 
     }
 
-    getListView(ctx, list) {
+    async getListView() {
+        // 获取数据
+        let list = await this.getSchedule()
         if (list.length === 0) {
             return [{
                 type: "text",
                 props: { text: $l10n("NO_CALENDAR&REMINDER") }
             }]
         }
-        let width = ctx.displaySize.height
         let dateCollect = {}
         const isReminder = item => item.completed !== undefined
         for (let item of list) {
@@ -117,11 +118,10 @@ class Schedule {
                     type: "hstack",
                     props: {
                         frame: {
-                            width: width,
+                            maxWidth: Infinity,
                             alignment: $widget.alignment.leading,
                             height: 30,
                         },
-                        padding: $insets(5, 35, 0, 0),
                         spacing: 5
                     },
                     views: [
@@ -138,7 +138,10 @@ class Schedule {
                         {
                             type: "vstack",
                             props: {
-                                frame: { alignment: $widget.alignment.leading },
+                                frame: {
+                                    maxWidth: Infinity,
+                                    alignment: $widget.alignment.leading
+                                },
                                 spacing: 0
                             },
                             views: [
@@ -149,7 +152,7 @@ class Schedule {
                                         text: item.title,
                                         font: $font(14),
                                         frame: {
-                                            width: width,
+                                            maxWidth: Infinity,
                                             alignment: $widget.alignment.leading
                                         },
                                         padding: $insets(0, 0, 2, 0)
@@ -159,7 +162,7 @@ class Schedule {
                                     type: "hstack",
                                     props: {
                                         frame: {
-                                            width: width,
+                                            maxWidth: Infinity,
                                             alignment: $widget.alignment.leading,
                                         },
                                         spacing: 5
@@ -184,10 +187,7 @@ class Schedule {
                                                 text: isReminder(item) ? this.formatDate(item.alarmDate, 1) : this.formatDate(item.endDate, 1),
                                                 font: $font(12),
                                                 color: $color("systemGray2"),
-                                                frame: {
-                                                    height: 10,
-                                                    alignment: $widget.alignment.leading
-                                                }
+                                                frame: { height: 10 }
                                             }
                                         }
                                     ]
@@ -199,7 +199,7 @@ class Schedule {
             }
             views.push({
                 type: "vstack",
-                props: { spacing: 0 },
+                props: { spacing: 5 },
                 views: [
                     {
                         type: "text",
@@ -208,11 +208,11 @@ class Schedule {
                             color: $color(this.colorTone),
                             font: $font("bold", 12),
                             frame: {
-                                width: width,
+                                maxWidth: Infinity,
                                 alignment: $widget.alignment.leading,
                                 height: 10,
                             },
-                            padding: $insets(-5, 50 + 2, -2, 0)
+                            padding: $insets(-5, 5 + 2, -2, 0)
                         }
                     }
                 ].concat(view)
@@ -221,9 +221,25 @@ class Schedule {
         return views
     }
 
-    async scheduleView(setTimeLine) {
-        // 获取数据
-        let list = await this.getSchedule()
+    /**
+     * 获取视图
+     * 只提供正方形视图布局
+     */
+    async scheduleView() {
+        return {
+            type: "vstack",
+            props: {
+                widgetURL: this.urlScheme,
+                frame: {
+                    maxWidth: Infinity,
+                    maxHeight: Infinity,
+                    alignment: $widget.verticalAlignment.firstTextBaseline
+                },
+                padding: 15,
+                spacing: 15
+            },
+            views: await this.getListView()
+        }
         // 渲染
         setTimeLine(ctx => {
             return {
