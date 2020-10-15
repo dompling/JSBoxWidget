@@ -16,7 +16,7 @@ class HomeUI {
         }
     }
 
-    getWidgetViews() {
+    getWidgetListView() {
         let data = []
         let widgets = $file.list(this.widgetRootPath)
         for (let widget of widgets) {
@@ -55,7 +55,7 @@ class HomeUI {
     }
 
     getViews() {
-        let views = this.getWidgetViews()
+        let views = this.getWidgetListView()
         return [
             {
                 type: "list",
@@ -176,7 +176,7 @@ class HomeUI {
                                     path: `${this.widgetRootPath}/${widgetName}Copy/config.json`
                                 })
                                 // 更新列表
-                                setTimeout(() => { $("EasyWidget-home-list").data = this.getWidgetViews() }, 200)
+                                setTimeout(() => { $("EasyWidget-home-list").data = this.getWidgetListView() }, 200)
                             }
                         },
                         {
