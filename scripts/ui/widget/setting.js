@@ -4,8 +4,8 @@ class Setting {
         this.widget = widget
         this.settingComponent = this.kernel._registerComponent("Setting", `${this.widget}Setting`)
         this.setting = this.settingComponent.controller.init(
-            `/scripts/ui/widget/${this.widget}/setting.json`,
-            `/assets/widget/${this.widget}/setting.json`
+            `${this.kernel.widgetRootPath}/${this.widget}/setting.json`,
+            `${this.kernel.widgetAssetsPath}/${this.widget}/setting.json`
         )
         this.setting.isSecondaryPage(true, () => { $ui.pop() })
         this.setting.setFooter({ type: "view" })
