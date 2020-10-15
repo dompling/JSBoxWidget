@@ -11,7 +11,7 @@ class Setting {
         this.setting.setFooter({ type: "view" })
         this.defaultSettingMethods()
         this.initSettingMethods()
-        this.settingUrlScheme = `jsbox://run?name=EasyWidget&widget=${this.setting.widget}`
+        this.settingUrlScheme = `jsbox://run?name=EasyWidget&widget=${this.widget}`
     }
 
     push() {

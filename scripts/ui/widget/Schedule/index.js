@@ -25,14 +25,15 @@ class CalendarWidget {
                         minimum: 10,
                         maximum: Infinity
                     },
-                    spacing: 10,
+                    spacing: 10
                 }),
-                spacing: 10,
+                spacing: 10
             },
             views: [
                 {
                     type: "text",
                     props: {
+                        background: $color("blue"),
                         text: "Hello World!"
                     }
                 },

@@ -318,7 +318,7 @@ class Calendar {
         return {
             type: "vstack",
             props: {
-                widgetURL: this.settingUrlScheme,
+                widgetURL: this.setting.settingUrlScheme,
                 alignment: $widget.verticalAlignment.center,
                 spacing: 0
             },

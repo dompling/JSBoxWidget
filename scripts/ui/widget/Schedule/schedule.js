@@ -7,7 +7,7 @@ class Schedule {
         this.colorReminder = this.setting.get("colorReminder")
         switch (this.setting.get("clickEvent")) {
             case 0:
-                this.urlScheme = this.settingUrlScheme
+                this.urlScheme = this.setting.settingUrlScheme
                 break
             case 1:
                 this.urlScheme = "x-apple-reminderkit://"
@@ -100,7 +100,7 @@ class Schedule {
                 props: { text: $l10n("NO_CALENDAR&REMINDER") }
             }]
         }
-        let width = ctx.displaySize.width
+        let width = ctx.displaySize.height
         let dateCollect = {}
         const isReminder = item => item.completed !== undefined
         for (let item of list) {
