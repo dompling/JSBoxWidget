@@ -18,7 +18,7 @@ class Calendar {
 
     setCtx(ctx) {
         this.ctx = ctx
-        this.displaySize = ctx.displaySize.height// 只提供正方形视图
+        this.size = ctx.displaySize.height// 只提供正方形视图
     }
 
     localizedWeek(index) {
@@ -131,9 +131,9 @@ class Calendar {
     formatCalendar(family, calendarInfo) {
         const titleHeight = 20 + 15 // +10为标题padding
         const padding = 10 // 自身表格边距
-        const minWidth = parseInt(this.displaySize / 7 - 10)
+        const minWidth = parseInt(this.size / 7 - 10)
         const line = calendarInfo.calendar.length + 1 // 日历行数
-        const height = parseInt((this.displaySize - titleHeight - padding) / line)
+        const height = parseInt((this.size - titleHeight - padding) / line)
         const template = (text, props = {}, ext = undefined) => {
             let views = [{
                 type: "text",
@@ -273,7 +273,7 @@ class Calendar {
                 right: right
             }
         }
-        let width = this.displaySize / 2
+        let width = this.size / 2
         let titleBar = {
             type: "hstack",
             props: {
