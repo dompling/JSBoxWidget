@@ -2,10 +2,19 @@ class Setting {
     constructor(kernel, widget) {
         this.kernel = kernel
         this.widget = widget
+        // 检查目录是否存在，不存在则创建
+        let assetsPath = `${this.kernel.widgetAssetsPath}/${this.widget}`
+        let rootPath = `${this.kernel.widgetRootPath}/${this.widget}`
+        if (!$file.exists(rootPath)) {
+            $file.mkdir(rootPath)
+        }
+        if (!$file.exists(assetsPath)) {
+            $file.mkdir(assetsPath)
+        }
         this.settingComponent = this.kernel._registerComponent("Setting", `${this.widget}Setting`)
         this.setting = this.settingComponent.controller.init(
-            `${this.kernel.widgetRootPath}/${this.widget}/setting.json`,
-            `${this.kernel.widgetAssetsPath}/${this.widget}/setting.json`
+            `${rootPath}/setting.json`,
+            `${assetsPath}/setting.json`
         )
         this.setting.isSecondaryPage(true, () => { $ui.pop() })
         this.setting.setFooter({ type: "view" })
