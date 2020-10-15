@@ -42,7 +42,7 @@ class CalendarWidget {
                 afterDate: expireDate
             },
             render: ctx => {
-                // 设定大小
+                // 设定ctx
                 this.calendar.setCtx(ctx)
                 switch (ctx.family) {
                     case 0:
