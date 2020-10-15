@@ -42,8 +42,6 @@ class CalendarWidget {
                 afterDate: expireDate
             },
             render: ctx => {
-                // 设定ctx
-                this.calendar.setCtx(ctx)
                 switch (ctx.family) {
                     case 0:
                         return this.view2x2()

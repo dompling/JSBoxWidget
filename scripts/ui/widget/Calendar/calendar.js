@@ -16,11 +16,6 @@ class Calendar {
         this.lunar2x2 = this.setting.get("calendar.small.lunar")// 2x2是否显示农历
     }
 
-    setCtx(ctx) {
-        this.ctx = ctx
-        this.size = ctx.displaySize.height// 只提供正方形视图
-    }
-
     localizedWeek(index) {
         let week = []
         week[0] = $l10n("SUNDAY")
@@ -129,17 +124,13 @@ class Calendar {
     }
 
     formatCalendar(family, calendarInfo) {
-        const titleHeight = 20 + 15 // +10为标题padding
-        const padding = 10 // 自身表格边距
-        const minWidth = parseInt(this.size / 7 - 10)
-        const line = calendarInfo.calendar.length + 1 // 日历行数
-        const height = parseInt((this.size - titleHeight - padding) / line)
         const template = (text, props = {}, ext = undefined) => {
             let views = [{
                 type: "text",
                 props: Object.assign({
                     text: text,
                     font: $font(12),
+                    lineLimit: 1,
                     minimumScaleFactor: 0.5
                 }, props.text)
             }]
@@ -149,6 +140,7 @@ class Calendar {
                     props: Object.assign({
                         text: ext,
                         font: $font(12),
+                        lineLimit: 2,
                         minimumScaleFactor: 0.5
                     }, props.ext)
                 })
@@ -167,8 +159,8 @@ class Calendar {
                         background: $color("clear"),
                         padding: $insets(0, 3, 0, 3),
                         frame: {
-                            minWidth: minWidth,
-                            height: height,
+                            maxWidth: Infinity,
+                            maxHeight: Infinity,
                             alignment: $widget.alignment.center
                         }
                     }, props.box),
@@ -230,8 +222,8 @@ class Calendar {
                 text: { color: $color(this.colorTone) },
                 box: {
                     frame: {
-                        minWidth: minWidth,
-                        height: family === this.setting.family.large ? height / 2 : height,// 4x4 widget 日期指示器高度减半
+                        maxWidth: Infinity,
+                        maxHeight: Infinity,
                         alignment: $widget.alignment.center
                     }
                 }
@@ -273,7 +265,6 @@ class Calendar {
                 right: right
             }
         }
-        let width = this.size / 2
         let titleBar = {
             type: "hstack",
             props: {
@@ -292,7 +283,7 @@ class Calendar {
                         font: $font("bold", content.size),
                         frame: {
                             alignment: $widget.alignment.leading,
-                            maxWidth: width,
+                            maxWidth: Infinity,
                             height: 20
                         }
                     }
@@ -305,7 +296,7 @@ class Calendar {
                         font: $font("bold", content.size),
                         frame: {
                             alignment: $widget.alignment.trailing,
-                            maxWidth: width,
+                            maxWidth: Infinity,
                             height: 20
                         }
                     }
