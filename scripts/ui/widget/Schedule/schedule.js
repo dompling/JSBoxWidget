@@ -233,7 +233,7 @@ class Schedule {
                 frame: {
                     maxWidth: Infinity,
                     maxHeight: Infinity,
-                    alignment: $widget.verticalAlignment.firstTextBaseline
+                    alignment: $widget.alignment.topLeading
                 },
                 padding: 15,
                 spacing: 15
