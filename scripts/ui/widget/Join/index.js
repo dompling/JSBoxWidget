@@ -32,7 +32,18 @@ class JoinWidget {
                     spacing: 0
                 })
             },
-            views: [leftView, rightView]
+            views: [
+                {
+                    type: "vstack",
+                    props: {},
+                    views: [leftView]
+                },
+                {
+                    type: "vstack",
+                    props: {},
+                    views: [rightView]
+                }
+            ]
         }
     }
 

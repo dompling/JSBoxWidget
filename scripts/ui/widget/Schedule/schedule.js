@@ -235,10 +235,17 @@ class Schedule {
                     maxHeight: Infinity,
                     alignment: $widget.alignment.topLeading
                 },
-                padding: 15,
-                spacing: 15
+                padding: 15
             },
-            views: await this.getListView()
+            views: [{
+                type: "vstack",
+                props: {
+                    widgetURL: this.urlScheme,
+                    padding: 5,
+                    spacing: 15
+                },
+                views: await this.getListView()
+            }]
         }
     }
 }
