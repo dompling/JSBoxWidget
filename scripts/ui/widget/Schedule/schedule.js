@@ -240,18 +240,6 @@ class Schedule {
             },
             views: await this.getListView()
         }
-        // 渲染
-        setTimeLine(ctx => {
-            return {
-                type: "vstack",
-                props: {
-                    widgetURL: this.urlScheme,
-                    alignment: $widget.verticalAlignment.firstTextBaseline,
-                    spacing: 15
-                },
-                views: this.getListView(ctx, list)
-            }
-        })
     }
 }
 

@@ -16,36 +16,6 @@ class CalendarWidget {
         return await this.schedule.scheduleView()
     }
 
-    async view2x4() {
-        return {
-            type: "vgrid",
-            props: {
-                columns: Array(2).fill({
-                    flexible: {
-                        minimum: 10,
-                        maximum: Infinity
-                    },
-                    spacing: 10
-                }),
-                spacing: 10
-            },
-            views: [
-                {
-                    type: "text",
-                    props: {
-                        background: $color("blue"),
-                        text: "Hello World!"
-                    }
-                },
-                this.schedule.scheduleView(this.setTimeLine)
-            ]
-        }
-    }
-
-    async view4x4() {
-        return this.schedule.scheduleView(this.setTimeLine)
-    }
-
     /**
      * 将会作为函数传递
      * @param {CallableFunction} view 视图处理函数
@@ -76,7 +46,6 @@ class CalendarWidget {
         const expireDate = new Date(nowDate + switchInterval)
         // 获取视图
         let view2x2 = await this.view2x2()
-        //console.log(view2x2)
         $widget.setTimeline({
             entries: [
                 {
@@ -88,29 +57,10 @@ class CalendarWidget {
                 afterDate: expireDate
             },
             render: ctx => {
-                switch (ctx.family) {
-                    case 0:
-                        return view2x2
-                    /* case 1:
-                        return this.view2x4()
-                    case 2:
-                        return this.view4x4() */
-                    default:
-                        return view2x2
-                }
+                // 只提供一种视图
+                return view2x2
             }
         })
-        return
-        switch ($widget.family) {
-            case 0:
-                return this.view2x2()
-            case 1:
-                return this.view2x4()
-            case 2:
-                return this.view4x4()
-            default:
-                return this.view2x2()
-        }
     }
 }
 
