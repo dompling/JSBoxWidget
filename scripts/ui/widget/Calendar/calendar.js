@@ -20,8 +20,9 @@ class Calendar {
         }
     }
 
-    setDisplaySize(displaySize) {
-        this.displaySize = displaySize.height
+    setCtx(ctx) {
+        this.ctx = ctx
+        this.displaySize = ctx.displaySize.height// 只提供正方形视图
     }
 
     localizedWeek(index) {

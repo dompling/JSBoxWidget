@@ -18,26 +18,8 @@ class CalendarWidget {
 
     view2x4() {
         return {
-            type: "vgrid",
-            props: {
-                columns: Array(2).fill({
-                    flexible: {
-                        minimum: 10,
-                        maximum: Infinity
-                    },
-                    spacing: 10,
-                }),
-                spacing: 10,
-            },
-            views: [
-                {
-                    type: "text",
-                    props: {
-                        text: "Hello World!"
-                    }
-                },
-                this.calendar.calendarView(this.calendar.family.small)
-            ]
+            type: "text",
+            props: { text: $l10n("ONLY_SQUARE_VIEW") }
         }
     }
 
@@ -61,7 +43,7 @@ class CalendarWidget {
             },
             render: ctx => {
                 // 设定大小
-                this.calendar.setDisplaySize(ctx.displaySize)
+                this.calendar.setCtx(ctx)
                 switch (ctx.family) {
                     case 0:
                         return this.view2x2()

@@ -9,6 +9,7 @@
 "COPY" = "复制";
 "CANNOT_COPY_THIS_WIDGET" = "无法复制该widget";
 "COPY_SUCCESS" = "复制成功";
+"ONLY_SQUARE_VIEW" = "只提供正方形视图";
 
 "HOME" = "首页";
 "SELECT" = "选用";
