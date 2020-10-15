@@ -124,3 +124,7 @@
 "NO_CALENDAR&REMINDER" = "最近无安排";
 "CLICK_EVENT" = "点击事件";
 "REMINDER" = "提醒事项";
+
+"CONTENT" = "内容";
+"LEFT" = "左边";
+"RIGHT" = "右边";

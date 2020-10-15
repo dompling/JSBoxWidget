@@ -2,7 +2,6 @@ class HomeUI {
     constructor(kernel, factory) {
         this.kernel = kernel
         this.factory = factory
-        this.widgetRootPath = "/scripts/ui/widget"
         // 检查是否携带widget参数，携带则打开设置页面
         if (this.kernel.query["widget"]) {
             setTimeout(() => {
@@ -17,26 +16,7 @@ class HomeUI {
     }
 
     getWidgetListView() {
-        let data = []
-        let widgets = $file.list(this.widgetRootPath)
-        for (let widget of widgets) {
-            let widgetPath = `${this.widgetRootPath}/${widget}`
-            if ($file.exists(`${widgetPath}/config.json`)) {
-                let config = JSON.parse($file.read(`${widgetPath}/config.json`).string)
-                if (typeof config.icon !== "object") {
-                    config.icon = [config.icon, config.icon]
-                }
-                config.icon = config.icon.map(icon => icon[0] === "@" ? icon.replace("@", widgetPath) : icon)
-                data.push({
-                    title: config.title,
-                    describe: config.describe,
-                    name: widget,
-                    icon: config.icon
-                })
-            } else {// 没有config.json文件则跳过
-                continue
-            }
-        }
+        let data = this.kernel.getWidgetList()
         const template = data => {
             return {
                 icon: {// 如果不设置image属性，默认为小组件目录下的icon.png
@@ -151,29 +131,29 @@ class HomeUI {
                             color: $color("orange"),
                             handler: (sender, indexPath) => {
                                 let widgetName = sender.object(indexPath).name
-                                if (!$file.exists(`${this.widgetRootPath}/${widgetName}/setting.js`) || !$file.exists(`${this.widgetRootPath}/${widgetName}/config.json`)) {
+                                if (!$file.exists(`${this.kernel.widgetRootPath}/${widgetName}/setting.js`) || !$file.exists(`${this.kernel.widgetRootPath}/${widgetName}/config.json`)) {
                                     $ui.error($l10n("CANNOT_COPY_THIS_WIDGET"))
                                     return
                                 }
                                 $file.copy({
-                                    src: `${this.widgetRootPath}/${widgetName}`,
-                                    dst: `${this.widgetRootPath}/${widgetName}Copy`
+                                    src: `${this.kernel.widgetRootPath}/${widgetName}`,
+                                    dst: `${this.kernel.widgetRootPath}/${widgetName}Copy`
                                 })
                                 // 更新设置文件中的NAME常量
-                                let settingjs = $file.read(`${this.widgetRootPath}/${widgetName}Copy/setting.js`).string
+                                let settingjs = $file.read(`${this.kernel.widgetRootPath}/${widgetName}Copy/setting.js`).string
                                 let firstLine = settingjs.split("\n")[0]
                                 let newFirstLine = `const NAME = "${widgetName}Copy"`
                                 settingjs = settingjs.replace(firstLine, newFirstLine)
                                 $file.write({
                                     data: $data({ string: settingjs }),
-                                    path: `${this.widgetRootPath}/${widgetName}Copy/setting.js`
+                                    path: `${this.kernel.widgetRootPath}/${widgetName}Copy/setting.js`
                                 })
                                 // 更新config.json
-                                let config = JSON.parse($file.read(`${this.widgetRootPath}/${widgetName}Copy/config.json`).string)
+                                let config = JSON.parse($file.read(`${this.kernel.widgetRootPath}/${widgetName}Copy/config.json`).string)
                                 config.title = `${widgetName}Copy`
                                 $file.write({
                                     data: $data({ string: JSON.stringify(config) }),
-                                    path: `${this.widgetRootPath}/${widgetName}Copy/config.json`
+                                    path: `${this.kernel.widgetRootPath}/${widgetName}Copy/config.json`
                                 })
                                 // 更新列表
                                 setTimeout(() => { $("EasyWidget-home-list").data = this.getWidgetListView() }, 200)
@@ -194,9 +174,9 @@ class HomeUI {
                                         Object.assign({
                                             title: $l10n("DELETE"),
                                             handler: () => {
-                                                $file.delete(`${this.widgetRootPath}/${widgetName}`)
+                                                $file.delete(`${this.kernel.widgetRootPath}/${widgetName}`)
                                                 // 删除assets
-                                                $file.delete(`/assets/widget/${widgetName}`)
+                                                $file.delete(`${this.kernel.widgetAssetsPath}/${widgetName}`)
                                                 sender.delete(indexPath)
                                             }
                                         }, style),

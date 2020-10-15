@@ -4,7 +4,7 @@ const Setting = require("../setting")
 class PictureSetting extends Setting {
     constructor(kernel) {
         super(kernel, NAME)
-        this.albumPath = `/assets/widget/${NAME}/pictures`
+        this.albumPath = `${this.kernel.widgetAssetsPath}/${NAME}/pictures`
         if (!$file.exists(this.albumPath)) {
             $file.mkdir(this.albumPath)
         }

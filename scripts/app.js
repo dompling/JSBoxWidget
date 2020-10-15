@@ -15,6 +15,9 @@ class AppKernel extends Kernel {
         this.initSettingMethods()
         this.page = this._registerComponent("Page")
         this.menu = this._registerComponent("Menu")
+        // 小组件根目录
+        this.widgetRootPath = "/scripts/ui/widget"
+        this.widgetAssetsPath = "/assets/widget"
     }
 
     /**
@@ -49,6 +52,30 @@ class AppKernel extends Kernel {
         } else {
             return false
         }
+    }
+
+    getWidgetList() {
+        let data = []
+        let widgets = $file.list(this.widgetRootPath)
+        for (let widget of widgets) {
+            let widgetPath = `${this.widgetRootPath}/${widget}`
+            if ($file.exists(`${widgetPath}/config.json`)) {
+                let config = JSON.parse($file.read(`${widgetPath}/config.json`).string)
+                if (typeof config.icon !== "object") {
+                    config.icon = [config.icon, config.icon]
+                }
+                config.icon = config.icon.map(icon => icon[0] === "@" ? icon.replace("@", widgetPath) : icon)
+                data.push({
+                    title: config.title,
+                    describe: config.describe,
+                    name: widget,
+                    icon: config.icon
+                })
+            } else {// 没有config.json文件则跳过
+                continue
+            }
+        }
+        return data
     }
 }
 
