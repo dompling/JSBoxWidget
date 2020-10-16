@@ -235,10 +235,10 @@ class Schedule {
      * 获取视图
      * 只提供正方形视图布局
      */
-    async scheduleView() {
+    async scheduleView(family) {
         return {
             type: "vstack",
-            props: {
+            props: Object.assign({
                 widgetURL: this.urlScheme,
                 frame: {
                     maxWidth: Infinity,
@@ -247,7 +247,11 @@ class Schedule {
                 },
                 padding: $insets(15, 15, 0, 15),
                 spacing: 15
-            },
+            }, family === this.setting.family.medium ? {
+                link: this.setting.settingUrlScheme
+            } : {
+                    widgetURL: this.setting.settingUrlScheme
+                }),
             views: await this.getListView()
         }
     }

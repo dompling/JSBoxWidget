@@ -14,11 +14,11 @@ class CalendarWidget {
     }
 
     async joinView() {
-        return await this.view2x2()
+        return await this.schedule.scheduleView(this.setting.family.medium)
     }
 
     async view2x2() {
-        return await this.schedule.scheduleView()
+        return await this.schedule.scheduleView(this.setting.family.small)
     }
 
     async render() {
