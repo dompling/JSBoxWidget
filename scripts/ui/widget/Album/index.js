@@ -35,7 +35,11 @@ class PictureWidget {
         }
     }
 
-    view2x2() {
+    joinView() {
+        return this.view2x2(this.setting.family.medium)
+    }
+
+    view2x2(family) {
         let pictures = this.setting.getImages()
         let index = 0 // 图片索引
         if (new Date().getTime() - this.data.date > this.switchInterval) {// 下一张
@@ -70,12 +74,15 @@ class PictureWidget {
         } else {
             view = {
                 type: "image",
-                props: {
-                    widgetURL: this.urlScheme ? this.urlScheme : this.setting.settingUrlScheme,
+                props: Object.assign({
                     image: $image(imagePath),
                     resizable: true,
                     scaledToFill: true
-                }
+                }, family === this.setting.family.medium ? {
+                    link: this.urlScheme ? this.urlScheme : this.setting.settingUrlScheme
+                } : {
+                        widgetURL: this.urlScheme ? this.urlScheme : this.setting.settingUrlScheme
+                    })
             }
         }
         return view
@@ -94,7 +101,7 @@ class PictureWidget {
                 afterDate: expireDate
             },
             render: ctx => {
-                return this.view2x2()
+                return this.view2x2(ctx.family)
             }
         })
     }

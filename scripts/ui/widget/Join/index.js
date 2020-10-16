@@ -19,8 +19,8 @@ class JoinWidget {
     async view2x4() {
         let leftWidget = this.kernel.widgetInstance(this.left)
         let rightWidget = this.kernel.widgetInstance(this.right)
-        let leftView = await leftWidget.view2x2()
-        let rightView = await rightWidget.view2x2()
+        let leftView = await leftWidget.joinView()
+        let rightView = await rightWidget.joinView()
         return {
             type: "vgrid",
             props: {
@@ -29,21 +29,10 @@ class JoinWidget {
                         minimum: 10,
                         maximum: Infinity
                     },
-                    spacing: 0
+                    spacing: 10
                 })
             },
-            views: [
-                {
-                    type: "vstack",
-                    props: {},
-                    views: [leftView]
-                },
-                {
-                    type: "vstack",
-                    props: {},
-                    views: [rightView]
-                }
-            ]
+            views: [leftView, rightView]
         }
     }
 

@@ -306,13 +306,16 @@ class Calendar {
         }
         return {
             type: "vstack",
-            props: {
-                widgetURL: this.setting.settingUrlScheme,
+            props: Object.assign({
                 maxWidth: Infinity,
                 maxHeight: Infinity,
                 spacing: 0,
                 padding: 10
-            },
+            }, family === this.setting.family.medium ? {
+                link: this.setting.settingUrlScheme
+            } : {
+                    widgetURL: this.setting.settingUrlScheme
+                }),
             views: [titleBar, calendar]
         }
     }

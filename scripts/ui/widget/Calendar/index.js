@@ -12,6 +12,10 @@ class CalendarWidget {
         this.setting.push()
     }
 
+    joinView(){
+        return this.calendar.calendarView(this.setting.family.medium)
+    }
+
     view2x2() {
         return this.calendar.calendarView(this.setting.family.small)
     }

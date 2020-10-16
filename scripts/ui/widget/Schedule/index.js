@@ -12,6 +12,10 @@ class CalendarWidget {
         this.setting.push()
     }
 
+    async joinView() {
+        return await this.view2x2()
+    }
+
     async view2x2() {
         return await this.schedule.scheduleView()
     }
