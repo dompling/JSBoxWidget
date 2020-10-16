@@ -131,7 +131,12 @@ class Calendar {
                     text: text,
                     font: $font(12),
                     lineLimit: 1,
-                    minimumScaleFactor: 0.5
+                    minimumScaleFactor: 0.5,
+                    padding: ext ? $insets(3, 3, 0, 3) : 0,
+                    frame: {
+                        maxWidth: Infinity,
+                        maxHeight: Infinity
+                    }
                 }, props.text)
             }]
             if (ext) {
@@ -140,8 +145,13 @@ class Calendar {
                     props: Object.assign({
                         text: ext,
                         font: $font(12),
-                        lineLimit: 2,
-                        minimumScaleFactor: 0.5
+                        lineLimit: ext.length > 3 ? 2 : 1,
+                        minimumScaleFactor: 0.5,
+                        padding: $insets(0, 3, 3, 3),
+                        frame: {
+                            maxWidth: Infinity,
+                            maxHeight: Infinity
+                        }
                     }, props.ext)
                 })
             }
@@ -154,14 +164,11 @@ class Calendar {
                 views: [{
                     type: "vstack",
                     props: Object.assign({
-                        alignment: $widget.verticalAlignment.center,
                         color: $color("primaryText"),
                         background: $color("clear"),
-                        padding: $insets(0, 3, 0, 3),
                         frame: {
                             maxWidth: Infinity,
-                            maxHeight: Infinity,
-                            alignment: $widget.alignment.center
+                            maxHeight: Infinity
                         }
                     }, props.box),
                     views: views
@@ -219,14 +226,7 @@ class Calendar {
         let title = []
         for (let i = 0; i < 7; i++) {
             title.push(template(this.localizedWeek(i), {
-                text: { color: $color(this.colorTone) },
-                box: {
-                    frame: {
-                        maxWidth: Infinity,
-                        maxHeight: Infinity,
-                        alignment: $widget.alignment.center
-                    }
-                }
+                text: { color: $color(this.colorTone) }
             }))
         }
         return title.concat(days)
@@ -235,17 +235,27 @@ class Calendar {
     calendarView(family) {
         let calendarInfo = this.getCalendar(family === this.setting.family.large)
         let calendar = {
-            type: "vgrid",
+            type: "hstack",
             props: {
-                columns: Array(7).fill({
-                    flexible: {
-                        minimum: 10,
-                        maximum: Infinity
-                    },
-                    spacing: 0
-                })
+                maxWidth: Infinity,
+                maxHeight: Infinity
             },
-            views: this.formatCalendar(family, calendarInfo)
+            views: [{
+                type: "vgrid",
+                props: {
+                    columns: Array(7).fill({
+                        flexible: {
+                            minimum: 10,
+                            maximum: Infinity
+                        }
+                    }),
+                    frame: {
+                        maxWidth: Infinity,
+                        maxHeight: Infinity
+                    }
+                },
+                views: this.formatCalendar(family, calendarInfo)
+            }]
         }
         // 标题栏文字内容
         let content
@@ -266,11 +276,11 @@ class Calendar {
         let titleBar = {
             type: "hstack",
             props: {
-                padding: $insets(0, 0, 10, 0),
                 frame: {
                     width: Infinity,
                     height: Infinity
-                }
+                },
+                padding: $insets(10, 3, 10, 3)
             },
             views: [
                 {
@@ -282,7 +292,8 @@ class Calendar {
                         font: $font("bold", content.size),
                         frame: {
                             alignment: $widget.alignment.leading,
-                            maxWidth: Infinity
+                            maxWidth: Infinity,
+                            height: Infinity
                         }
                     }
                 },
@@ -295,7 +306,8 @@ class Calendar {
                         font: $font("bold", content.size),
                         frame: {
                             alignment: $widget.alignment.trailing,
-                            maxWidth: Infinity
+                            maxWidth: Infinity,
+                            height: Infinity
                         }
                     }
                 }
