@@ -24,6 +24,7 @@ class JoinWidget {
         let rightView = await rightWidget.joinView()
         $widget.family = this.setting.family.medium
         let width = $widget.displaySize.width / 2 - this.spacing / 2
+        let height = $widget.displaySize.height
         return {
             type: "vgrid",
             props: {
@@ -31,10 +32,6 @@ class JoinWidget {
                     flexible: {
                         minimum: 10,
                         maximum: Infinity
-                    },
-                    frame: {
-                        maxWidth: Infinity,
-                        maxHeight: Infinity
                     },
                     spacing: this.spacing
                 })
@@ -45,7 +42,7 @@ class JoinWidget {
                     props: {
                         frame: {
                             maxWidth: width,
-                            maxHeight: Infinity
+                            maxHeight: height
                         },
                         clipped: true
                     },
@@ -56,7 +53,7 @@ class JoinWidget {
                     props: {
                         frame: {
                             maxWidth: width,
-                            maxHeight: Infinity
+                            maxHeight: height
                         },
                         clipped: true
                     },
