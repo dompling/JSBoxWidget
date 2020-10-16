@@ -241,6 +241,7 @@ class Calendar {
                         maximum: Infinity
                     }
                 }),
+                spacing: 5,
                 frame: {
                     maxWidth: Infinity,
                     maxHeight: Infinity
@@ -271,7 +272,7 @@ class Calendar {
                     width: Infinity,
                     height: Infinity
                 },
-                padding: $insets(10, 3, 10, 3)
+                padding: $insets(5, 3, 5, 3)
             },
             views: [
                 {
@@ -307,8 +308,10 @@ class Calendar {
         return {
             type: "vstack",
             props: Object.assign({
-                maxWidth: Infinity,
-                maxHeight: Infinity,
+                frame: {
+                    maxWidth: Infinity,
+                    maxHeight: Infinity
+                },
                 spacing: 0,
                 padding: 10
             }, family === this.setting.family.medium ? {

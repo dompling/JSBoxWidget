@@ -9,12 +9,14 @@ class PictureWidget {
         this.switchInterval = 1000 * 60 * Number(this.setting.get("album.switchInterval"))
         this.useCompressedImage = this.setting.get("album.useCompressedImage")
         this.urlScheme = this.setting.get("album.urlScheme")
+        this.pictures = this.setting.getImages()
         // 缓存
         this.data = $cache.get("album.switch.data")
         if (!this.data) {// 首次写入缓存
+
             this.data = {
                 date: new Date().getTime(),
-                index: this.imageSwitchMethod === 0 ? this.randomNum(0, pictures.length - 1) : 0
+                index: this.imageSwitchMethod === 0 ? this.randomNum(0, this.pictures.length - 1) : 0
             }
             $cache.set("album.switch.data", this.data)
         }
@@ -40,14 +42,13 @@ class PictureWidget {
     }
 
     view2x2(family) {
-        let pictures = this.setting.getImages()
         let index = 0 // 图片索引
         if (new Date().getTime() - this.data.date > this.switchInterval) {// 下一张
             if (this.imageSwitchMethod === 0) {// 0随机切换，1顺序切换
-                index = this.randomNum(0, pictures.length - 1)
+                index = this.randomNum(0, this.pictures.length - 1)
             } else {
                 index = this.data.index + 1
-                if (index > pictures.length - 1) index = 0
+                if (index > this.pictures.length - 1) index = 0
             }
             $cache.set("album.switch.data", {
                 date: new Date().getTime(),
@@ -58,9 +59,9 @@ class PictureWidget {
         }
         let imagePath // 获取图片
         if (this.useCompressedImage) {// 检查是否使用压缩后的图片
-            imagePath = `${this.albumPath}/archive/${pictures[index]}`
+            imagePath = `${this.albumPath}/archive/${this.pictures[index]}`
         } else {
-            imagePath = `${this.albumPath}/${pictures[index]}`
+            imagePath = `${this.albumPath}/${this.pictures[index]}`
         }
         let view
         if (!$file.exists(imagePath)) {
@@ -77,7 +78,11 @@ class PictureWidget {
                 props: Object.assign({
                     image: $image(imagePath),
                     resizable: true,
-                    scaledToFill: true
+                    scaledToFill: true,
+                    frame: {
+                        maxWidth: Infinity,
+                        maxHeight: Infinity
+                    }
                 }, family === this.setting.family.medium ? {
                     link: this.urlScheme ? this.urlScheme : this.setting.settingUrlScheme
                 } : {
