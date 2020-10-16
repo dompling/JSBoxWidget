@@ -33,6 +33,18 @@
             },
             {
                 "icon": [
+                    "pencil.and.ellipsis.rectangle",
+                    "#FF9900"
+                ],
+                "title": "ITEM_LENGTH",
+                "type": "stepper",
+                "key": "itemLength",
+                "min": 3,
+                "max": 5,
+                "value": 3
+            },
+            {
+                "icon": [
                     "rectangle.split.3x1.fill",
                     "#FF6666"
                 ],
@@ -48,7 +60,7 @@
                 "title": "CLICK_EVENT",
                 "type": "menu",
                 "key": "clickEvent",
-                "items":[
+                "items": [
                     "SETTING",
                     "REMINDER",
                     "CALENDAR"

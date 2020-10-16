@@ -5,6 +5,7 @@ class Schedule {
         this.timeSpan = this.setting.get("timeSpan")
         this.colorTone = this.setting.get("colorTone")
         this.colorReminder = this.setting.get("colorReminder")
+        this.itemLength = this.setting.get("itemLength")
         switch (this.setting.get("clickEvent")) {
             case 0:
                 this.urlScheme = this.setting.settingUrlScheme
@@ -48,7 +49,8 @@ class Schedule {
         })
         // 按创建日期排序
         return this.sort(total, (item, compare) => {
-            if (item.creationDate > compare.creationDate) {
+            // 按时间顺序排序
+            if (item.creationDate < compare.creationDate) {
                 return true
             }
             return false
@@ -102,12 +104,15 @@ class Schedule {
                 props: { text: $l10n("NO_CALENDAR&REMINDER") }
             }]
         }
-        let dateCollect = {}
+        let itemLength = 0, dateCollect = {}
         const isReminder = item => item.completed !== undefined
         for (let item of list) {
+            // 控制显示数目
+            if (itemLength >= this.itemLength) break
             let dateString = isReminder(item) ? this.formatDate(item.alarmDate) : this.formatDate(item.endDate)
             if (!dateCollect[dateString])
                 dateCollect[dateString] = []
+            itemLength++
             dateCollect[dateString].push(item)
         }
         let views = []
@@ -230,10 +235,12 @@ class Schedule {
             type: "vstack",
             props: {
                 widgetURL: this.urlScheme,
-                maxWidth: Infinity,
-                maxHeight: Infinity,
-                alignment: $widget.alignment.top,
-                padding: 10,
+                frame: {
+                    maxWidth: Infinity,
+                    maxHeight: Infinity,
+                    alignment: $widget.verticalAlignment.firstTextBaseline
+                },
+                padding: $insets(15, 15, 0, 15),
                 spacing: 15
             },
             views: await this.getListView()

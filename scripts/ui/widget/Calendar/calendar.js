@@ -272,7 +272,7 @@ class Calendar {
                     width: Infinity,
                     height: Infinity
                 },
-                padding: $insets(5, 3, 5, 3)
+                padding: $insets(family === this.setting.family.large ? 10 : 5, 3, 5, 3)
             },
             views: [
                 {
