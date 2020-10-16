@@ -25,9 +25,7 @@ class CalendarWidget {
         let nowDate = new Date()
         const expireDate = new Date(nowDate + this.switchInterval)
         // 获取视图
-        let startTime = new Date()
         let view2x2 = await this.view2x2()
-        console.log(new Date() - startTime)
         $widget.setTimeline({
             entries: [
                 {
