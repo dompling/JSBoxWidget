@@ -18,6 +18,18 @@
         "items": [
             {
                 "icon": [
+                    "pause.fill",
+                    "#FF6666"
+                ],
+                "title": "SPACING",
+                "type": "stepper",
+                "key": "spacing",
+                "min": 0,
+                "max": 20,
+                "value": 5
+            },
+            {
+                "icon": [
                     "square.lefthalf.fill",
                     "#FF9900"
                 ],

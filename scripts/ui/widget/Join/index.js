@@ -5,6 +5,7 @@ class JoinWidget {
         this.kernel = kernel
         this.setting = new JoinSetting(this.kernel)
         this.left = this.setting.get("left")
+        this.spacing = this.setting.get("spacing")
         if (typeof this.left === "object") this.left = this.left[1]
         else this.left = this.setting.menu[this.left]
         this.right = this.setting.get("right")
@@ -21,6 +22,8 @@ class JoinWidget {
         let rightWidget = this.kernel.widgetInstance(this.right)
         let leftView = await leftWidget.joinView()
         let rightView = await rightWidget.joinView()
+        $widget.family = this.setting.family.medium
+        let width = $widget.displaySize.width / 2 - this.spacing / 2
         return {
             type: "vgrid",
             props: {
@@ -29,10 +32,37 @@ class JoinWidget {
                         minimum: 10,
                         maximum: Infinity
                     },
-                    spacing: 10
+                    frame: {
+                        maxWidth: Infinity,
+                        maxHeight: Infinity
+                    },
+                    spacing: this.spacing
                 })
             },
-            views: [leftView, rightView]
+            views: [
+                {
+                    type: "hstack",
+                    props: {
+                        frame: {
+                            maxWidth: width,
+                            maxHeight: Infinity
+                        },
+                        clipped: true
+                    },
+                    views: [leftView]
+                },
+                {
+                    type: "hstack",
+                    props: {
+                        frame: {
+                            maxWidth: width,
+                            maxHeight: Infinity
+                        },
+                        clipped: true
+                    },
+                    views: [rightView]
+                }
+            ]
         }
     }
 

@@ -127,5 +127,6 @@
 
 "ONLY_SQUARE_VIEW" = "只提供正方形视图";
 "NO_SMALL_VIEW" = "不提供2x2视图";
+"SPACING" = "间距";
 "LEFT" = "左边";
 "RIGHT" = "右边";
