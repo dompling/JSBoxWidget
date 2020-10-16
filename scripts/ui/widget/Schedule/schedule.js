@@ -47,34 +47,39 @@ class Schedule {
                 total.push(item)
             }
         })
-        // 按创建日期排序
-        return this.sort(total, (item, compare) => {
-            // 按时间顺序排序
-            if (item.creationDate < compare.creationDate) {
-                return true
-            }
-            return false
+        // 按结束日期排序
+        this.quicksort(total, 0, total.length - 1, (item, compare) => {
+            let itemDate = item.endDate ? item.endDate : item.alarmDate ? item.alarmDate : nowDate
+            let compareDate = compare.endDate ? compare.endDate : compare.alarmDate ? compare.alarmDate : nowDate
+            return itemDate.getTime() >= compareDate.getTime()
         })
+        return total
     }
 
     /**
      * 排序
      * @param {Array} arr 数组
-     * @param {CallableFunction} compare 比较大小，item为被比较对象，compare为比较对象，如果item大则应该返回true
+     * @param {CallableFunction} compare 比较大小
      */
-    sort(arr, compare) {
-        if (arr.length <= 1) { return arr }
-        let left = []
-        let right = []
-        let middle = arr.splice(0, 1)[0]
-        arr.forEach(item => {
-            if (compare(item, middle)) {
-                right.push(item)
-            } else {
-                left.push(item)
+    quicksort(arr, left, right, compare) {
+        let i, j, temp, middle
+        if (left > right) return
+        middle = arr[left]
+        i = left
+        j = right
+        while (i != j) {
+            while (compare(arr[j], middle) && i < j) j--
+            while (compare(middle, arr[i]) && i < j) i++
+            if (i < j) {
+                temp = arr[i]
+                arr[i] = arr[j]
+                arr[j] = temp
             }
-        })
-        return this.sort(left, compare).concat([middle], this.sort(right, compare))
+        }
+        arr[left] = arr[i]
+        arr[i] = middle
+        this.quicksort(arr, left, i - 1, compare)
+        this.quicksort(arr, i + 1, right, compare)
     }
 
     /**

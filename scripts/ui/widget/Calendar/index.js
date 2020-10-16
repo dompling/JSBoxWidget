@@ -12,7 +12,7 @@ class CalendarWidget {
         this.setting.push()
     }
 
-    joinView(){
+    joinView() {
         return this.calendar.calendarView(this.setting.family.medium)
     }
 
