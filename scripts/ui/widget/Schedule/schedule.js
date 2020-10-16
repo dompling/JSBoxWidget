@@ -230,22 +230,13 @@ class Schedule {
             type: "vstack",
             props: {
                 widgetURL: this.urlScheme,
-                frame: {
-                    maxWidth: Infinity,
-                    maxHeight: Infinity,
-                    alignment: $widget.alignment.topLeading
-                },
-                padding: 15
+                maxWidth: Infinity,
+                maxHeight: Infinity,
+                alignment: $widget.alignment.top,
+                padding: 10,
+                spacing: 15
             },
-            views: [{
-                type: "vstack",
-                props: {
-                    widgetURL: this.urlScheme,
-                    padding: 5,
-                    spacing: 15
-                },
-                views: await this.getListView()
-            }]
+            views: await this.getListView()
         }
     }
 }
