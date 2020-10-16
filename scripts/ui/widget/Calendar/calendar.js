@@ -124,7 +124,7 @@ class Calendar {
     }
 
     formatCalendar(family, calendarInfo) {
-        const template = (text, props = {}, ext = undefined) => {
+        const template = (text, props = {}, extra = undefined) => {
             let views = [{
                 type: "text",
                 props: Object.assign({
@@ -132,20 +132,20 @@ class Calendar {
                     font: $font(12),
                     lineLimit: 1,
                     minimumScaleFactor: 0.5,
-                    padding: ext ? $insets(3, 3, 0, 3) : 0,
+                    padding: extra ? $insets(3, 3, 0, 3) : 0,
                     frame: {
                         maxWidth: Infinity,
                         maxHeight: Infinity
                     }
                 }, props.text)
             }]
-            if (ext) {
+            if (extra) {
                 views.push({
                     type: "text",
                     props: Object.assign({
-                        text: ext,
+                        text: extra,
                         font: $font(12),
-                        lineLimit: ext.length > 3 ? 2 : 1,
+                        lineLimit: extra.length > 3 ? 2 : 1,
                         minimumScaleFactor: 0.5,
                         padding: $insets(0, 3, 3, 3),
                         frame: {
@@ -156,23 +156,21 @@ class Calendar {
                 })
             }
             return {
-                type: "hstack",
-                props: {
-                    clipped: true,
-                    cornerRadius: 5
-                },
-                views: [{
-                    type: "vstack",
-                    props: Object.assign({
+                type: "vstack",
+                modifiers: [
+                    Object.assign({
                         color: $color("primaryText"),
-                        background: $color("clear"),
+                        background: $color("clear")
+                    }, props.box),
+                    {
                         frame: {
                             maxWidth: Infinity,
                             maxHeight: Infinity
-                        }
-                    }, props.box),
-                    views: views
-                }]
+                        },
+                        cornerRadius: 5
+                    }
+                ],
+                views: views
             }
         }
 
@@ -235,27 +233,20 @@ class Calendar {
     calendarView(family) {
         let calendarInfo = this.getCalendar(family === this.setting.family.large)
         let calendar = {
-            type: "hstack",
+            type: "vgrid",
             props: {
-                maxWidth: Infinity,
-                maxHeight: Infinity
-            },
-            views: [{
-                type: "vgrid",
-                props: {
-                    columns: Array(7).fill({
-                        flexible: {
-                            minimum: 10,
-                            maximum: Infinity
-                        }
-                    }),
-                    frame: {
-                        maxWidth: Infinity,
-                        maxHeight: Infinity
+                columns: Array(7).fill({
+                    flexible: {
+                        minimum: 10,
+                        maximum: Infinity
                     }
-                },
-                views: this.formatCalendar(family, calendarInfo)
-            }]
+                }),
+                frame: {
+                    maxWidth: Infinity,
+                    maxHeight: Infinity
+                }
+            },
+            views: this.formatCalendar(family, calendarInfo)
         }
         // 标题栏文字内容
         let content
