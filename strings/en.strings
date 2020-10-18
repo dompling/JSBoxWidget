@@ -1,12 +1,17 @@
+"EN_STRING_AUTHOR" = "@SorryCC";
+
 "ALERT_INFO" = "Alert";
 "OK" = "Ok";
 "CANCEL" = "Cancel";
+"CLEAR" = "Clear";
 "BACK" = "Back";
 "SUCCESS" = "Success";
 "ERROR" = "Error";
 "NONE" = "None";
 "COPY" = "Copy";
+"CANNOT_COPY_THIS_WIDGET" = "Unable to copy this Widget";
 "COPY_SUCCESS" = "Copy success";
+"FAILED_TO_LOAD_VIEW" = "Faild to load view";
 
 "HOME" = "Home";
 "SELECT" = "Select";
@@ -37,32 +42,103 @@
 
 "CALENDAR" = "Calendar";
 
-"SUNDAY" = "Sun";
-"MONDAY" = "Mon";
-"TUESDAY" = "Tue";
-"WEDNESDAY" = "Wed";
-"THURSDAY" = "Thu";
-"FRIDAY" = "Fri";
-"SATURDAY" = "Sat";
+"_SUNDAY" = "Sunday";
+"_MONDAY" = "Monday";
+
+"SUNDAY" = "S";
+"MONDAY" = "M";
+"TUESDAY" = "T";
+"WEDNESDAY" = "W";
+"THURSDAY" = "T";
+"FRIDAY" = "F";
+"SATURDAY" = "S";
 
 "MONTH" = " ";
-"JANUARY" = "January";
-"FEBRUARY" = "February";
-"MARCH" = "March";
-"APRIL" = "April";
-"MAY" = "May";
-"JUNE" = "June";
-"JULY" = "July";
-"AUGUST" = "August";
-"SEPTEMBER" = "September";
-"OCTOBER" = "October";
-"NOVEMBER" = "November";
-"DECEMBER" = "December";
+"JANUARY_C" = "January";
+"FEBRUARY_C" = "February";
+"MARCH_C" = "March";
+"APRIL_C" = "April";
+"MAY_C" = "May";
+"JUNE_C" = "June";
+"JULY_C" = "July";
+"AUGUST_C" = "August";
+"SEPTEMBER_C" = "September";
+"OCTOBER_C" = "October";
+"NOVEMBER_C" = "November";
+"DECEMBER_C" = "December";
+
+"JANUARY_N" = " 1";
+"FEBRUARY_N" = " 2";
+"MARCH_N" = " 3";
+"APRIL_N" = " 4";
+"MAY_N" = " 5";
+"JUNE_N" = " 6";
+"JULY_N" = " 7";
+"AUGUST_N" = " 8";
+"SEPTEMBER_N" = " 9";
+"OCTOBER_N" = "10";
+"NOVEMBER_N" = "11";
+"DECEMBER_N" = "12";
+
 "YEAR" = " ";
 
 "COLOR_TONE" = "Color Tone";
-"HOLIDAY" = "Holiday";
-"NEED_HOLIDAY_DATA" = "需要节假日数据，请去编辑页面获取。";
+"FIRST_DAY_OF_WEEK" = "1st Day of Week";
+"ONLY_CURRENT_MONTH" = "This month only";
 
-"ALBUM" = "Picture";
+"HOLIDAT_COLOR" = "Color of Holiday";
+"HOLIDAT_REST_NO_COLOR" = "Color of OT";
+"HOLIDAY" = "Holiday";
+"CLEAR_HOLIDAY_DATA" = "Clear Holiday Data";
+"GET_HOLIDAY" = "Get Holiday";
+"NO_NEED_TO_OBTAIN_MANUALLY" = "Manually obtain is unnecessary in most of case";
+"HOLIDAY_API_ERROR" = "Holiday API Error";
+"NEED_HOLIDAY_DATA" = "Require Holiday Data, Please proceed to edit Page";
+"HOLIDAY_ALREADY_EXISTS" = "Overwrite Existing Holiday Data?";
+
+"TITLE" = "Title";
+"SHOW_YEAR" = "Show Year";
+"SHOW_FULL_YEAR" = "Show Full Year";
+"SHOW_LUNAR" = "Show Lunar";
+"SHOW_LUNAR_YEAR" = "Show Lunar (Year)";
+"MONTH_DISPLAY_MODE" = "Display Mode (Month)";
+"CHINESE_CHARACTERS" = "Chars";
+"NUMBER" = "Number";
+
+"FAMILY_SMALL" = "Small Widget";
+"SHOW_MODE" = "Shwo Mode";
+
+"ALBUM" = "Album";
 "ALBUM_COLUMN" = "Album column number";
+"URL_SCHEME" = "URL scheme";
+"USE_COMPRESSED_IMAGE" = "Use Compressed Image";
+"SWITCH_METHOD" = "Switch Method";
+"RANDOM" = "Random";
+"SEQUENCE" = "Sequence";
+"SWITCH_INTERVAL" = "Switch Interval(Min)";
+"SYSTEM_ALBUM" = "Photo";
+"SAVE_TO_SYSTEM_ALBUM" = "Save to Photo";
+"NO_IMAGE" = "Image not Found";
+"CLEAR_CACHE" = "Clear Cache";
+
+"TIME_SPAN" = "Time Span (Day)";
+"REMINDER_COLOR" = "Reminder Color";
+"DATE" = "Date";
+"NO_DATE" = "No Date";
+"TODAY" = "Today";
+"ALL_DAY" = "All day";
+"NO_CALENDAR&REMINDER" = "No Schedule";
+"ITEM_LENGTH" = "Number of items to display";
+"CLICK_EVENT" = "Click Event";
+"REMINDER" = "Reminder";
+
+"JOIN" = "Join";
+"JOIN_MODE" = "Join Mode";
+"SMALL" = "Small";
+"MEDIUM" = "Medium";
+"SELECT_WIDGET" = "Select Widget";
+"ONLY_SQUARE_VIEW" = "Square View Only";
+"NO_SMALL_VIEW" = "No Small View";
+"SPACING" = "Spacing";
+"LEFT" = "Left";
+"RIGHT" = "Right";
