@@ -103,8 +103,11 @@ class Calendar {
                 // 是否仅显示本月
                 if (this.onlyCurrentMonth) {
                     if (firstDay === 0) {
-                        // 判断是否到达最后一天
-                        formatDate = date > dates ? 0 : {
+                        // 判断是否到达最后一天，并判断是否是本周第一天，舍弃本周
+                        if (date > dates && day === 0) {
+                            break
+                        }
+                        formatDate = {
                             month: month,
                             date: date,
                             day: formatDay
