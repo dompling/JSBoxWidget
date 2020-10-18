@@ -27,37 +27,15 @@ class JoinWidget extends Widget {
         let width = $widget.displaySize.width / 2 - this.spacing / 2
         let height = $widget.displaySize.height
         return {
-            type: "vgrid",
+            type: "hstack",
             props: {
-                columns: Array(2).fill({
-                    fixed: width,
-                    spacing: this.spacing
-                })
-            },
-            views: [
-                {
-                    type: "hstack",
-                    props: {
-                        frame: {
-                            maxWidth: width,
-                            maxHeight: height
-                        },
-                        clipped: true
-                    },
-                    views: [leftView]
-                },
-                {
-                    type: "hstack",
-                    props: {
-                        frame: {
-                            maxWidth: width,
-                            maxHeight: height
-                        },
-                        clipped: true
-                    },
-                    views: [rightView]
+                spacing: this.spacing,
+                frame: {
+                    maxWidth: Infinity,
+                    height: height
                 }
-            ]
+            },
+            views: [leftView, rightView]
         }
     }
 
