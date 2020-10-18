@@ -62,10 +62,7 @@ class JoinWidget extends Widget {
     async render() {
         let switchInterval = 1000 * 60 * this.switchInterval
         const expireDate = new Date(new Date() + switchInterval)
-        let view2x4
-        let cache = this.getCache(this.setting.family.medium)
-        if (cache) view2x4 = cache
-        else view = await this.view2x4()
+        let view2x4 = await this.view2x4()
         $widget.setTimeline({
             entries: [
                 {

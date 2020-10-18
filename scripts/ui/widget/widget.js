@@ -15,7 +15,7 @@ class Widget {
     custom() {
         this.setting.push()
     }
-    
+
     async refreshCache() {
         this.setCache(this.setting.family.small)
         this.setCache(this.setting.family.medium)
@@ -61,8 +61,10 @@ class Widget {
         return this.errorView
     }
 
-    joinView() {
-        return this.view2x2()
+    async joinView() {
+        let cache = this.getCache(this.setting.family.small)
+        if (cache) return cache
+        return await this.view2x2()
     }
 }
 

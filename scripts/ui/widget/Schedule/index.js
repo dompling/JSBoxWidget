@@ -10,6 +10,8 @@ class ScheduleWidget extends Widget {
     }
 
     async joinView() {
+        let cache = this.getCache(this.setting.family.medium)
+        if (cache) return cache
         return await this.view2x4()
     }
 
@@ -18,6 +20,7 @@ class ScheduleWidget extends Widget {
     }
 
     async view2x4() {
+        // 中等大小将使用link而不是widgetURL
         return await this.schedule.scheduleView(this.setting.family.medium)
     }
 
