@@ -3,6 +3,7 @@ class Calendar {
         this.kernel = kernel
         this.setting = setting
         this.sloarToLunar = this.kernel.registerPlugin("sloarToLunar")
+        this.onlyCurrentMonth = this.setting.get("onlyCurrentMonth")
         this.colorTone = this.setting.get("colorTone")
         this.hasHoliday = this.setting.get("holiday")
         this.holidayColor = this.setting.get("holidayColor")
@@ -99,23 +100,37 @@ class Calendar {
                 if (formatDay > 6) formatDay = 0 // 格式化每周第一天 end
                 // 只有当firstDay为0时才到本月第一天
                 let formatDate
-                if (firstDay === 0) {
-                    // 判断是否到达最后一天
-                    formatDate = date > dates ? {
-                        month: month + 1,
-                        date: nextMonth++,
-                        day: formatDay
-                    } : {
+                // 是否仅显示本月
+                if (this.onlyCurrentMonth) {
+                    if (firstDay === 0) {
+                        // 判断是否到达最后一天
+                        formatDate = date > dates ? 0 : {
                             month: month,
                             date: date,
                             day: formatDay
                         }
+                    } else {
+                        formatDate = 0
+                    }
                 } else {
-                    // 补齐第一周前面空缺的日期
-                    formatDate = {
-                        month: month - 1,
-                        date: lastMonthDates++,
-                        day: formatDay
+                    if (firstDay === 0) {
+                        // 判断是否到达最后一天
+                        formatDate = date > dates ? {
+                            month: month + 1,
+                            date: nextMonth++,
+                            day: formatDay
+                        } : {
+                                month: month,
+                                date: date,
+                                day: formatDay
+                            }
+                    } else {
+                        // 补齐第一周前面空缺的日期
+                        formatDate = {
+                            month: month - 1,
+                            date: lastMonthDates++,
+                            day: formatDay
+                        }
                     }
                 }
                 // 农历
@@ -123,14 +138,14 @@ class Calendar {
                     // 保存农历信息
                     this.lunar = this.sloarToLunar(year, month + 1, date)
                 }
-                if (lunar) {
+                if (lunar && formatDate !== 0) {
                     // month是0-11，故+1
                     formatDate["lunar"] = date === dateNow ? this.lunar : this.sloarToLunar(
                         year, formatDate.month + 1, formatDate.date
                     )
                 }
                 // 节假日
-                if (this.hasHoliday) { // 判断是否需要展示节假日
+                if (this.hasHoliday && formatDate !== 0) { // 判断是否需要展示节假日
                     // month是0-11，故+1
                     let holiday = this.isHoliday(year, formatDate.month + 1, formatDate.date)
                     if (holiday) {

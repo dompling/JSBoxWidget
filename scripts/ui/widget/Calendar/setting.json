@@ -48,6 +48,16 @@
                     "NUMBER"
                 ],
                 "value": 1
+            },
+            {
+                "icon": [
+                    "rectangle.and.paperclip",
+                    "#FFCC00"
+                ],
+                "title": "ONLY_CURRENT_MONTH",
+                "type": "switch",
+                "key": "onlyCurrentMonth",
+                "value": false
             }
         ]
     },

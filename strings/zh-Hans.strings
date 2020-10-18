@@ -81,6 +81,7 @@
 
 "COLOR_TONE" = "主色调";
 "FIRST_DAY_OF_WEEK" = "每周第一天";
+"ONLY_CURRENT_MONTH" = "仅显示本月";
 
 "HOLIDAT_COLOR" = "节假日颜色";
 "HOLIDAT_REST_NO_COLOR" = "调休颜色";
