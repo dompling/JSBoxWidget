@@ -20,7 +20,6 @@ class ScheduleWidget extends Widget {
     }
 
     async view2x4() {
-        console.log("aaa")
         // 中等大小将使用link而不是widgetURL
         return await this.schedule.scheduleView(this.setting.family.medium)
     }
