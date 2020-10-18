@@ -3,17 +3,17 @@ class Calendar {
         this.kernel = kernel
         this.setting = setting
         this.sloarToLunar = this.kernel.registerPlugin("sloarToLunar")
-        this.colorTone = this.setting.get("calendar.colorTone")
-        this.hasHoliday = this.setting.get("calendar.holiday")
-        this.holidayColor = this.setting.get("calendar.holidayColor")
-        this.holidayNoRestColor = this.setting.get("calendar.holidayNoRestColor")// 调休
+        this.colorTone = this.setting.get("colorTone")
+        this.hasHoliday = this.setting.get("holiday")
+        this.holidayColor = this.setting.get("holidayColor")
+        this.holidayNoRestColor = this.setting.get("holidayNoRestColor")// 调休
         if (this.hasHoliday && $file.exists(this.setting.holidayPath)) {// 假期信息
             this.holiday = JSON.parse($file.read(this.setting.holidayPath).string).holiday
         }
-        this.monthDisplayMode = this.setting.get("calendar.monthDisplayMode")// 月份显示模式
-        this.widget2x2TitleYear = this.setting.get("calendar.small.title.year")// 2x2标题是否显示年
-        this.firstDayOfWeek = this.setting.get("calendar.firstDayOfWeek")// 每周第一天
-        this.lunar2x2 = this.setting.get("calendar.small.lunar")// 2x2是否显示农历
+        this.monthDisplayMode = this.setting.get("monthDisplayMode")// 月份显示模式
+        this.widget2x2TitleYear = this.setting.get("small.title.year")// 2x2标题是否显示年
+        this.firstDayOfWeek = this.setting.get("firstDayOfWeek")// 每周第一天
+        this.lunar2x2 = this.setting.get("small.lunar")// 2x2是否显示农历
     }
 
     localizedWeek(index) {

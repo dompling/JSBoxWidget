@@ -22,7 +22,7 @@
                 ],
                 "title": "ALBUM_COLUMN",
                 "type": "stepper",
-                "key": "album.columns",
+                "key": "columns",
                 "value": 3
             },
             {
@@ -32,7 +32,7 @@
                 ],
                 "title": "ALBUM",
                 "type": "script",
-                "key": "album.manager",
+                "key": "manager",
                 "value": "this.controller.album()"
             }
         ]
@@ -47,7 +47,7 @@
                 ],
                 "title": "URL_SCHEME",
                 "type": "string",
-                "key": "album.urlScheme",
+                "key": "urlScheme",
                 "value": ""
             },
             {
@@ -57,7 +57,7 @@
                 ],
                 "title": "USE_COMPRESSED_IMAGE",
                 "type": "switch",
-                "key": "album.useCompressedImage",
+                "key": "useCompressedImage",
                 "value": true
             },
             {
@@ -67,7 +67,7 @@
                 ],
                 "title": "SWITCH_METHOD",
                 "type": "tab",
-                "key": "album.imageSwitchMethod",
+                "key": "imageSwitchMethod",
                 "items": [
                     "RANDOM",
                     "SEQUENCE"
@@ -81,7 +81,7 @@
                 ],
                 "title": "SWITCH_INTERVAL",
                 "type": "stepper",
-                "key": "album.switchInterval",
+                "key": "switchInterval",
                 "min": 10,
                 "max": 60,
                 "value": 10
@@ -98,7 +98,7 @@
                 ],
                 "title": "CLEAR_CACHE",
                 "type": "script",
-                "key": "album.clearCache",
+                "key": "clearCache",
                 "value": "this.controller.clearCache()"
             },
             {

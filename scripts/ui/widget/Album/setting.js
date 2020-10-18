@@ -107,7 +107,7 @@ class PictureSetting extends Setting {
                 type: "matrix",
                 props: {
                     id: "picture-edit-matrix",
-                    columns: this.setting.get("album.columns"),
+                    columns: this.setting.get("columns"),
                     square: true,
                     data: data,
                     template: {
@@ -119,7 +119,7 @@ class PictureSetting extends Setting {
                                     id: "image"
                                 },
                                 layout: make => {
-                                    make.size.equalTo($device.info.screen.width / this.setting.get("album.columns"))
+                                    make.size.equalTo($device.info.screen.width / this.setting.get("columns"))
                                 }
                             }
                         ]
@@ -176,7 +176,7 @@ class PictureSetting extends Setting {
         this.setting.clearCache = () => {
             this.settingComponent.view.touchHighlight()
             this.settingComponent.view.start()
-            $cache.remove("album.switch.data")
+            $cache.remove("switch.data")
             this.settingComponent.view.done()
         }
     }

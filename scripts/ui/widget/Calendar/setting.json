@@ -18,7 +18,7 @@
                 ],
                 "title": "COLOR_TONE",
                 "type": "color",
-                "key": "calendar.colorTone",
+                "key": "colorTone",
                 "value": "orange"
             },
             {
@@ -28,7 +28,7 @@
                 ],
                 "title": "FIRST_DAY_OF_WEEK",
                 "type": "tab",
-                "key": "calendar.firstDayOfWeek",
+                "key": "firstDayOfWeek",
                 "items": [
                     "_SUNDAY",
                     "_MONDAY"
@@ -42,7 +42,7 @@
                 ],
                 "title": "MONTH_DISPLAY_MODE",
                 "type": "tab",
-                "key": "calendar.monthDisplayMode",
+                "key": "monthDisplayMode",
                 "items": [
                     "CHINESE_CHARACTERS",
                     "NUMBER"
@@ -57,7 +57,7 @@
             {
                 "title": "SHOW_YEAR",
                 "type": "switch",
-                "key": "calendar.small.title.year",
+                "key": "small.title.year",
                 "value": true
             },
             {
@@ -67,7 +67,7 @@
                 ],
                 "title": "SHOW_LUNAR",
                 "type": "switch",
-                "key": "calendar.small.lunar",
+                "key": "small.lunar",
                 "value": true
             }
         ]
@@ -81,7 +81,7 @@
                 ],
                 "title": "HOLIDAY",
                 "type": "switch",
-                "key": "calendar.holiday",
+                "key": "holiday",
                 "value": true
             },
             {
@@ -91,7 +91,7 @@
                 ],
                 "title": "HOLIDAT_COLOR",
                 "type": "color",
-                "key": "calendar.holidayColor",
+                "key": "holidayColor",
                 "value": "#0099CC"
             },
             {
@@ -101,7 +101,7 @@
                 ],
                 "title": "HOLIDAT_REST_NO_COLOR",
                 "type": "color",
-                "key": "calendar.holidayNoRestColor",
+                "key": "holidayNoRestColor",
                 "value": "red"
             },
             {
@@ -111,7 +111,7 @@
                 ],
                 "title": "GET_HOLIDAY",
                 "type": "script",
-                "key": "calendar.get_holiday",
+                "key": "get_holiday",
                 "value": "this.controller.getHoliday()"
             },
             {
@@ -121,7 +121,7 @@
                 ],
                 "title": "CLEAR_HOLIDAY_DATA",
                 "type": "script",
-                "key": "calendar.clear_holiday",
+                "key": "clear_holiday",
                 "value": "this.controller.clearHoliday()"
             }
         ]

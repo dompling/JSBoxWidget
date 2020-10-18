@@ -5,20 +5,20 @@ class PictureWidget {
         this.kernel = kernel
         this.setting = new PictureSetting(this.kernel)
         this.albumPath = this.setting.albumPath
-        this.imageSwitchMethod = this.setting.get("album.imageSwitchMethod")
-        this.switchInterval = 1000 * 60 * Number(this.setting.get("album.switchInterval"))
-        this.useCompressedImage = this.setting.get("album.useCompressedImage")
-        this.urlScheme = this.setting.get("album.urlScheme")
+        this.imageSwitchMethod = this.setting.get("imageSwitchMethod")
+        this.switchInterval = 1000 * 60 * Number(this.setting.get("switchInterval"))
+        this.useCompressedImage = this.setting.get("useCompressedImage")
+        this.urlScheme = this.setting.get("urlScheme")
         this.pictures = this.setting.getImages()
         // 缓存
-        this.data = $cache.get("album.switch.data")
+        this.data = $cache.get("switch.data")
         if (!this.data) {// 首次写入缓存
 
             this.data = {
                 date: new Date().getTime(),
                 index: this.imageSwitchMethod === 0 ? this.randomNum(0, this.pictures.length - 1) : 0
             }
-            $cache.set("album.switch.data", this.data)
+            $cache.set("switch.data", this.data)
         }
     }
 
@@ -50,7 +50,7 @@ class PictureWidget {
                 index = this.data.index + 1
                 if (index > this.pictures.length - 1) index = 0
             }
-            $cache.set("album.switch.data", {
+            $cache.set("switch.data", {
                 date: new Date().getTime(),
                 index: index
             })
