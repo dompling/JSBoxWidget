@@ -18,7 +18,8 @@ class AppKernel extends Kernel {
         this.refreshWidgetCache()
         // 检查是否携带URL scheme
         if (this.query["url-scheme"]) {
-            $app.openURL(this.query["url-scheme"])
+            // 延时500ms后跳转
+            setTimeout(() => { $app.openURL(this.query["url-scheme"]) }, 500)
         }
     }
 
