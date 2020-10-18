@@ -151,8 +151,6 @@ class Calendar {
     }
 
     formatCalendar(family, calendarInfo) {
-        /* $widget.family = family
-        const size = $widget.displaySize.height */
         const template = (text, props = {}, extra = undefined) => {
             let views = [{
                 type: "text",
@@ -195,7 +193,6 @@ class Calendar {
                             maxWidth: Infinity,
                             maxHeight: Infinity
                         },
-                        // 不同视图设置不同圆角
                         cornerRadius: 5
                     }
                 ],
