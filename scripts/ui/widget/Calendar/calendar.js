@@ -455,22 +455,6 @@ class Calendar {
                 }),
             views: [titleBar, calendar]
         }
-        /* {
-            type: "hstack",
-            props: Object.assign({
-                frame: {
-                    maxWidth: Infinity,
-                    maxHeight: Infinity
-                },
-                spacing: 0,
-                padding: 0
-            }, family === this.setting.family.medium ? {
-                link: this.setting.settingUrlScheme
-            } : {
-                    widgetURL: this.setting.settingUrlScheme
-                }),
-            views: days
-        } */
     }
 }
 
