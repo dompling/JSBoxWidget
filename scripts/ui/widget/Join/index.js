@@ -25,10 +25,7 @@ class JoinWidget extends Widget {
             type: "vgrid",
             props: {
                 columns: Array(2).fill({
-                    flexible: {
-                        minimum: 10,
-                        maximum: Infinity
-                    },
+                    fixed: width,
                     spacing: this.spacing
                 })
             },
