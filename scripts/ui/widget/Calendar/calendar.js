@@ -17,14 +17,15 @@ class Calendar {
     }
 
     localizedWeek(index) {
-        let week = []
-        week[0] = $l10n("SUNDAY")
-        week[1] = $l10n("MONDAY")
-        week[2] = $l10n("TUESDAY")
-        week[3] = $l10n("WEDNESDAY")
-        week[4] = $l10n("THURSDAY")
-        week[5] = $l10n("FRIDAY")
-        week[6] = $l10n("SATURDAY")
+        const week = [
+            $l10n("SUNDAY"),
+            $l10n("MONDAY"),
+            $l10n("TUESDAY"),
+            $l10n("WEDNESDAY"),
+            $l10n("THURSDAY"),
+            $l10n("FRIDAY"),
+            $l10n("SATURDAY")
+        ]
         if (this.firstDayOfWeek === 1) {
             index += 1
             if (index > 6) index = 0
@@ -33,20 +34,21 @@ class Calendar {
     }
 
     localizedMonth(index) {
-        let mode = this.monthDisplayMode === 0 ? "_C" : "_N"
-        let month = []
-        month[0] = $l10n("JANUARY" + mode)
-        month[1] = $l10n("FEBRUARY" + mode)
-        month[2] = $l10n("MARCH" + mode)
-        month[3] = $l10n("APRIL" + mode)
-        month[4] = $l10n("MAY" + mode)
-        month[5] = $l10n("JUNE" + mode)
-        month[6] = $l10n("JULY" + mode)
-        month[7] = $l10n("AUGUST" + mode)
-        month[8] = $l10n("SEPTEMBER" + mode)
-        month[9] = $l10n("OCTOBER" + mode)
-        month[10] = $l10n("NOVEMBER" + mode)
-        month[11] = $l10n("DECEMBER" + mode)
+        const mode = this.monthDisplayMode === 0 ? "_C" : "_N"
+        const month = [
+            $l10n("JANUARY" + mode),
+            $l10n("FEBRUARY" + mode),
+            $l10n("MARCH" + mode),
+            $l10n("APRIL" + mode),
+            $l10n("MAY" + mode),
+            $l10n("JUNE" + mode),
+            $l10n("JULY" + mode),
+            $l10n("AUGUST" + mode),
+            $l10n("SEPTEMBER" + mode),
+            $l10n("OCTOBER" + mode),
+            $l10n("NOVEMBER" + mode),
+            $l10n("DECEMBER" + mode)
+        ]
         return month[index] + $l10n("MONTH")
     }
 
@@ -72,40 +74,65 @@ class Calendar {
     }
 
     getCalendar(lunar) {
-        let date = new Date()
-        let year = date.getFullYear()
-        let month = date.getMonth()
-        let dateNow = date.getDate()// 当前日期
-        let dates = new Date(year, month + 1, 0).getDate()// 总天数
-        let firstDay = new Date(year, month, 1).getDay()// 本月第一天是周几
-        if (this.firstDayOfWeek === 1) {// 设置中设定每周第一天是周几
+        let dateInstance = new Date()
+        let year = dateInstance.getFullYear()
+        let month = dateInstance.getMonth()
+        let dateNow = dateInstance.getDate() // 当前日期
+        let dates = new Date(year, month + 1, 0).getDate() // 总天数
+        let firstDay = new Date(year, month, 1).getDay() // 本月第一天是周几
+        let lastMonthDates = new Date(year, month, 0).getDate() // 上个月总天数
+        let nextMonth = 1 // 下个月的日期计数器
+        lastMonthDates -= 7 - firstDay // 补齐本月开始前的空位
+        if (this.firstDayOfWeek === 1) { // 设置中设定每周第一天是周几
             firstDay -= 1
             if (firstDay < 0) firstDay = 6
+            lastMonthDates++ // 上周补到这周的天数少一天，加上一才会少一天
         }
         let calendar = []
-        for (let date = 1; date <= dates;) {
+        let date = 1 // 日期计数器
+        for (let i = 0; i < 6; i++) { // 循环6次，每个月显示6周
             let week = []
             for (let day = 0; day <= 6; day++) {
-                if (day === firstDay) firstDay = 0
-                // 只有当firstDay为this.firstDay时才开始放入数据，之前的用0补位
-                let formatDay = this.firstDayOfWeek === 1 ? day + 1 : day// 判断每周第一天
-                if (formatDay > 6) formatDay = 0
-                let formatDate = firstDay === 0 ? (date > dates ? 0 : {
-                    date: date,
-                    day: formatDay
-                }) : 0
+                // 当每周第一天为0时，代表前方无偏移量
+                if (day === firstDay && firstDay !== 0) firstDay = 0
+                let formatDay = this.firstDayOfWeek === 1 ? day + 1 : day // 格式化每周第一天
+                if (formatDay > 6) formatDay = 0 // 格式化每周第一天 end
+                // 只有当firstDay为0时才到本月第一天
+                let formatDate
+                if (firstDay === 0) {
+                    // 判断是否到达最后一天
+                    formatDate = date > dates ? {
+                        month: month + 1,
+                        date: nextMonth++,
+                        day: formatDay
+                    } : {
+                            month: month,
+                            date: date,
+                            day: formatDay
+                        }
+                } else {
+                    // 补齐第一周前面空缺的日期
+                    formatDate = {
+                        month: month - 1,
+                        date: lastMonthDates++,
+                        day: formatDay
+                    }
+                }
                 // 农历
                 if (date === dateNow) {
                     // 保存农历信息
                     this.lunar = this.sloarToLunar(year, month + 1, date)
                 }
-                if (lunar && formatDate !== 0) {
-                    formatDate["lunar"] = date === dateNow ? this.lunar : this.sloarToLunar(year, month + 1, date)
+                if (lunar) {
+                    // month是0-11，故+1
+                    formatDate["lunar"] = date === dateNow ? this.lunar : this.sloarToLunar(
+                        year, formatDate.month + 1, formatDate.date
+                    )
                 }
                 // 节假日
-                if (this.hasHoliday && formatDate !== 0) {// 判断是否需要展示节假日
+                if (this.hasHoliday) { // 判断是否需要展示节假日
                     // month是0-11，故+1
-                    let holiday = this.isHoliday(year, month + 1, date)
+                    let holiday = this.isHoliday(year, formatDate.month + 1, formatDate.date)
                     if (holiday) {
                         formatDate["holiday"] = holiday
                     }
@@ -124,6 +151,8 @@ class Calendar {
     }
 
     formatCalendar(family, calendarInfo) {
+        /* $widget.family = family
+        const size = $widget.displaySize.height */
         const template = (text, props = {}, extra = undefined) => {
             let views = [{
                 type: "text",
@@ -132,14 +161,13 @@ class Calendar {
                     font: $font(12),
                     lineLimit: 1,
                     minimumScaleFactor: 0.5,
-                    padding: extra ? $insets(3, 3, 0, 3) : 0,
                     frame: {
                         maxWidth: Infinity,
                         maxHeight: Infinity
                     }
                 }, props.text)
             }]
-            if (extra) {
+            if (extra) { // 判断是否有额外信息
                 views.push({
                     type: "text",
                     props: Object.assign({
@@ -147,7 +175,6 @@ class Calendar {
                         font: $font(12),
                         lineLimit: extra.length > 3 ? 2 : 1,
                         minimumScaleFactor: 0.5,
-                        padding: $insets(0, 3, 3, 3),
                         frame: {
                             maxWidth: Infinity,
                             maxHeight: Infinity
@@ -159,14 +186,16 @@ class Calendar {
                 type: "vstack",
                 modifiers: [
                     Object.assign({
+                        background: $color("clear"),
                         color: $color("primaryText"),
-                        background: $color("clear")
+                        padding: 2
                     }, props.box),
                     {
                         frame: {
                             maxWidth: Infinity,
                             maxHeight: Infinity
                         },
+                        // 不同视图设置不同圆角
                         cornerRadius: 5
                     }
                 ],
@@ -176,18 +205,19 @@ class Calendar {
 
         let calendar = calendarInfo.calendar
         let days = []
-        for (let line of calendar) {
+        for (let line of calendar) { // 设置不同日期显示不同样式
             for (let date of line) {
-                if (date === 0) {// 空白直接跳过
+                if (date === 0) { // 空白直接跳过
                     days.push(template(""))
                     continue
                 }
                 // 初始样式
                 let props = {
                     text: { color: $color("primaryText") },
-                    ext: { color: $color("primaryText") },// 额外信息样式，如农历等
-                    box: { background: $color("clear") }
+                    ext: { color: $color("primaryText") }, // 额外信息样式，如农历等
+                    box: {}
                 }
+                // 周末
                 if (date.day === 0 || date.day === 6) {
                     props.ext.color = props.text.color = $color("systemGray2")
                 }
@@ -198,6 +228,10 @@ class Calendar {
                     } else {
                         props.ext.color = props.text.color = $color(this.holidayNoRestColor)
                     }
+                }
+                // 本月前后补位日期
+                if (date.month !== calendarInfo.month) {
+                    props.ext.color = props.text.color = $color("systemGray2")
                 }
                 // 当天
                 if (date.date === calendarInfo.date) {
@@ -227,28 +261,29 @@ class Calendar {
                 text: { color: $color(this.colorTone) }
             }))
         }
-        return title.concat(days)
-    }
-
-    calendarView(family) {
-        let calendarInfo = this.getCalendar(family === this.setting.family.large)
-        let calendar = {
+        return { // 返回完整视图
             type: "vgrid",
             props: {
                 columns: Array(7).fill({
                     flexible: {
-                        minimum: 10,
+                        minimum: 0,
                         maximum: Infinity
-                    }
+                    },
+                    spacing: 0
                 }),
-                spacing: 5,
+                spacing: 0,
                 frame: {
                     maxWidth: Infinity,
                     maxHeight: Infinity
                 }
             },
-            views: this.formatCalendar(family, calendarInfo)
+            views: title.concat(days)
         }
+    }
+
+    calendarView(family) {
+        let calendarInfo = this.getCalendar(family === this.setting.family.large)
+        let calendar = this.formatCalendar(family, calendarInfo)
         // 标题栏文字内容
         let content
         if (family === this.setting.family.large) {
