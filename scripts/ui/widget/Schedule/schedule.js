@@ -239,7 +239,6 @@ class Schedule {
         return {
             type: "vstack",
             props: Object.assign({
-                widgetURL: this.urlScheme,
                 frame: {
                     maxWidth: Infinity,
                     maxHeight: Infinity,
