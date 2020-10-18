@@ -11,10 +11,10 @@ class Schedule {
                 this.urlScheme = this.setting.settingUrlScheme
                 break
             case 1:
-                this.urlScheme = "x-apple-reminderkit://"
+                this.urlScheme = "jsbox://run?name=EasyWidget&url-scheme='x-apple-reminderkit://'"
                 break
             case 2:
-                this.urlScheme = "calshow://"
+                this.urlScheme = "jsbox://run?name=EasyWidget&url-scheme='calshow://'"
                 break
         }
     }
