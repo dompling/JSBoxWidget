@@ -24,7 +24,6 @@ class JoinWidget extends Widget {
         let leftView = await leftWidget.joinView()
         let rightView = await rightWidget.joinView()
         $widget.family = this.setting.family.medium
-        let width = $widget.displaySize.width / 2 - this.spacing / 2
         let height = $widget.displaySize.height
         return {
             type: "hstack",
