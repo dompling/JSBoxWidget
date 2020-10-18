@@ -13,6 +13,11 @@ class JoinWidget extends Widget {
         else this.right = this.setting.menu[this.right]
     }
 
+    /**
+     * 不使用缓存
+     */
+    refreshCache() { }
+
     async view2x4() {
         let leftWidget = this.kernel.widgetInstance(this.left)
         let rightWidget = this.kernel.widgetInstance(this.right)
