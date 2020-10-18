@@ -31,7 +31,7 @@ class ScheduleWidget extends Widget {
         let view2x2
         let cache = this.getCache(this.setting.family.small)
         if (cache) view2x2 = cache
-        else view = await this.view2x2()
+        else view2x2 = await this.view2x2()
         $widget.setTimeline({
             entries: [
                 {
