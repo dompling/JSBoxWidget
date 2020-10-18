@@ -60,8 +60,7 @@ class AppKernel extends Kernel {
 
     widgetInstance(widget) {
         if ($file.exists(`${this.widgetRootPath}/${widget}/index.js`)) {
-            let path = `./ui/widget/${widget}/index.js`
-            let { Widget } = require(path)
+            let { Widget } = require(`./ui/widget/${widget}/index.js`)
             return new Widget(this)
         } else {
             return false
