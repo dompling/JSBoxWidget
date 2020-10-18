@@ -12,9 +12,11 @@ class Calendar {
             this.holiday = JSON.parse($file.read(this.setting.holidayPath).string).holiday
         }
         this.monthDisplayMode = this.setting.get("monthDisplayMode")// 月份显示模式
-        this.widget2x2TitleYear = this.setting.get("small.title.year")// 2x2标题是否显示年
         this.firstDayOfWeek = this.setting.get("firstDayOfWeek")// 每周第一天
-        this.lunar2x2 = this.setting.get("small.lunar")// 2x2是否显示农历
+        this.titleYear = this.setting.get("title.year")// 标题是否显示年
+        this.titleFullYear = this.setting.get("title.fullYear")// 标题是否显示完整年
+        this.titleLunar = this.setting.get("title.lunar")// 标题是否显示农历
+        this.titleLunarYear = this.setting.get("title.lunarYear")// 标题是否显示农历年
     }
 
     localizedWeek(index) {
@@ -333,19 +335,22 @@ class Calendar {
     titleBarTemplate(family, calendarInfo) {
         // 标题栏文字内容
         let content
-        if (family !== this.setting.family.small) {
-            content = {
-                left: calendarInfo.year + $l10n("YEAR") + this.localizedMonth(calendarInfo.month),
-                right: this.lunar.lunarYear + $l10n("YEAR") + this.lunar.lunarMonth + $l10n("MONTH") + this.lunar.lunarDay,
-                size: 18
-            }
+        let left = "", right = "",
+            size = family === this.setting.family.small ? 12 : 18
+        if (this.titleYear) {
+            let year = !this.titleFullYear ? String(calendarInfo.year).slice(-2) + $l10n("YEAR") : calendarInfo.year + $l10n("YEAR")
+            left = year + this.localizedMonth(calendarInfo.month)
         } else {
-            let year = this.widget2x2TitleYear ? String(calendarInfo.year).slice(-2) + $l10n("YEAR") : ""
-            let right = this.lunar2x2 ? this.lunar.lunarMonth + $l10n("MONTH") + this.lunar.lunarDay : ""
-            content = {
-                left: year + this.localizedMonth(calendarInfo.month),
-                right: right
-            }
+            left = this.localizedMonth(calendarInfo.month)
+        }
+        if (this.titleLunar) {
+            right = this.lunar.lunarMonth + $l10n("MONTH") + this.lunar.lunarDay
+            if (this.titleLunarYear) right = this.lunar.lunarYear + $l10n("YEAR") + right
+        }
+        content = {
+            left: left,
+            right: right,
+            size: size
         }
         return {
             type: "hstack",
@@ -354,7 +359,7 @@ class Calendar {
                     width: Infinity,
                     height: Infinity
                 },
-                padding: $insets(family === this.setting.family.large ? 10 : 5, 3, 5, 3)
+                padding: $insets(10, 3, 5, 3)
             },
             views: [
                 {
