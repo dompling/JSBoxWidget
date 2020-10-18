@@ -37,15 +37,15 @@ class CalendarWidget extends Widget {
             render: ctx => {
                 let cache
                 switch (ctx.family) {
-                    case 0:return this.view2x2()
+                    case 0:
                         cache = this.getCache(this.setting.family.small)
                         if (cache) return cache
                         else return this.view2x2()
-                    case 1:return this.view2x4()
+                    case 1:
                         cache = this.getCache(this.setting.family.meduim)
                         if (cache) return cache
                         else return this.view2x4()
-                    case 2:return this.view4x4()
+                    case 2:
                         cache = this.getCache(this.setting.family.large)
                         if (cache) return cache
                         else return this.view4x4()
