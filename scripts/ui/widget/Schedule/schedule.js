@@ -248,9 +248,9 @@ class Schedule {
                 padding: $insets(15, 15, 0, 15),
                 spacing: 15
             }, family === this.setting.family.medium ? {
-                link: this.setting.settingUrlScheme
+                link: this.urlScheme
             } : {
-                    widgetURL: this.setting.settingUrlScheme
+                    widgetURL: this.urlScheme
                 }),
             views: await this.getListView()
         }
