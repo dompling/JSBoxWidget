@@ -4,11 +4,15 @@ const JoinSetting = require("./setting")
 class JoinWidget extends Widget {
     constructor(kernel) {
         super(kernel, new JoinSetting(kernel))
-        this.left = this.setting.get("left")
         this.spacing = this.setting.get("spacing")
+        // 左侧视图设置
+        this.left = this.setting.get("left")
+        this.leftJoinMode = this.setting.get("left.joinMode")
         if (typeof this.left === "object") this.left = this.left[1]
         else this.left = this.setting.menu[this.left]
+        // 右侧视图设置
         this.right = this.setting.get("right")
+        this.rightJoinMode = this.setting.get("right.joinMode")
         if (typeof this.right === "object") this.right = this.right[1]
         else this.right = this.setting.menu[this.right]
     }
@@ -21,8 +25,8 @@ class JoinWidget extends Widget {
     async view2x4() {
         let leftWidget = this.kernel.widgetInstance(this.left)
         let rightWidget = this.kernel.widgetInstance(this.right)
-        let leftView = await leftWidget.joinView()
-        let rightView = await rightWidget.joinView()
+        let leftView = await leftWidget.joinView(this.leftJoinMode)
+        let rightView = await rightWidget.joinView(this.rightJoinMode)
         $widget.family = this.setting.family.medium
         let width = $widget.displaySize.width / 2 - this.spacing / 2
         let height = $widget.displaySize.height

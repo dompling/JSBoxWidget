@@ -127,6 +127,11 @@
 "CLICK_EVENT" = "点击事件";
 "REMINDER" = "提醒事项";
 
+"JOIN" = "拼接";
+"JOIN_MODE" = "拼接模式";
+"SMALL" = "小";
+"MEDIUM" = "中";
+"SELECT_WIDGET" = "选择widget";
 "ONLY_SQUARE_VIEW" = "只提供正方形视图";
 "NO_SMALL_VIEW" = "不提供2x2视图";
 "SPACING" = "间距";

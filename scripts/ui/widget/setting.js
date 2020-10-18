@@ -26,6 +26,10 @@ class Setting {
             medium: 1,
             large: 2
         }
+        this.joinMode = {
+            small: 0,
+            medium: 1
+        }
     }
 
     push() {

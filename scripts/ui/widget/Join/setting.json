@@ -10,12 +10,7 @@
                 "type": "script",
                 "key": "preview",
                 "value": "this.controller.preview()"
-            }
-        ]
-    },
-    {
-        "title": "2x4",
-        "items": [
+            },
             {
                 "icon": [
                     "pause.fill",
@@ -27,13 +22,28 @@
                 "min": 0,
                 "max": 20,
                 "value": 5
+            }
+        ]
+    },
+    {
+        "title": "LEFT",
+        "items": [
+            {
+                "title": "JOIN_MODE",
+                "type": "tab",
+                "key": "left.joinMode",
+                "items": [
+                    "SMALL",
+                    "MEDIUM"
+                ],
+                "value": 0
             },
             {
                 "icon": [
                     "square.lefthalf.fill",
                     "#FF9900"
                 ],
-                "title": "LEFT",
+                "title": "SELECT_WIDGET",
                 "type": "menu",
                 "key": "left",
                 "items": "this.controller.getMenu()",
@@ -42,13 +52,28 @@
                     0,
                     "Calendar"
                 ]
+            }
+        ]
+    },
+    {
+        "title": "RIGHT",
+        "items": [
+            {
+                "title": "JOIN_MODE",
+                "type": "tab",
+                "key": "right.joinMode",
+                "items": [
+                    "SMALL",
+                    "MEDIUM"
+                ],
+                "value": 0
             },
             {
                 "icon": [
                     "square.righthalf.fill",
                     "#FF9900"
                 ],
-                "title": "RIGHT",
+                "title": "SELECT_WIDGET",
                 "type": "menu",
                 "key": "right",
                 "items": "this.controller.getMenu()",

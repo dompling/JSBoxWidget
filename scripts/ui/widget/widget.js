@@ -61,10 +61,20 @@ class Widget {
         return this.errorView
     }
 
-    async joinView() {
-        let cache = this.getCache(this.setting.family.small)
-        if (cache) return cache
-        return await this.view2x2()
+    async joinView(mode) {
+        let cache
+        switch (mode) {
+            case this.setting.joinMode.small:
+                cache = this.getCache(this.setting.family.small)
+                if (cache) return cache
+                return await this.view2x2()
+            case this.setting.joinMode.medium:
+                cache = this.getCache(this.setting.family.medium)
+                if (cache) return cache
+                return await this.view2x4()
+            default:
+                return false
+        }
     }
 }
 
