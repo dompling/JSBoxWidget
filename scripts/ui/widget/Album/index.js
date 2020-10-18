@@ -1,9 +1,9 @@
+const Widget = require("../widget")
 const PictureSetting = require("./setting")
 
-class PictureWidget {
+class PictureWidget extends Widget {
     constructor(kernel) {
-        this.kernel = kernel
-        this.setting = new PictureSetting(this.kernel)
+        super(kernel, new PictureSetting(kernel))
         this.albumPath = this.setting.albumPath
         this.imageSwitchMethod = this.setting.get("imageSwitchMethod")
         this.switchInterval = 1000 * 60 * Number(this.setting.get("switchInterval"))
@@ -22,10 +22,6 @@ class PictureWidget {
         }
     }
 
-    custom() {
-        this.setting.push()
-    }
-
     randomNum(min, max) {
         switch (arguments.length) {
             case 1:
@@ -37,9 +33,10 @@ class PictureWidget {
         }
     }
 
-    joinView() {
-        return this.view2x2(this.setting.family.medium)
-    }
+    /**
+     * 相册不必使用缓存
+     */
+    refreshCache() { }
 
     view2x2(family) {
         let index = 0 // 图片索引

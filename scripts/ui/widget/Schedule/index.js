@@ -1,31 +1,34 @@
+const Widget = require("../widget")
 const ScheduleSetting = require("./setting")
 const Schedule = require("./schedule")
 
-class CalendarWidget {
+class ScheduleWidget extends Widget {
     constructor(kernel) {
-        this.kernel = kernel
-        this.setting = new ScheduleSetting(this.kernel)
+        super(kernel, new ScheduleSetting(kernel))
         this.schedule = new Schedule(this.kernel, this.setting)
         this.switchInterval = 1000 * 60 * 10 // 10分钟
     }
 
-    custom() {
-        this.setting.push()
-    }
-
     async joinView() {
-        return await this.schedule.scheduleView(this.setting.family.medium)
+        return await this.view2x4()
     }
 
     async view2x2() {
         return await this.schedule.scheduleView(this.setting.family.small)
     }
 
+    async view2x4() {
+        return await this.schedule.scheduleView(this.setting.family.medium)
+    }
+
     async render() {
         let nowDate = new Date()
         const expireDate = new Date(nowDate + this.switchInterval)
         // 获取视图
-        let view2x2 = await this.view2x2()
+        let view2x2
+        let cache = this.getCache(this.setting.family.small)
+        if (cache) view2x2 = cache
+        else view = await this.view2x2()
         $widget.setTimeline({
             entries: [
                 {
@@ -45,5 +48,5 @@ class CalendarWidget {
 }
 
 module.exports = {
-    Widget: CalendarWidget
+    Widget: ScheduleWidget
 }

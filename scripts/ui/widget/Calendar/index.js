@@ -1,19 +1,11 @@
+const Widget = require("../widget")
 const CalendarSetting = require("./setting")
 const Calendar = require("./calendar")
 
-class CalendarWidget {
+class CalendarWidget extends Widget {
     constructor(kernel) {
-        this.kernel = kernel
-        this.setting = new CalendarSetting(this.kernel)
+        super(kernel, new CalendarSetting(kernel))
         this.calendar = new Calendar(this.kernel, this.setting)
-    }
-
-    custom() {
-        this.setting.push()
-    }
-
-    joinView() {
-        return this.calendar.calendarView(this.setting.family.medium)
     }
 
     view2x2() {
@@ -46,15 +38,22 @@ class CalendarWidget {
                 afterDate: expireDate
             },
             render: ctx => {
+                let cache
                 switch (ctx.family) {
                     case 0:
-                        return this.view2x2()
+                        cache = this.getCache(this.setting.family.small)
+                        if (cache) return cache
+                        else return this.view2x2()
                     case 1:
-                        return this.view2x4()
+                        cache = this.getCache(this.setting.family.meduim)
+                        if (cache) return cache
+                        else return this.view2x4()
                     case 2:
-                        return this.view4x4()
+                        cache = this.getCache(this.setting.family.large)
+                        if (cache) return cache
+                        else return this.view4x4()
                     default:
-                        return this.view2x2()
+                        return this.errorView
                 }
             }
         })

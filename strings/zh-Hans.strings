@@ -9,6 +9,7 @@
 "COPY" = "复制";
 "CANNOT_COPY_THIS_WIDGET" = "无法复制该widget";
 "COPY_SUCCESS" = "复制成功";
+"FAILED_TO_LOAD_VIEW" = "加载视图失败";
 
 "HOME" = "首页";
 "SELECT" = "选用";

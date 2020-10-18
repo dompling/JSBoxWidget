@@ -4,11 +4,7 @@ const MainUI = require("./ui/main")
 class AppKernel extends Kernel {
     constructor() {
         super()
-        // 检查是否携带URL scheme
         this.query = $context.query
-        if (this.query["url-scheme"]) {
-            $app.openURL(this.query["url-scheme"])
-        }
         // 注册组件
         this.settingComponent = this._registerComponent("Setting")
         this.setting = this.settingComponent.controller
@@ -18,6 +14,23 @@ class AppKernel extends Kernel {
         // 小组件根目录
         this.widgetRootPath = "/scripts/ui/widget"
         this.widgetAssetsPath = "/assets/widget"
+        // 更新所有小组件缓存
+        this.refreshWidgetCache()
+        // 检查是否携带URL scheme
+        if (this.query["url-scheme"]) {
+            $app.openURL(this.query["url-scheme"])
+        }
+    }
+
+    /**
+     * 更新所有小组件缓存
+     */
+    async refreshWidgetCache() {
+        let widgets = this.getWidgetList()
+        for (let widget of widgets) {
+            widget = this.widgetInstance(widget.name)
+            widget.refreshCache()
+        }
     }
 
     /**

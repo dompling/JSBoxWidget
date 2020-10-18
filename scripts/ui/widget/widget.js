@@ -1,44 +1,69 @@
-const inputValue = $widget.inputValue
-
-class WidgetBase {
-    constructor(kernel) {
+class Widget {
+    constructor(kernel, setting) {
         this.kernel = kernel
-    }
-
-    noSelected() {
-        const midnight = new Date()
-        midnight.setHours(0, 0, 0, 0)
-        const expireDate = new Date(midnight.getTime() + 60 * 60 * 24 * 1000)
-        $widget.setTimeline({
-            entries: [
-                {
-                    date: new Date(),
-                    info: {}
-                }
-            ],
-            policy: {
-                afterDate: expireDate
-            },
-            render: ctx => {
-                return {
-                    type: "text",
-                    props: {
-                        text: "去主程序选择一个Widget，或者参数有误？\n注意，不需要引号"
-                    }
-                }
+        this.setting = setting
+        this.errorView = {
+            type: "text",
+            props: {
+                text: $l10n("FAILED_TO_LOAD_VIEW")
             }
-        })
+        }
+        // 每次实例化都刷新缓存
+        this.refreshCache()
     }
 
-    render() {
-        let widgetName = inputValue
-        let widget = this.kernel.widgetInstance(widgetName)
-        if (widget) {
-            widget.render()
-        } else {
-            this.noSelected()
+    custom() {
+        this.setting.push()
+    }
+    
+    async refreshCache() {
+        this.setCache(this.setting.family.small)
+        this.setCache(this.setting.family.medium)
+        this.setCache(this.setting.family.large)
+    }
+
+    async setCache(family) {
+        switch (family) {
+            case this.setting.family.small:
+                $cache.set(`view-${this.setting.widget}-${family}`, await this.view2x2())
+                break
+            case this.setting.family.medium:
+                $cache.set(`view-${this.setting.widget}-${family}`, await this.view2x4())
+                break
+            case this.setting.family.large:
+                $cache.set(`view-${this.setting.widget}-${family}`, await this.view4x4())
+                break
         }
+    }
+
+    getCache(family) {
+        switch (family) {
+            case this.setting.family.small:
+                return $cache.get(`view-${this.setting.widget}-${family}`)
+            case this.setting.family.medium:
+                return $cache.get(`view-${this.setting.widget}-${family}`)
+            case this.setting.family.large:
+                return $cache.get(`view-${this.setting.widget}-${family}`)
+            default:
+                return false
+        }
+    }
+
+    view2x2() {
+        return this.errorView
+    }
+
+    view2x4() {
+        return this.errorView
+    }
+
+    view4x4() {
+        return this.errorView
+    }
+
+    joinView() {
+        return this.view2x2()
     }
 }
 
-module.exports = WidgetBase
+module.exports = Widget

@@ -1,9 +1,9 @@
+const Widget = require("../widget")
 const JoinSetting = require("./setting")
 
-class JoinWidget {
+class JoinWidget extends Widget {
     constructor(kernel) {
-        this.kernel = kernel
-        this.setting = new JoinSetting(this.kernel)
+        super(kernel, new JoinSetting(kernel))
         this.left = this.setting.get("left")
         this.spacing = this.setting.get("spacing")
         if (typeof this.left === "object") this.left = this.left[1]
@@ -11,10 +11,6 @@ class JoinWidget {
         this.right = this.setting.get("right")
         if (typeof this.right === "object") this.right = this.right[1]
         else this.right = this.setting.menu[this.right]
-    }
-
-    custom() {
-        this.setting.push()
     }
 
     async view2x4() {
@@ -63,12 +59,13 @@ class JoinWidget {
         }
     }
 
-    view4x4() { }
-
     async render() {
         let switchInterval = 1000 * 60 * this.switchInterval
         const expireDate = new Date(new Date() + switchInterval)
-        let view2x2 = await this.view2x4()
+        let view2x4
+        let cache = this.getCache(this.setting.family.medium)
+        if (cache) view2x4 = cache
+        else view = await this.view2x4()
         $widget.setTimeline({
             entries: [
                 {
@@ -87,7 +84,7 @@ class JoinWidget {
                             props: { text: $l10n("NO_SMALL_VIEW") }
                         }
                     case 1:
-                        return view2x2
+                        return view2x4
                     /* case 2:
                         return this.view4x4() */
                     default:
