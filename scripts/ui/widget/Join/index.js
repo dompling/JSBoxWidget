@@ -24,7 +24,15 @@ class JoinWidget extends Widget {
         let leftView = await leftWidget.joinView()
         let rightView = await rightWidget.joinView()
         $widget.family = this.setting.family.medium
+        let width = $widget.displaySize.width / 2 - this.spacing / 2
         let height = $widget.displaySize.height
+        // 调节宽度并裁剪多余部分
+        if (!leftView.props.frame) leftView.props.frame = {}
+        leftView.props.frame["maxWidth"] = width
+        leftView.props["clipped"] = true
+        if (!rightView.props.frame) rightView.props.frame = {}
+        rightView.props.frame["maxWidth"] = width
+        rightView.props["clipped"] = true
         return {
             type: "hstack",
             props: {
