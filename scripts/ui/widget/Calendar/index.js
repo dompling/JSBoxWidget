@@ -13,10 +13,7 @@ class CalendarWidget extends Widget {
     }
 
     view2x4() {
-        return {
-            type: "text",
-            props: { text: $l10n("ONLY_SQUARE_VIEW") }
-        }
+        return this.calendar.weekView(this.setting.family.meduim)
     }
 
     view4x4() {
@@ -40,15 +37,15 @@ class CalendarWidget extends Widget {
             render: ctx => {
                 let cache
                 switch (ctx.family) {
-                    case 0:
+                    case 0:return this.view2x2()
                         cache = this.getCache(this.setting.family.small)
                         if (cache) return cache
                         else return this.view2x2()
-                    case 1:
+                    case 1:return this.view2x4()
                         cache = this.getCache(this.setting.family.meduim)
                         if (cache) return cache
                         else return this.view2x4()
-                    case 2:
+                    case 2:return this.view4x4()
                         cache = this.getCache(this.setting.family.large)
                         if (cache) return cache
                         else return this.view4x4()
