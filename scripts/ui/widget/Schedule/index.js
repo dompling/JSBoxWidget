@@ -11,7 +11,7 @@ class ScheduleWidget extends Widget {
 
     async joinView() {
         let cache = this.getCache(this.setting.family.medium)
-        if (cache) return cache
+        if (cache) return cache.view
         return await this.view2x4()
     }
 
@@ -30,8 +30,13 @@ class ScheduleWidget extends Widget {
         // 获取视图
         let view2x2
         let cache = this.getCache(this.setting.family.small)
-        if (cache) view2x2 = cache
-        else view2x2 = await this.view2x2()
+        if (cache && nowDate - cache.date.getTime() < this.switchInterval)
+            view2x2 = cache.view
+        else {
+            view2x2 = await this.view2x2()
+            // 更新缓存
+            this.setCache(view2x2)
+        }
         $widget.setTimeline({
             entries: [
                 {

@@ -35,23 +35,33 @@ class CalendarWidget extends Widget {
                 afterDate: expireDate
             },
             render: ctx => {
-                let cache
-                switch (ctx.family) {
-                    case 0:
-                        cache = this.getCache(this.setting.family.small)
-                        if (cache) return cache
-                        else return this.view2x2()
-                    case 1:
-                        cache = this.getCache(this.setting.family.meduim)
-                        if (cache) return cache
-                        else return this.view2x4()
-                    case 2:
-                        cache = this.getCache(this.setting.family.large)
-                        if (cache) return cache
-                        else return this.view4x4()
-                    default:
-                        return this.errorView
+                let cache = family => {
+                    let cache = this.getCache(family)
+                    // 未超过一天则不更新缓存
+                    let oneDay = 1000 * 60 * 60 * 24
+                    if (cache && new Date().setHours(0, 0, 0, 0).getTime() - cache.date.getTime() < oneDay)
+                        return cache.view
+                    else {
+                        let view
+                        switch (family) {
+                            case 0:
+                                view = this.view2x2()
+                                break
+                            case 1:
+                                view = this.view2x4()
+                                break
+                            case 2:
+                                view = this.view4x4()
+                                break
+                            default:
+                                view = this.errorView
+                        }
+                        // 更新缓存
+                        this.setCache(family, view)
+                        return view
+                    }
                 }
+                return cache(ctx.family)
             }
         })
     }
