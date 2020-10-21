@@ -38,6 +38,17 @@ class PictureWidget extends Widget {
      */
     refreshCache() { }
 
+    joinView(mode) {
+        switch (mode) {
+            case this.setting.joinMode.small:
+                return this.view2x2()
+            case this.setting.joinMode.medium:
+                return this.view2x4()
+            default:
+                return this.errorView
+        }
+    }
+
     view2x2(family) {
         let index = 0 // 图片索引
         if (new Date().getTime() - this.data.date > this.switchInterval) {// 下一张
