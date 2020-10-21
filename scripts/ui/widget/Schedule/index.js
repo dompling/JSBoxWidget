@@ -6,13 +6,19 @@ class ScheduleWidget extends Widget {
     constructor(kernel) {
         super(kernel, new ScheduleSetting(kernel))
         this.schedule = new Schedule(this.kernel, this.setting)
-        this.switchInterval = 1000 * 60 * 10 // 10分钟
     }
 
     async joinView() {
         let cache = this.getCache(this.setting.family.medium)
-        if (cache) return cache.view
-        return await this.view2x4()
+        if (cache && nowDate - cache.date.getTime() < this.cacheLife) {
+            return cache.view
+        }
+        else {
+            let view = await this.view2x4()
+            // 更新缓存
+            this.setCache(view)
+            return view
+        }
     }
 
     async view2x2() {
@@ -26,13 +32,13 @@ class ScheduleWidget extends Widget {
 
     async render() {
         let nowDate = new Date()
-        const expireDate = new Date(nowDate + this.switchInterval)
+        const expireDate = new Date(nowDate + this.cacheLife)
         // 获取视图
         let view2x2
         let cache = this.getCache(this.setting.family.small)
-        if (cache && nowDate - cache.date.getTime() < this.switchInterval)
+        if (cache && nowDate - cache.date.getTime() < this.cacheLife) {
             view2x2 = cache.view
-        else {
+        } else {
             view2x2 = await this.view2x2()
             // 更新缓存
             this.setCache(view2x2)

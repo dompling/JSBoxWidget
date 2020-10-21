@@ -6,6 +6,8 @@ class CalendarWidget extends Widget {
     constructor(kernel) {
         super(kernel, new CalendarSetting(kernel))
         this.calendar = new Calendar(this.kernel, this.setting)
+        this.cacheLife = 1000 * 60 * 60 * 24
+        this.cacheDateStartFromZero=true
     }
 
     view2x2() {
@@ -38,8 +40,7 @@ class CalendarWidget extends Widget {
                 let cache = family => {
                     let cache = this.getCache(family)
                     // 未超过一天则不更新缓存
-                    let oneDay = 1000 * 60 * 60 * 24
-                    if (cache && new Date().setHours(0, 0, 0, 0).getTime() - cache.date.getTime() < oneDay)
+                    if (cache && new Date().setHours(0, 0, 0, 0).getTime() - cache.date.getTime() < this.cacheLife)
                         return cache.view
                     else {
                         let view

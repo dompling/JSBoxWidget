@@ -2,6 +2,8 @@ class Widget {
     constructor(kernel, setting) {
         this.kernel = kernel
         this.setting = setting
+        this.cacheLife = 1000 * 60 * 10
+        this.cacheDateStartFromZero = false
         this.errorView = {
             type: "text",
             props: {
@@ -69,19 +71,28 @@ class Widget {
     }
 
     async joinView(mode) {
-        let cache
-        switch (mode) {
-            case this.setting.joinMode.small:
-                cache = this.getCache(this.setting.family.small)
-                if (cache) return cache.view
-                return await this.view2x2()
-            case this.setting.joinMode.medium:
-                cache = this.getCache(this.setting.family.medium)
-                if (cache) return cache.view
-                return await this.view2x4()
-            default:
-                return false
+        let cache = mode => {
+            let cache = this.getCache(mode)
+            if (cache && (this.cacheDateStartFromZero ? new Date().setHours(0, 0, 0, 0).getTime() : new Date().getTime()) - cache.date.getTime() < this.cacheLife)
+                return cache.view
+            else {
+                let view
+                switch (mode) {
+                    case this.setting.joinMode.small:
+                        view = this.view2x2()
+                        break
+                    case this.setting.joinMode.medium:
+                        view = this.view2x4()
+                        break
+                    default:
+                        return false
+                }
+                // 更新缓存
+                this.setCache(mode, view)
+                return view
+            }
         }
+        return cache(mode)
     }
 }
 
