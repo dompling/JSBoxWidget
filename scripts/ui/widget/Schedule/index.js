@@ -12,8 +12,7 @@ class ScheduleWidget extends Widget {
         let cache = this.getCache(this.setting.family.medium)
         if (cache && new Date().getTime() - cache.date.getTime() < this.cacheLife) {
             return cache.view
-        }
-        else {
+        } else {
             let view = await this.view2x4()
             // 更新缓存
             this.setCache(view)
