@@ -65,7 +65,7 @@ class Album {
                             Object.assign({
                                 title: $l10n("DELETE"),
                                 handler: () => {
-                                    delectImage(data.image.src, sender, indexPath)
+                                    this.deleteImage(data.image.src, sender, indexPath)
                                 }
                             }, style),
                             { title: $l10n("CANCEL") }
@@ -109,8 +109,7 @@ class Album {
                             items: [$l10n("SYSTEM_ALBUM"), "iCloud"],
                             handler: (title, idx) => {
                                 const saveImageAction = data => {
-                                    let length = this.getImages().length
-                                    let fileName = "img-" + length + data.fileName.slice(data.fileName.lastIndexOf("."))
+                                    let fileName = this.kernel.uuid() + data.fileName.slice(data.fileName.lastIndexOf("."))
                                     $file.write({
                                         data: data,
                                         path: `${this.albumPath}/${fileName}`
@@ -222,9 +221,14 @@ class Album {
                                     Object.assign({
                                         title: $l10n("DELETE"),
                                         handler: () => {
+                                            let time = 0
                                             Object.values(this.selected).forEach(item => {
-                                                delectImage(item.data.image.src, item.sender, item.indexPath)
+                                                setTimeout(() => {
+                                                    this.deleteImage(item.data.image.src, item.sender, item.indexPath)
+                                                }, time)
+                                                time += 500
                                             })
+                                            this.selected = []
                                         }
                                     }, style),
                                     { title: $l10n("CANCEL") }
