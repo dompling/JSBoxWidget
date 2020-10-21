@@ -52,7 +52,12 @@ class Album {
                                     data: data.image.jpg(0.5),
                                     path: `${this.albumPath}/archive/${fileName}`
                                 })
-                                $("picture-edit-matrix").insert({
+                                // UI隐藏无图片字样
+                                $("no-image-text").hidden = true
+                                // UI插入图片
+                                let matrix = $("picture-edit-matrix")
+                                matrix.hidden = false
+                                matrix.insert({
                                     indexPath: $indexPath(0, 0),
                                     value: {
                                         image: {
@@ -100,82 +105,90 @@ class Album {
                     image: { src: `${this.albumPath}/${picture}` }
                 })
             })
-        } else {
-            return [{
+        }
+        return [
+            {
                 type: "label",
                 layout: $layout.fill,
                 props: {
+                    id: "no-image-text",
+                    hidden: pictures.length > 0 ? true : false,
                     text: $l10n("NO_IMAGES"),
                     color: $color("secondaryText"),
                     align: $align.center
                 }
-            }]
-        }
-        return [{
-            type: "matrix",
-            props: {
-                id: "picture-edit-matrix",
-                columns: this.setting.get("columns"),
-                square: true,
-                data: data,
-                template: {
-                    props: {},
-                    views: [
-                        {
-                            type: "image",
-                            props: {
-                                id: "image"
-                            },
-                            layout: make => {
-                                make.size.equalTo($device.info.screen.width / this.setting.get("columns"))
-                            }
-                        }
-                    ]
-                }
             },
-            events: {
-                didSelect: (sender, indexPath, data) => {
-                    $ui.menu({
-                        items: [$l10n("SAVE_TO_SYSTEM_ALBUM"), $l10n("DELETE")],
-                        handler: (title, idx) => {
-                            if (idx === 0) {
-                                $photo.save({
-                                    data: $file.read(data.image.src),
-                                    handler: success => {
-                                        if (success)
-                                            $ui.success($l10n("SUCCESS"))
-                                        else
-                                            $ui.error($l10n("ERROR"))
-                                    }
-                                })
-                            } else if (idx === 1) {
-                                let style = {}
-                                if ($alertActionType) {
-                                    style = { style: $alertActionType.destructive }
+            {
+                type: "matrix",
+                props: {
+                    id: "picture-edit-matrix",
+                    hidden: pictures.length > 0 ? false : true,
+                    columns: this.setting.get("columns"),
+                    square: true,
+                    data: data,
+                    template: {
+                        props: {},
+                        views: [
+                            {
+                                type: "image",
+                                props: {
+                                    id: "image"
+                                },
+                                layout: make => {
+                                    make.size.equalTo($device.info.screen.width / this.setting.get("columns"))
                                 }
-                                $ui.alert({
-                                    title: $l10n("CONFIRM_DELETE_MSG"),
-                                    actions: [
-                                        Object.assign({
-                                            title: $l10n("DELETE"),
-                                            handler: () => {
-                                                $file.delete(data.image.src)
-                                                // 同时删除压缩过的文件
-                                                let name = data.image.src.slice(data.image.src.lastIndexOf("/"))
-                                                $file.delete(`${this.albumPath}/archive/${name}`)
-                                                sender.delete(indexPath)
-                                            }
-                                        }, style),
-                                        { title: $l10n("CANCEL") }
-                                    ]
-                                })
                             }
-                        }
-                    })
-                }
-            },
-            layout: $layout.fill
-        }]
+                        ]
+                    }
+                },
+                events: {
+                    didSelect: (sender, indexPath, data) => {
+                        $ui.menu({
+                            items: [$l10n("SAVE_TO_SYSTEM_ALBUM"), $l10n("DELETE")],
+                            handler: (title, idx) => {
+                                if (idx === 0) {
+                                    $photo.save({
+                                        data: $file.read(data.image.src),
+                                        handler: success => {
+                                            if (success)
+                                                $ui.success($l10n("SUCCESS"))
+                                            else
+                                                $ui.error($l10n("ERROR"))
+                                        }
+                                    })
+                                } else if (idx === 1) {
+                                    let style = {}
+                                    if ($alertActionType) {
+                                        style = { style: $alertActionType.destructive }
+                                    }
+                                    $ui.alert({
+                                        title: $l10n("CONFIRM_DELETE_MSG"),
+                                        actions: [
+                                            Object.assign({
+                                                title: $l10n("DELETE"),
+                                                handler: () => {
+                                                    $file.delete(data.image.src)
+                                                    // 同时删除压缩过的文件
+                                                    let name = data.image.src.slice(data.image.src.lastIndexOf("/"))
+                                                    $file.delete(`${this.albumPath}/archive/${name}`)
+                                                    sender.delete(indexPath)
+                                                    // 检查是否已经为空，为空则显示提示字样
+                                                    if (sender.data.length === 0) {
+                                                        $("no-image-text").hidden = false
+                                                        $("picture-edit-matrix").hidden = true
+                                                    }
+                                                }
+                                            }, style),
+                                            { title: $l10n("CANCEL") }
+                                        ]
+                                    })
+                                }
+                            }
+                        })
+                    }
+                },
+                layout: $layout.fill
+            }]
     }
 }
 
