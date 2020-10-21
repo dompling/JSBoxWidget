@@ -111,6 +111,7 @@ class Schedule {
         }
         let itemLength = 0, dateCollect = {}
         const isReminder = item => item.completed !== undefined
+        const isExpire = date => date ? date.getTime() < new Date().getTime() : false
         for (let item of list) {
             // 控制显示数目
             if (itemLength >= this.itemLength) break
@@ -168,7 +169,7 @@ class Schedule {
                                         padding: $insets(0, 0, 2, 0)
                                     }
                                 },
-                                {// 图标和截止日期
+                                {// 图标和日期
                                     type: "hstack",
                                     props: {
                                         frame: {
@@ -194,10 +195,30 @@ class Schedule {
                                             type: "text",
                                             props: {
                                                 lineLimit: 1,
-                                                text: isReminder(item) ? this.formatDate(item.alarmDate, 1) : this.formatDate(item.endDate, 1),
+                                                text: isReminder(item) ? this.formatDate(item.alarmDate, 1) : (() => {
+                                                    let startDate = this.formatDate(item.startDate, 1)
+                                                    let endDate = this.formatDate(item.endDate, 1)
+                                                    return `${startDate}-${endDate}`
+                                                })(),
                                                 font: $font(12),
                                                 color: $color("systemGray2"),
                                                 frame: { height: 10 }
+                                            }
+                                        },
+                                        { // 已过期
+                                            type: "image",
+                                            props: {
+                                                opacity: (() => {
+                                                    if (isReminder(item)) return isExpire(item.alarmDate) ? 1 : 0
+                                                    else return isExpire(item.endDate) ? 1 : 0
+                                                })(),
+                                                symbol: "exclamationmark.triangle.fill",
+                                                color: $color("red"),
+                                                frame: {
+                                                    width: 12,
+                                                    height: 12
+                                                },
+                                                resizable: true
                                             }
                                         }
                                     ]
@@ -244,7 +265,7 @@ class Schedule {
                     maxHeight: Infinity,
                     alignment: $widget.verticalAlignment.firstTextBaseline
                 },
-                padding: $insets(15, 15, 0, 15),
+                padding: $insets(15, 15, 0, 0),
                 spacing: 15
             }, family === this.setting.family.medium ? {
                 link: this.urlScheme
