@@ -73,7 +73,13 @@ class Widget {
     async joinView(mode) {
         let cache = mode => {
             let cache = this.getCache(mode)
-            if (cache && (this.cacheDateStartFromZero ? new Date().setHours(0, 0, 0, 0).getTime() : new Date().getTime()) - cache.date.getTime() < this.cacheLife)
+            if (cache && (() => {
+                if (this.cacheDateStartFromZero) {
+                    const midnight = new Date()
+                    midnight.setHours(0, 0, 0, 0)
+                    return midnight.getTime()
+                } else return new Date().getTime()
+            })() - cache.date.getTime() < this.cacheLife)
                 return cache.view
             else {
                 let view
