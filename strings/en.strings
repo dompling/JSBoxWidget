@@ -120,6 +120,7 @@
 "SAVE_TO_SYSTEM_ALBUM" = "Save to Photo";
 "NO_IMAGE" = "Image not Found";
 "CLEAR_CACHE" = "Clear Cache";
+"NO_IMAGES" = "No Images";
 
 "TIME_SPAN" = "Time Span (Day)";
 "REMINDER_COLOR" = "Reminder Color";

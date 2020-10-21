@@ -118,6 +118,8 @@
 "SAVE_TO_SYSTEM_ALBUM" = "保存到系统相册";
 "NO_IMAGE" = "无该图片";
 "CLEAR_CACHE" = "清除缓存";
+"NO_IMAGES" = "无图片";
+
 
 "TIME_SPAN" = "时间跨度(天)";
 "REMINDER_COLOR" = "提醒事项颜色";
