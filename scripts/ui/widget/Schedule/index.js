@@ -10,7 +10,7 @@ class ScheduleWidget extends Widget {
 
     async joinView() {
         let cache = this.getCache(this.setting.family.medium)
-        if (cache && nowDate - cache.date.getTime() < this.cacheLife) {
+        if (cache && new Date().getTime() - cache.date.getTime() < this.cacheLife) {
             return cache.view
         }
         else {
