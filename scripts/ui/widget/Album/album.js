@@ -94,19 +94,21 @@ class Album {
     getAlbumViews() {
         let pictures = this.getImages()
         let data = []
-        if (pictures) {
-            for (let picture of pictures) {
+        if (pictures.length > 0) {
+            pictures.forEach(picture => {
                 data.push({
-                    image: {
-                        src: `${this.albumPath}/${picture}`
-                    }
+                    image: { src: `${this.albumPath}/${picture}` }
                 })
-            }
+            })
         } else {
             return [{
                 type: "label",
                 layout: $layout.fill,
-                props: { text: $l10n("NO_IMAGES") }
+                props: {
+                    text: $l10n("NO_IMAGES"),
+                    color: $color("secondaryText"),
+                    align: $align.center
+                }
             }]
         }
         return [{
