@@ -90,6 +90,28 @@ class Album {
         }
     }
 
+    changemode() {
+        let button = $("album-multiple-selection-mode")
+        switch (this.mode) {
+            case 0: // 多选模式，显示删除按钮
+                button.symbol = "square.fill.on.square.fill"
+                this.mode = 1
+                $("album-multiple-selection-mode-delete").hidden = false
+                break
+            case 1: // 隐藏删除按钮
+                button.symbol = "square.on.square"
+                this.mode = 0
+                $("album-multiple-selection-mode-delete").hidden = true
+                // 恢复选中的选项
+                Object.values(this.selected).forEach(item => {
+                    item.sender.cell(item.indexPath).alpha = 1
+                })
+                break
+        }
+        // 清空数据
+        this.selected = []
+    }
+
     getAlbumButtons() {
         return [
             { // 添加新图片
@@ -164,34 +186,18 @@ class Album {
             { // 多选
                 type: "button",
                 props: {
+                    id: "album-multiple-selection-mode",
                     symbol: "square.on.square",
                     tintColor: this.kernel.page.view.textColor,
                     bgcolor: $color("clear")
                 },
                 layout: (make, view) => {
-                    make.right.equalTo(view.prev.left)
+                    make.right.equalTo(view.prev.left).offset(-10)
                     make.size.equalTo(view.prev)
                 },
                 events: {
-                    tapped: sender => {
-                        switch (this.mode) {
-                            case 0: // 多选模式，显示删除按钮
-                                sender.symbol = "square.fill.on.square.fill"
-                                this.mode = 1
-                                $("album-multiple-selection-mode-delete").hidden = false
-                                break
-                            case 1: // 隐藏删除按钮
-                                sender.symbol = "square.on.square"
-                                this.mode = 0
-                                $("album-multiple-selection-mode-delete").hidden = true
-                                // 恢复选中的选项
-                                Object.values(this.selected).forEach(item => {
-                                    item.sender.cell(item.indexPath).alpha = 1
-                                })
-                                break
-                        }
-                        // 清空数据
-                        this.selected = []
+                    tapped: () => {
+                        this.changemode()
                     }
                 }
             },
@@ -205,7 +211,7 @@ class Album {
                     bgcolor: $color("clear")
                 },
                 layout: (make, view) => {
-                    make.right.equalTo(view.prev.left)
+                    make.right.equalTo(view.prev.left).offset(-10)
                     make.size.equalTo(view.prev)
                 },
                 events: {
@@ -226,9 +232,9 @@ class Album {
                                                 setTimeout(() => {
                                                     this.deleteImage(item.data.image.src, item.sender, item.indexPath)
                                                 }, time)
-                                                time += 500
+                                                time += 100
                                             })
-                                            this.selected = []
+                                            this.changemode()
                                         }
                                     }, style),
                                     { title: $l10n("CANCEL") }
