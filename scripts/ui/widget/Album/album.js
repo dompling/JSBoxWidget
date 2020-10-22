@@ -13,6 +13,10 @@ class Album {
         this.selected = {}
     }
 
+    /**
+     * 获取除去archive目录的所有图片
+     * @param {Boolean} isCompress 是否是archive(用于存放压缩后的图片)目录下的图片
+     */
     getImages(isCompress) {
         if (isCompress) return $file.list(`${this.albumPath}/archive`)
         let list = $file.list(this.albumPath)
@@ -91,6 +95,10 @@ class Album {
     }
 
     changemode() {
+        if ($("picture-edit-matrix").data.length === 0) {
+            $ui.toast($l10n("NO_IMAGES"))
+            return
+        }
         let button = $("album-multiple-selection-mode")
         switch (this.mode) {
             case 0: // 多选模式，显示删除按钮
@@ -142,16 +150,15 @@ class Album {
                                         path: `${this.albumPath}/archive/${fileName}`
                                     })
                                     // UI隐藏无图片字样
-                                    $("no-image-text").hidden = true
+                                    if (!$("no-image-text").hidden)
+                                        $("no-image-text").hidden = true
                                     // UI插入图片
                                     let matrix = $("picture-edit-matrix")
                                     matrix.hidden = false
                                     matrix.insert({
-                                        indexPath: $indexPath(0, 0),
+                                        indexPath: $indexPath(0, matrix.data.length),
                                         value: {
-                                            image: {
-                                                src: `${this.albumPath}/${fileName}`
-                                            }
+                                            image: { src: `${this.albumPath}/${fileName}` }
                                         }
                                     })
                                     $ui.toast($l10n("SUCCESS"))
@@ -161,12 +168,12 @@ class Album {
                                         format: "data",
                                         multi: true,
                                         handler: resp => {
-                                            if (!resp.status) {
+                                            if (!resp.status && resp.error.description !== "canceled") {
                                                 $ui.error($l10n("ERROR"))
                                                 return
                                             }
                                             for (let image of resp.results) {
-                                                saveImageAction(image.data)
+                                                setTimeout(() => { saveImageAction(image.data) }, 0)
                                             }
                                         }
                                     })
