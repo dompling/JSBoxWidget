@@ -29,17 +29,20 @@ class Album {
         return list
     }
 
-    deleteImage(src, sender, indexPath) {
-        $file.delete(src)
-        // 同时删除压缩过的文件
-        let name = src.slice(src.lastIndexOf("/"))
-        $file.delete(`${this.albumPath}/archive/${name}`)
-        if (sender) {
+    deleteImage(src, indexPath) {
+        setTimeout(() => {
+            $file.delete(src)
+            // 同时删除压缩过的文件
+            let name = src.slice(src.lastIndexOf("/"))
+            $file.delete(`${this.albumPath}/archive/${name}`)
+        })
+        if (indexPath) {
+            let sender = $("picture-edit-matrix")
             sender.delete(indexPath)
             // 检查是否已经为空，为空则显示提示字样
             if (sender.data.length === 0) {
                 $("no-image-text").hidden = false
-                $("picture-edit-matrix").hidden = true
+                sender.hidden = true
             }
         }
     }
@@ -69,7 +72,7 @@ class Album {
                             Object.assign({
                                 title: $l10n("DELETE"),
                                 handler: () => {
-                                    this.deleteImage(data.image.src, sender, indexPath)
+                                    this.deleteImage(data.image.src, indexPath)
                                 }
                             }, style),
                             { title: $l10n("CANCEL") }
@@ -87,7 +90,6 @@ class Album {
         } else {
             sender.cell(indexPath).alpha = 0.2
             this.selected[data.image.src] = {
-                sender: sender,
                 indexPath: indexPath,
                 data: data
             }
@@ -111,9 +113,10 @@ class Album {
                 this.mode = 0
                 $("album-multiple-selection-mode-delete").hidden = true
                 // 恢复选中的选项
-                Object.values(this.selected).forEach(item => {
-                    item.sender.cell(item.indexPath).alpha = 1
-                })
+                if (this.selected)
+                    Object.values(this.selected).forEach(item => {
+                        item.sender.cell(item.indexPath).alpha = 1
+                    })
                 break
         }
         // 清空数据
@@ -172,9 +175,10 @@ class Album {
                                                 $ui.error($l10n("ERROR"))
                                                 return
                                             }
-                                            for (let image of resp.results) {
-                                                setTimeout(() => { saveImageAction(image.data) }, 0)
-                                            }
+                                            if (!resp.results) return
+                                            resp.results.forEach(image => {
+                                                saveImageAction(image.data)
+                                            })
                                         }
                                     })
                                 } else if (idx === 1) { // 从iCloud选取图片
@@ -234,14 +238,28 @@ class Album {
                                     Object.assign({
                                         title: $l10n("DELETE"),
                                         handler: () => {
-                                            let time = 0
+                                            let i = 0
                                             Object.values(this.selected).forEach(item => {
-                                                setTimeout(() => {
-                                                    this.deleteImage(item.data.image.src, item.sender, item.indexPath)
-                                                }, time)
-                                                time += 100
+                                                this.deleteImage(item.data.image.src, $indexPath(0, item.indexPath.item - i++))
+
                                             })
+                                            this.selected = []
+                                            // 关闭多选模式
                                             this.changemode()
+                                            // TODO 多项删除
+                                            // 重载图片数据，覆盖之前删错的内容。。。
+                                            setTimeout(() => {
+                                                let pictures = this.getImages()
+                                                if (pictures.length > 0) {
+                                                    let data = []
+                                                    pictures.forEach(picture => {
+                                                        data.push({
+                                                            image: { src: `${this.albumPath}/${picture}` }
+                                                        })
+                                                    })
+                                                    $("picture-edit-matrix").data = data
+                                                }
+                                            }, 500)
                                         }
                                     }, style),
                                     { title: $l10n("CANCEL") }
