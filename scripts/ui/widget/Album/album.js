@@ -30,12 +30,10 @@ class Album {
     }
 
     deleteImage(src, indexPath) {
-        setTimeout(() => {
-            $file.delete(src)
-            // 同时删除压缩过的文件
-            let name = src.slice(src.lastIndexOf("/"))
-            $file.delete(`${this.albumPath}/archive/${name}`)
-        })
+        $file.delete(src)
+        // 同时删除压缩过的文件
+        let name = src.slice(src.lastIndexOf("/"))
+        $file.delete(`${this.albumPath}/archive/${name}`)
         if (indexPath) {
             let sender = $("picture-edit-matrix")
             sender.delete(indexPath)
@@ -47,7 +45,7 @@ class Album {
         }
     }
 
-    normalMode(sender, indexPath, data) {
+    normalMode(indexPath, data) {
         $ui.menu({
             items: [$l10n("SAVE_TO_SYSTEM_ALBUM"), $l10n("DELETE")],
             handler: (title, idx) => {
@@ -86,7 +84,7 @@ class Album {
     multipleSelectionMode(sender, indexPath, data) {
         if (this.selected[data.image.src]) {
             sender.cell(indexPath).alpha = 1
-            this.selected[data.image.src] = undefined
+            delete this.selected[data.image.src]
         } else {
             sender.cell(indexPath).alpha = 0.2
             this.selected[data.image.src] = {
@@ -97,13 +95,14 @@ class Album {
     }
 
     changemode() {
-        if ($("picture-edit-matrix").data.length === 0) {
-            $ui.toast($l10n("NO_IMAGES"))
-            return
-        }
+        let matrix = $("picture-edit-matrix")
         let button = $("album-multiple-selection-mode")
         switch (this.mode) {
             case 0: // 多选模式，显示删除按钮
+                if (matrix.data.length === 0) {
+                    $ui.toast($l10n("NO_IMAGES"))
+                    break
+                }
                 button.symbol = "square.fill.on.square.fill"
                 this.mode = 1
                 $("album-multiple-selection-mode-delete").hidden = false
@@ -113,87 +112,78 @@ class Album {
                 this.mode = 0
                 $("album-multiple-selection-mode-delete").hidden = true
                 // 恢复选中的选项
-                if (this.selected)
+                try {
                     Object.values(this.selected).forEach(item => {
-                        item.sender.cell(item.indexPath).alpha = 1
+                        matrix.cell(item.indexPath).alpha = 1
                     })
+                } catch (error) { }
                 break
         }
         // 清空数据
-        this.selected = []
+        this.selected = {}
     }
 
     getAlbumButtons() {
         return [
-            { // 添加新图片
-                type: "button",
-                props: {
-                    symbol: "plus",
-                    tintColor: this.kernel.page.view.textColor,
-                    bgcolor: $color("clear")
-                },
-                layout: make => {
-                    make.right.inset(20)
-                    make.size.equalTo(30)
-                },
-                events: {
-                    tapped: () => {
-                        $ui.menu({
-                            items: [$l10n("SYSTEM_ALBUM"), "iCloud"],
-                            handler: (title, idx) => {
-                                const saveImageAction = data => {
-                                    let fileName = this.kernel.uuid() + data.fileName.slice(data.fileName.lastIndexOf("."))
-                                    $file.write({
-                                        data: data,
-                                        path: `${this.albumPath}/${fileName}`
-                                    })
-                                    // 同时保留一份压缩后的图片
-                                    $file.write({
-                                        data: data.image.jpg(0.5),
-                                        path: `${this.albumPath}/archive/${fileName}`
-                                    })
-                                    // UI隐藏无图片字样
-                                    if (!$("no-image-text").hidden)
-                                        $("no-image-text").hidden = true
-                                    // UI插入图片
-                                    let matrix = $("picture-edit-matrix")
-                                    matrix.hidden = false
-                                    matrix.insert({
-                                        indexPath: $indexPath(0, matrix.data.length),
-                                        value: {
-                                            image: { src: `${this.albumPath}/${fileName}` }
-                                        }
+            this.kernel.page.view.navButton("album-add-image", "plus", (start, done) => { // 添加新图片
+                $ui.menu({
+                    items: [$l10n("SYSTEM_ALBUM"), "iCloud"],
+                    handler: (title, idx) => {
+                        const saveImageAction = data => {
+                            let fileName = new Date().getTime() + data.fileName.slice(data.fileName.lastIndexOf("."))
+                            $file.write({
+                                data: data,
+                                path: `${this.albumPath}/${fileName}`
+                            })
+                            // 同时保留一份压缩后的图片
+                            $file.write({
+                                data: data.image.jpg(0.5),
+                                path: `${this.albumPath}/archive/${fileName}`
+                            })
+                            // UI隐藏无图片提示字符
+                            if (!$("no-image-text").hidden)
+                                $("no-image-text").hidden = true
+                            // UI插入图片
+                            let matrix = $("picture-edit-matrix")
+                            matrix.hidden = false
+                            matrix.insert({
+                                indexPath: $indexPath(0, matrix.data.length),
+                                value: {
+                                    image: { src: `${this.albumPath}/${fileName}` }
+                                }
+                            })
+                        }
+                        start()
+                        if (idx === 0) { // 从系统相册选取图片
+                            $photo.pick({
+                                format: "data",
+                                multi: true,
+                                handler: resp => {
+                                    if (!resp.status && resp.error.description !== "canceled") {
+                                        $ui.error($l10n("ERROR"))
+                                        return
+                                    }
+                                    if (!resp.results) return
+                                    resp.results.forEach(image => {
+                                        saveImageAction(image.data)
                                     })
                                     $ui.toast($l10n("SUCCESS"))
+                                    done()
                                 }
-                                if (idx === 0) { // 从系统相册选取图片
-                                    $photo.pick({
-                                        format: "data",
-                                        multi: true,
-                                        handler: resp => {
-                                            if (!resp.status && resp.error.description !== "canceled") {
-                                                $ui.error($l10n("ERROR"))
-                                                return
-                                            }
-                                            if (!resp.results) return
-                                            resp.results.forEach(image => {
-                                                saveImageAction(image.data)
-                                            })
-                                        }
-                                    })
-                                } else if (idx === 1) { // 从iCloud选取图片
-                                    $drive.open({
-                                        handler: file => {
-                                            if (!file) return
-                                            saveImageAction(file)
-                                        }
-                                    })
+                            })
+                        } else if (idx === 1) { // 从iCloud选取图片
+                            $drive.open({
+                                handler: file => {
+                                    if (!file) return
+                                    saveImageAction(file)
+                                    $ui.toast($l10n("SUCCESS"))
+                                    done()
                                 }
-                            }
-                        })
+                            })
+                        }
                     }
-                }
-            },
+                })
+            }),
             { // 多选
                 type: "button",
                 props: {
@@ -212,63 +202,40 @@ class Album {
                     }
                 }
             },
-            { // 多选后的删除按钮
-                type: "button",
-                props: {
-                    symbol: "trash",
-                    id: "album-multiple-selection-mode-delete",
-                    hidden: true,
-                    tintColor: this.kernel.page.view.textColor,
-                    bgcolor: $color("clear")
-                },
-                layout: (make, view) => {
-                    make.right.equalTo(view.prev.left).offset(-10)
-                    make.size.equalTo(view.prev)
-                },
-                events: {
-                    tapped: () => {
-                        if (this.mode === 1) {
-                            let style = {}
-                            if ($alertActionType) {
-                                style = { style: $alertActionType.destructive }
-                            }
-                            $ui.alert({
-                                title: $l10n("CONFIRM_DELETE_MSG"),
-                                actions: [
-                                    Object.assign({
-                                        title: $l10n("DELETE"),
-                                        handler: () => {
-                                            let i = 0
-                                            Object.values(this.selected).forEach(item => {
-                                                this.deleteImage(item.data.image.src, $indexPath(0, item.indexPath.item - i++))
-
-                                            })
-                                            this.selected = []
-                                            // 关闭多选模式
-                                            this.changemode()
-                                            // TODO 多项删除
-                                            // 重载图片数据，覆盖之前删错的内容。。。
-                                            setTimeout(() => {
-                                                let pictures = this.getImages()
-                                                if (pictures.length > 0) {
-                                                    let data = []
-                                                    pictures.forEach(picture => {
-                                                        data.push({
-                                                            image: { src: `${this.albumPath}/${picture}` }
-                                                        })
-                                                    })
-                                                    $("picture-edit-matrix").data = data
-                                                }
-                                            }, 500)
-                                        }
-                                    }, style),
-                                    { title: $l10n("CANCEL") }
-                                ]
-                            })
-                        }
+            this.kernel.page.view.navButton("album-multiple-selection-mode-delete", "trash", (start, done, cancel) => {
+                let length = Object.keys(this.selected).length
+                if (this.mode === 1 && length > 0) {
+                    let style = {}
+                    if ($alertActionType) {
+                        style = { style: $alertActionType.destructive }
                     }
+                    start()
+                    $ui.alert({
+                        title: $l10n("CONFIRM_DELETE_MSG"),
+                        actions: [
+                            Object.assign({
+                                title: $l10n("DELETE"),
+                                handler: () => {
+                                    for (let i = $("picture-edit-matrix").data.length - 1; i >= 0; i--) {
+                                        if (length === 0) break
+                                        Object.values(this.selected).forEach(item => {
+                                            if (i === item.indexPath.item) {
+                                                this.deleteImage(item.data.image.src, item.indexPath)
+                                                length--
+                                            }
+                                        })
+                                    }
+                                    done()
+                                }
+                            }, style),
+                            {
+                                title: $l10n("CANCEL"),
+                                handler: () => { cancel() }
+                            }
+                        ]
+                    })
                 }
-            }
+            }, true)
         ]
     }
 
@@ -321,7 +288,7 @@ class Album {
                     didSelect: (sender, indexPath, data) => {
                         switch (this.mode) {
                             case 0:
-                                this.normalMode(sender, indexPath, data)
+                                this.normalMode(indexPath, data)
                                 break
                             case 1:
                                 this.multipleSelectionMode(sender, indexPath, data)
