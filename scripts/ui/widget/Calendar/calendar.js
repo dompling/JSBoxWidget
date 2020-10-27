@@ -205,10 +205,6 @@ class Calendar {
                 props.ext.color = props.text.color = $color(this.holidayNoRestColor)
             }
         }
-        // 本月前后补位日期
-        if (date.month !== calendarInfo.month) {
-            props.ext.color = props.text.color = $color("systemGray2")
-        }
         // 当天
         if (date.date === calendarInfo.date) {
             props.text.color = $color("white")
@@ -221,6 +217,11 @@ class Calendar {
                 else
                     props.box.background = $color(this.holidayNoRestColor)
             }
+        }
+        // 本月前后补位日期
+        if (date.month !== calendarInfo.month) {
+            props.ext.color = props.text.color = $color("systemGray2")
+            props.box = {}
         }
         // 4x4 widget 可显示额外信息
         let extra = null
