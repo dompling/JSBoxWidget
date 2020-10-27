@@ -4,11 +4,11 @@ const Setting = require("../setting")
 class ScheduleSetting extends Setting {
     constructor(kernel) {
         super(kernel, NAME)
-        this.calendarPath = `${this.kernel.widgetAssetsPath}/${NAME}`
-        if (!$file.exists(this.calendarPath)) {
-            $file.mkdir(this.calendarPath)
+        this.path = `${this.kernel.widgetAssetsPath}/${NAME}`
+        if (!$file.exists(this.path)) {
+            $file.mkdir(this.path)
         }
-        this.holidayPath = `${this.calendarPath}/holiday.json`
+        this.holidayPath = `${this.path}/holiday.json`
         // 自动获取节假日信息，有效期7天
         this.getHoliday(1000 * 60 * 60 * 24 * 7)
     }
