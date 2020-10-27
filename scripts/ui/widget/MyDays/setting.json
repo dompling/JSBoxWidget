@@ -84,7 +84,7 @@
             {
                 "icon": [
                     "wand.and.rays",
-                    "#CCCCCC"
+                    "#339933"
                 ],
                 "title": "INFO_COLOR",
                 "type": "color",
@@ -119,7 +119,7 @@
             {
                 "icon": [
                     "wand.and.rays",
-                    "#CCCCCC"
+                    "#339933"
                 ],
                 "title": "INFO_COLOR",
                 "type": "color",
