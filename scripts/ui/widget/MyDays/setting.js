@@ -13,6 +13,7 @@ class MyDaysSetting extends Setting {
 
     initSettingMethods() {
         this.setting.backgroundImage = () => {
+            this.settingComponent.view.touchHighlightStart()
             $ui.menu({
                 items: [$l10n("CHOOSE_IMAGE"), $l10n("CLEAR_IMAGE")],
                 handler: (title, idx) => {
@@ -41,10 +42,15 @@ class MyDaysSetting extends Setting {
                             break
                         case 1:
                             $cache.remove("MyDays.image")
+                            this.settingComponent.view.done()
                             break
                     }
+                },
+                finished: (cancelled) => {
+                    if (cancelled)
+                        this.settingComponent.view.touchHighlightEnd()
                 }
-            });
+            })
         }
     }
 }
