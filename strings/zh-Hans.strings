@@ -32,6 +32,11 @@
 "GENERAL" = "一般";
 "TIPS" = "小贴士";
 
+"BACKUP" = "备份";
+"START_BACKUP" = "开始备份";
+"BACKUP_TO_ICLOUD" = "备份到iCloud";
+"RECOVER_FROM_ICLOUD" = "从iCloud恢复";
+
 "ADVANCED" = "高级";
 
 "ABOUT" = "关于";

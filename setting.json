@@ -15,6 +15,30 @@
         ]
     },
     {
+        "title": "BACKUP",
+        "items": [
+            {
+                "icon": [
+                    "icloud.and.arrow.up.fill"
+                ],
+                "title": "BACKUP_TO_ICLOUD",
+                "type": "script",
+                "key": "backup",
+                "value": "this.controller.backupToICloud()"
+            },
+            {
+                "icon": [
+                    "arrow.clockwise.icloud.fill",
+                    "#FFCC33"
+                ],
+                "title": "RECOVER_FROM_ICLOUD",
+                "type": "script",
+                "key": "recover",
+                "value": "this.controller.recoverFromICloud()"
+            }
+        ]
+    },
+    {
         "title": "ABOUT",
         "items": [
             {
