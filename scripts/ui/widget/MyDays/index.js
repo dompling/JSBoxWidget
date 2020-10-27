@@ -30,11 +30,6 @@ class MyDaysWidget extends Widget {
         }
     }
 
-    view2x4() {
-        // 中等大小将使用link而不是widgetURL
-        return this.view2x2()
-    }
-
     view2x2() {
         let myday = this.myday
         if (!myday) return {
@@ -131,38 +126,6 @@ class MyDaysWidget extends Widget {
             },
             render: ctx => {
                 return this.view2x2()
-                let cache = family => {
-                    let cache = this.getCache(family)
-                    // 未超过一天则不更新缓存
-                    if (cache && (() => {
-                        if (this.cacheDateStartFromZero) {
-                            const midnight = new Date()
-                            midnight.setHours(0, 0, 0, 0)
-                            return midnight.getTime()
-                        } else return new Date().getTime()
-                    })() - cache.date.getTime() < this.cacheLife)
-                        return cache.view
-                    else {
-                        let view
-                        switch (family) {
-                            case 0:
-                                view = this.view2x2()
-                                break
-                            case 1:
-                                view = this.view2x4()
-                                break
-                            case 2:
-                                view = this.view4x4()
-                                break
-                            default:
-                                view = this.errorView
-                        }
-                        // 更新缓存
-                        this.setCache(family, view)
-                        return view
-                    }
-                }
-                return cache(ctx.family)
             }
         })
     }
