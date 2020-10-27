@@ -12,6 +12,7 @@
 "CANNOT_COPY_THIS_WIDGET" = "Unable to copy this Widget";
 "COPY_SUCCESS" = "Copy success";
 "FAILED_TO_LOAD_VIEW" = "Faild to load view";
+"VIEW_NOT_PROVIDED" = "The view is not provided";
 
 "HOME" = "Home";
 "SELECT" = "Select";

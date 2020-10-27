@@ -7,7 +7,8 @@ class Widget {
         this.errorView = {
             type: "text",
             props: {
-                text: $l10n("FAILED_TO_LOAD_VIEW")
+                // text: $l10n("FAILED_TO_LOAD_VIEW")
+                text: $l10n("VIEW_NOT_PROVIDED")
             }
         }
     }
