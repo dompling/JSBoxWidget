@@ -9,6 +9,7 @@ class Album {
         if (!$file.exists(`${this.albumPath}/archive`)) {
             $file.mkdir(`${this.albumPath}/archive`)
         }
+        this.imageMaxSize = 50 // kb
         this.mode = 0 // 0: 正常模式  1: 多选模式
         this.selected = {}
     }
@@ -136,8 +137,10 @@ class Album {
                                 path: `${this.albumPath}/${fileName}`
                             })
                             // 同时保留一份压缩后的图片
+                            // TODO 控制压缩图片大小
+                            let image = data.image.jpg(this.imageMaxSize * 1024 / data.info.size)
                             $file.write({
-                                data: data.image.jpg(0.5),
+                                data: image,
                                 path: `${this.albumPath}/archive/${fileName}`
                             })
                             // UI隐藏无图片提示字符

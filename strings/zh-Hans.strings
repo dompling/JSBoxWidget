@@ -150,5 +150,6 @@
 "BACKGROUND_COLOR" = "背景色";
 "BACKGROUND_IMAGE" = "背景图片";
 "CHOOSE_IMAGE" = "选择图片";
+"CLEAR_IMAGE" = "清除图片";
 "DESCRIBE" = "描述";
 "CHOOSE_DATE" = "选择日期";

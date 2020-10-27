@@ -8,18 +8,16 @@ class MyDaysSetting extends Setting {
         if (!$file.exists(this.path)) {
             $file.mkdir(this.path)
         }
+        this.imageMaxSize = 50 // kb
     }
 
     initSettingMethods() {
         this.setting.backgroundImage = () => {
             $ui.menu({
-                items: [$l10n("PREVIEW"), $l10n("CHOOSE_IMAGE")],
+                items: [$l10n("CHOOSE_IMAGE"), $l10n("CLEAR_IMAGE")],
                 handler: (title, idx) => {
                     switch (idx) {
                         case 0:
-                            const image = $cache.get("MyDays.image")
-                            break
-                        case 1:
                             this.settingComponent.view.start()
                             $photo.pick({
                                 format: "data",
@@ -30,15 +28,19 @@ class MyDaysSetting extends Setting {
                                     }
                                     if (!resp.data) return
                                     let fileName = "background" + resp.data.fileName.slice(resp.data.fileName.lastIndexOf("."))
+                                    // TODO 控制压缩图片大小
+                                    let image = resp.data.image.jpg(this.imageMaxSize * 1000 / resp.data.info.size)
                                     $file.write({
-                                        data: resp.data.image.jpg(0.5),
+                                        data: image,
                                         path: `${this.path}/${fileName}`
                                     })
                                     $cache.set("MyDays.image", `${this.path}/${fileName}`)
-                                    $ui.toast($l10n("SUCCESS"))
                                     this.settingComponent.view.done()
                                 }
                             })
+                            break
+                        case 1:
+                            $cache.remove("MyDays.image")
                             break
                     }
                 }
