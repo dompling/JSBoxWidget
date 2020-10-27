@@ -92,7 +92,7 @@ class MyDaysWidget extends Widget {
                     props: {
                         text: myday.describe,
                         font: $font(12),
-                        color: $color(this.infoColor),
+                        color: $color(this.infoColor, this.infoColorDark),
                         frame: {
                             alignment: $widget.alignment.bottomTrailing,
                             maxWidth: Infinity
@@ -104,7 +104,7 @@ class MyDaysWidget extends Widget {
                     props: {
                         text: new Date(myday.date).toLocaleDateString(),
                         font: $font(12),
-                        color: $color(this.infoColor),
+                        color: $color(this.infoColor, this.infoColorDark),
                         frame: {
                             alignment: $widget.alignment.bottomTrailing,
                             maxWidth: Infinity

@@ -43,7 +43,7 @@
                 "title": "TITLE",
                 "type": "input",
                 "key": "title",
-                "value": "标题"
+                "value": "Title"
             },
             {
                 "icon": [
@@ -53,7 +53,7 @@
                 "title": "DESCRIBE",
                 "type": "string",
                 "key": "describe",
-                "value": "描述"
+                "value": "Description"
             },
             {
                 "icon": [
