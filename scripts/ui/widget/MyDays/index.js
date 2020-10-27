@@ -40,6 +40,7 @@ class MyDaysWidget extends Widget {
         return {
             type: "vstack",
             props: {
+                link: this.setting.settingUrlScheme,
                 alignment: $widget.verticalAlignment.center,
                 spacing: 0,
                 padding: 10,
