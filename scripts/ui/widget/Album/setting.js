@@ -8,8 +8,6 @@ class PictureSetting extends Setting {
         this.album = new Album(this.kernel, this)
     }
 
-
-
     initSettingMethods() {
         this.setting.album = () => {
             this.settingComponent.view.touchHighlightStart()
