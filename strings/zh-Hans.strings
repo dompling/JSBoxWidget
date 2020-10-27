@@ -121,7 +121,6 @@
 "CLEAR_CACHE" = "清除缓存";
 "NO_IMAGES" = "无图片";
 
-
 "TIME_SPAN" = "时间跨度(天)";
 "REMINDER_COLOR" = "提醒事项颜色";
 "DATE" = "日";
@@ -145,11 +144,14 @@
 "RIGHT" = "右边";
 
 "MYDAYS" = "倒数日";
+"DATE_FONT_SIZE" = "日期字体大小";
 "DATE_COLOR" = "日期颜色";
 "INFO_COLOR" = "信息颜色";
 "BACKGROUND_COLOR" = "背景色";
 "BACKGROUND_IMAGE" = "背景图片";
 "CHOOSE_IMAGE" = "选择图片";
 "CLEAR_IMAGE" = "清除图片";
+"DARK_MODE" = "深色模式";
+"LIGHT_MODE" = "浅色模式";
 "DESCRIBE" = "描述";
 "CHOOSE_DATE" = "选择日期";

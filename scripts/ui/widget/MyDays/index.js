@@ -9,9 +9,13 @@ class MyDaysWidget extends Widget {
             describe: this.setting.get("describe"),
             date: this.setting.get("date") === 0 ? new Date().getTime() : this.setting.get("date")
         }
+        this.dateFontSize = this.setting.get("dateFontSize")
         this.dateColor = this.setting.get("dateColor")
+        this.dateColorDark = this.setting.get("dateColorDark")
         this.infoColor = this.setting.get("infoColor")
+        this.infoColorDark = this.setting.get("infoColorDark")
         this.backgroundColor = this.setting.get("backgroundColor")
+        this.backgroundColorDark = this.setting.get("backgroundColorDark")
         this.backgroundImage = $cache.get("MyDays.image")
         this.isImageBackground = $file.exists(this.backgroundImage)
     }
@@ -51,7 +55,7 @@ class MyDaysWidget extends Widget {
                         resizable: true,
                         scaledToFill: true
                     }
-                } : $color(this.backgroundColor),
+                } : $color(this.backgroundColor, this.backgroundColorDark),
                 frame: {
                     maxWidth: Infinity,
                     maxHeight: Infinity
@@ -62,8 +66,8 @@ class MyDaysWidget extends Widget {
                     type: "text",
                     props: {
                         text: remainingDays === 0 ? $l10n("TODAY") : String(remainingDays),
-                        font: $font(remainingDays === 0 ? 34 : 40),
-                        color: remainingDays >= 0 ? $color(this.dateColor) : $color("red"),
+                        font: $font(this.dateFontSize),
+                        color: remainingDays >= 0 ? $color(this.dateColor, this.dateColorDark) : $color("red"),
                         frame: {
                             alignment: $widget.alignment.topLeading,
                             maxWidth: Infinity,
@@ -76,7 +80,7 @@ class MyDaysWidget extends Widget {
                     props: {
                         text: myday.title,
                         font: $font(16),
-                        color: $color(this.infoColor),
+                        color: $color(this.infoColor, this.infoColorDark),
                         frame: {
                             alignment: $widget.alignment.bottomTrailing,
                             maxWidth: Infinity

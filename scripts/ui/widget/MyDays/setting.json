@@ -13,42 +13,22 @@
             },
             {
                 "icon": [
-                    "wand.and.rays",
-                    "#0099CC"
-                ],
-                "title": "DATE_COLOR",
-                "type": "color",
-                "key": "dateColor",
-                "value": "#0099CC"
-            },
-            {
-                "icon": [
-                    "wand.and.rays",
-                    "#CCCCCC"
-                ],
-                "title": "INFO_COLOR",
-                "type": "color",
-                "key": "infoColor",
-                "value": "#CCCCCC"
-            },
-            {
-                "icon": [
-                    "wand.and.rays",
-                    "#FF9933"
-                ],
-                "title": "BACKGROUND_COLOR",
-                "type": "color",
-                "key": "backgroundColor",
-                "value": "#FF9933"
-            },
-            {
-                "icon": [
                     "photo"
                 ],
                 "title": "BACKGROUND_IMAGE",
                 "type": "script",
                 "key": "backgroundImage",
                 "value": "this.controller.backgroundImage()"
+            },
+            {
+                "icon": [
+                    "wand.and.rays",
+                    "#FF9933"
+                ],
+                "title": "DATE_FONT_SIZE",
+                "type": "number",
+                "key": "dateFontSize",
+                "value": 40
             }
         ]
     },
@@ -85,6 +65,76 @@
                 "key": "date",
                 "mode": 1,
                 "value": 0
+            }
+        ]
+    },
+    {
+        "title": "LIGHT_MODE",
+        "items": [
+            {
+                "icon": [
+                    "wand.and.rays",
+                    "#0099CC"
+                ],
+                "title": "DATE_COLOR",
+                "type": "color",
+                "key": "dateColor",
+                "value": "#0099CC"
+            },
+            {
+                "icon": [
+                    "wand.and.rays",
+                    "#CCCCCC"
+                ],
+                "title": "INFO_COLOR",
+                "type": "color",
+                "key": "infoColor",
+                "value": "#CCCCCC"
+            },
+            {
+                "icon": [
+                    "wand.and.rays",
+                    "#FF9933"
+                ],
+                "title": "BACKGROUND_COLOR",
+                "type": "color",
+                "key": "backgroundColor",
+                "value": "#FF9933"
+            }
+        ]
+    },
+    {
+        "title": "DARK_MODE",
+        "items": [
+            {
+                "icon": [
+                    "wand.and.rays",
+                    "#0099CC"
+                ],
+                "title": "DATE_COLOR",
+                "type": "color",
+                "key": "dateColorDark",
+                "value": "#0099CC"
+            },
+            {
+                "icon": [
+                    "wand.and.rays",
+                    "#CCCCCC"
+                ],
+                "title": "INFO_COLOR",
+                "type": "color",
+                "key": "infoColorDark",
+                "value": "#CCCCCC"
+            },
+            {
+                "icon": [
+                    "wand.and.rays",
+                    "#FF9933"
+                ],
+                "title": "BACKGROUND_COLOR",
+                "type": "color",
+                "key": "backgroundColorDark",
+                "value": "#333333"
             }
         ]
     },
