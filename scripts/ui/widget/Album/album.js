@@ -125,7 +125,7 @@ class Album {
 
     getAlbumButtons() {
         return [
-            this.kernel.page.view.navButton("album-add-image", "plus", (start, done) => { // 添加新图片
+            this.kernel.page.view.navButton("album-add-image", "plus", (start, done, cancel) => { // 添加新图片
                 $ui.menu({
                     items: [$l10n("SYSTEM_ALBUM"), "iCloud"],
                     handler: (title, idx) => {
@@ -163,7 +163,10 @@ class Album {
                                         $ui.error($l10n("ERROR"))
                                         return
                                     }
-                                    if (!resp.results) return
+                                    if (!resp.results) {
+                                        cancel()
+                                        return
+                                    }
                                     resp.results.forEach(image => {
                                         saveImageAction(image.data)
                                     })
@@ -174,7 +177,10 @@ class Album {
                         } else if (idx === 1) { // 从iCloud选取图片
                             $drive.open({
                                 handler: file => {
-                                    if (!file) return
+                                    if (!file) {
+                                        cancel()
+                                        return
+                                    }
                                     saveImageAction(file)
                                     $ui.toast($l10n("SUCCESS"))
                                     done()
