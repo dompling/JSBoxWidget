@@ -23,15 +23,13 @@ class MyDaysWidget extends Widget {
     dateSpan(date) {
         let now = new Date()
         if (typeof date === "number") date = new Date(date)
+        // 重置时间
+        date.setHours(0, 0, 0, 0)
         if (date.getDate() === now.getDate()) {
             return 0
         }
-        let span = (date - (now.getTime())) / 1000 / 3600 / 24
-        if ((span < 1 && span > 0) || (span > -1 && span < 0)) {
-            return Math.ceil(span)
-        } else {
-            return parseInt(span)
-        }
+        let span = (date.getTime() - (now.getTime())) / 1000 / 3600 / 24
+        return Math.ceil(span)
     }
 
     view2x2() {
