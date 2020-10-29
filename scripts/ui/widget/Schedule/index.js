@@ -53,6 +53,7 @@ class ScheduleWidget extends Widget {
                 afterDate: expireDate
             },
             render: ctx => {
+                this.printTimeConsuming()
                 // 只提供一种视图
                 return view2x2
             }

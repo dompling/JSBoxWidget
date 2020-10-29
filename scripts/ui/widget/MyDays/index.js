@@ -128,7 +128,9 @@ class MyDaysWidget extends Widget {
                 afterDate: expireDate
             },
             render: ctx => {
-                return this.view2x2()
+                let view = this.view2x2()
+                this.printTimeConsuming()
+                return view
             }
         })
     }

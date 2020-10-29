@@ -68,7 +68,9 @@ class CalendarWidget extends Widget {
                         return view
                     }
                 }
-                return cache(ctx.family)
+                let view = cache(ctx.family)
+                this.printTimeConsuming()
+                return view
             }
         })
     }

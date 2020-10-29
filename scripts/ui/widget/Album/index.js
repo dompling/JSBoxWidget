@@ -114,7 +114,9 @@ class PictureWidget extends Widget {
                 afterDate: expireDate
             },
             render: ctx => {
-                return this.view2x2(ctx.family)
+                let view = this.view2x2(ctx.family)
+                this.printTimeConsuming()
+                return view
             }
         })
     }

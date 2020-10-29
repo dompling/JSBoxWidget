@@ -1,5 +1,6 @@
 class Widget {
     constructor(kernel, setting) {
+        this.startTime = new Date()
         this.kernel = kernel
         this.setting = setting
         this.cacheLife = 1000 * 60 * 10
@@ -15,6 +16,10 @@ class Widget {
 
     custom() {
         this.setting.push()
+    }
+
+    printTimeConsuming() {
+        console.log(`Use ${new Date() - this.startTime} ms`)
     }
 
     async refreshCache() {
@@ -73,6 +78,7 @@ class Widget {
 
     async joinView(mode) {
         let cache = mode => {
+            
             let cache = this.getCache(mode)
             if (cache && (() => {
                 if (this.cacheDateStartFromZero) {

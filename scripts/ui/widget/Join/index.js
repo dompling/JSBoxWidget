@@ -65,6 +65,7 @@ class JoinWidget extends Widget {
                 afterDate: expireDate
             },
             render: ctx => {
+                this.printTimeConsuming()
                 switch (ctx.family) {
                     case 0:
                         return {
