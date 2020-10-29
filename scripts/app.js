@@ -1,6 +1,17 @@
 const { Kernel, VERSION } = require("../EasyJsBox/src/kernel")
-const MainUI = require("./ui/main")
+const widgetRootPath = "/scripts/ui/widget"
+const widgetAssetsPath = "/assets/widget"
+const backupPath = "/assets/backup"
 
+function widgetInstance(widget, that) {
+    if ($file.exists(`${widgetRootPath}/${widget}/index.js`)) {
+        let { Widget } = require(`./ui/widget/${widget}/index.js`)
+        return new Widget(that)
+    } else {
+        return false
+    }
+}
+// $app.env = $env.widget
 class AppKernel extends Kernel {
     constructor() {
         super()
@@ -12,10 +23,10 @@ class AppKernel extends Kernel {
         this.page = this._registerComponent("Page")
         this.menu = this._registerComponent("Menu")
         // 小组件根目录
-        this.widgetRootPath = "/scripts/ui/widget"
-        this.widgetAssetsPath = "/assets/widget"
+        this.widgetRootPath = widgetRootPath
+        this.widgetAssetsPath = widgetAssetsPath
         // backup
-        this.backupPath = "/assets/backup"
+        this.backupPath = backupPath
         // 更新所有小组件缓存
         this.refreshWidgetCache()
         // 检查是否携带URL scheme
@@ -95,10 +106,14 @@ class AppKernel extends Kernel {
                     $drive.save({
                         data: $data({ path: `${this.backupPath}/backup.zip` }),
                         name: `EasyWidgetBackup-${new Date().getTime()}.zip`,
-                        handler: () => {
+                        handler: success => {
                             //删除压缩文件
                             $file.delete(this.backupPath)
-                            this.settingComponent.view.done()
+                            if (success) {
+                                this.settingComponent.view.done()
+                            } else {
+                                this.settingComponent.view.cancel()
+                            }
                         }
                     })
                 } catch (error) {
@@ -138,39 +153,49 @@ class AppKernel extends Kernel {
                     $archiver.unzip({
                         path: `${this.backupPath}/backup.zip`,
                         dest: this.backupPath,
-                        handler: async () => {
-                            if ($file.exists(`${this.backupPath}/widgets.zip`) && $file.exists(`${this.backupPath}/userdata.zip`)) {
-                                try {
-                                    // 保证目录存在
-                                    $file.mkdir(`${this.backupPath}/widgets`)
-                                    $file.mkdir(`${this.backupPath}/userdata`)
-                                    // 解压
-                                    await $archiver.unzip({
-                                        path: `${this.backupPath}/widgets.zip`,
-                                        dest: `${this.backupPath}/widgets`
-                                    })
-                                    await $archiver.unzip({
-                                        path: `${this.backupPath}/userdata.zip`,
-                                        dest: `${this.backupPath}/userdata`
-                                    })
-                                    // 删除文件
-                                    $file.delete(`${this.backupPath}/backup.zip`)
-                                    $file.delete(`${this.backupPath}/userdata.zip`)
-                                    $file.delete(`${this.backupPath}/userdata.zip`)
-                                    // 恢复
-                                    $file.move({
-                                        src: `${this.backupPath}/widgets`,
-                                        dst: this.widgetRootPath
-                                    })
-                                    $file.move({
-                                        src: `${this.backupPath}/userdata`,
-                                        dst: this.widgetAssetsPath
-                                    })
-                                    this.settingComponent.view.done()
-                                } catch (error) {
-                                    this.settingComponent.view.cancel()
-                                    console.log(error)
+                        handler: async success => {
+                            if (success) {
+                                if ($file.exists(`${this.backupPath}/widgets.zip`) && $file.exists(`${this.backupPath}/userdata.zip`)) {
+                                    try {
+                                        // 保证目录存在
+                                        $file.mkdir(`${this.backupPath}/widgets`)
+                                        $file.mkdir(`${this.backupPath}/userdata`)
+                                        // 解压
+                                        await $archiver.unzip({
+                                            path: `${this.backupPath}/widgets.zip`,
+                                            dest: `${this.backupPath}/widgets`
+                                        })
+                                        await $archiver.unzip({
+                                            path: `${this.backupPath}/userdata.zip`,
+                                            dest: `${this.backupPath}/userdata`
+                                        })
+                                        // 删除文件
+                                        $file.delete(`${this.backupPath}/backup.zip`)
+                                        $file.delete(`${this.backupPath}/widgets.zip`)
+                                        $file.delete(`${this.backupPath}/userdata.zip`)
+                                        // 恢复
+                                        $file.list(`${this.backupPath}/widgets`).forEach(item => {
+                                            if ($file.isDirectory(`${this.backupPath}/widgets/${item}`)) {
+                                                $file.delete(`${this.widgetRootPath}/${item}`)
+                                                $file.move({
+                                                    src: `${this.backupPath}/widgets/${item}`,
+                                                    dst: `${this.widgetRootPath}/${item}`
+                                                })
+                                            }
+                                        })
+                                        $file.move({
+                                            src: `${this.backupPath}/userdata`,
+                                            dst: this.widgetAssetsPath
+                                        })
+                                        $file.delete(this.backupPath)
+                                        this.settingComponent.view.done()
+                                    } catch (error) {
+                                        this.settingComponent.view.cancel()
+                                        console.log(error)
+                                    }
                                 }
+                            } else {
+                                this.settingComponent.view.cancel()
                             }
                         }
                     })
@@ -180,12 +205,7 @@ class AppKernel extends Kernel {
     }
 
     widgetInstance(widget) {
-        if ($file.exists(`${this.widgetRootPath}/${widget}/index.js`)) {
-            let { Widget } = require(`./ui/widget/${widget}/index.js`)
-            return new Widget(this)
-        } else {
-            return false
-        }
+        return widgetInstance(widget, this)
     }
 
     getWidgetList() {
@@ -215,9 +235,22 @@ class AppKernel extends Kernel {
 
 module.exports = {
     run: () => {
-        // 实例化应用核心
-        let kernel = new AppKernel()
-        // 渲染UI
-        new MainUI(kernel).render()
+        if ($app.env === $env.widget) {
+            const Widget = require("./ui/widget/index")
+            new Widget({
+                // 实例化方法
+                widgetInstance: widget => {
+                    return widgetInstance(widget, this)
+                },
+                // 小组件根目录
+                widgetRootPath: widgetRootPath,
+                widgetAssetsPath: widgetAssetsPath
+            }).render()
+        } else {
+            // 实例化应用核心
+            let kernel = new AppKernel()
+            const Factory = require("./ui/main/factory")
+            new Factory(kernel).render()
+        }
     }
 }

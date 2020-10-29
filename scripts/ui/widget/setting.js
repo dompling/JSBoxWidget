@@ -11,15 +11,23 @@ class Setting {
         if (!$file.exists(assetsPath)) {
             $file.mkdir(assetsPath)
         }
-        this.settingComponent = this.kernel._registerComponent("Setting", `${this.widget}Setting`)
-        this.setting = this.settingComponent.controller.init(
-            `${rootPath}/setting.json`,
-            `${assetsPath}/setting.json`
-        )
-        this.setting.isSecondaryPage(true, () => { $ui.pop() })
-        this.setting.setFooter({ type: "view" })
-        this.defaultSettingMethods()
-        this.initSettingMethods()
+        // 判断当前环境
+        if ($app.env === $env.widget) {
+            this.setting = this.init(
+                `${rootPath}/setting.json`,
+                `${assetsPath}/setting.json`
+            )
+        } else {
+            this.settingComponent = this.kernel._registerComponent("Setting", `${this.widget}Setting`)
+            this.setting = this.settingComponent.controller.init(
+                `${rootPath}/setting.json`,
+                `${assetsPath}/setting.json`
+            )
+            this.setting.isSecondaryPage(true, () => { $ui.pop() })
+            this.setting.setFooter({ type: "view" })
+            this.defaultSettingMethods()
+            this.initSettingMethods()
+        }
         this.settingUrlScheme = `jsbox://run?name=EasyWidget&widget=${this.widget}`
         this.family = {
             small: 0,
@@ -30,6 +38,21 @@ class Setting {
             small: 0,
             medium: 1
         }
+    }
+
+    init(settintPath, savePath) {
+        this.struct = JSON.parse($file.read(settintPath).string)
+        this.setting = {}
+        let user = {}
+        if ($file.exists(savePath)) {
+            user = JSON.parse($file.read(savePath).string)
+        }
+        for (let section of this.struct) {
+            for (let item of section.items) {
+                this.setting[item.key] = item.key in user ? user[item.key] : item.value
+            }
+        }
+        this.dataCenter.set("name", name)
     }
 
     push() {
