@@ -10,8 +10,8 @@ class CalendarWidget extends Widget {
         this.cacheDateStartFromZero = true
     }
 
-    view2x2() {
-        return this.calendar.calendarView(this.setting.family.small)
+    view2x2(family = this.setting.family.small) {
+        return this.calendar.calendarView(this.setting.family.small, family)
     }
 
     view2x4() {
@@ -37,38 +37,20 @@ class CalendarWidget extends Widget {
                 afterDate: expireDate
             },
             render: ctx => {
-                let cache = family => {
-                    let cache = this.getCache(family)
-                    // 未超过一天则不更新缓存
-                    if (cache && (() => {
-                        if (this.cacheDateStartFromZero) {
-                            const midnight = new Date()
-                            midnight.setHours(0, 0, 0, 0)
-                            return midnight.getTime()
-                        } else return new Date().getTime()
-                    })() - cache.date.getTime() < this.cacheLife)
-                        return cache.view
-                    else {
-                        let view
-                        switch (family) {
-                            case 0:
-                                view = this.view2x2()
-                                break
-                            case 1:
-                                view = this.view2x4()
-                                break
-                            case 2:
-                                view = this.view4x4()
-                                break
-                            default:
-                                view = this.errorView
-                        }
-                        // 更新缓存
-                        this.setCache(family, view)
-                        return view
-                    }
+                let view
+                switch (ctx.family) {
+                    case 0:
+                        view = this.view2x2()
+                        break
+                    case 1:
+                        view = this.view2x4()
+                        break
+                    case 2:
+                        view = this.view4x4()
+                        break
+                    default:
+                        view = this.errorView
                 }
-                let view = cache(ctx.family)
                 this.printTimeConsuming()
                 return view
             }

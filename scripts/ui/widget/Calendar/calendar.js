@@ -395,7 +395,7 @@ class Calendar {
         }
     }
 
-    calendarView(family) {
+    calendarView(family, reviseFamily) {
         let calendarInfo = this.getCalendar(family === this.setting.family.large)
         let calendar = this.formatCalendar(calendarInfo, family !== this.setting.family.small)
         let titleBar = this.titleBarTemplate(family, calendarInfo)
@@ -408,7 +408,7 @@ class Calendar {
                 },
                 spacing: 0,
                 padding: 10
-            }, family === this.setting.family.medium ? {
+            }, reviseFamily === this.setting.family.medium ? {
                 link: this.setting.settingUrlScheme
             } : {
                     widgetURL: this.setting.settingUrlScheme

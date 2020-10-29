@@ -8,20 +8,8 @@ class ScheduleWidget extends Widget {
         this.schedule = new Schedule(this.kernel, this.setting)
     }
 
-    async joinView() {
-        let cache = this.getCache(this.setting.family.medium)
-        if (cache && new Date().getTime() - cache.date.getTime() < this.cacheLife) {
-            return cache.view
-        } else {
-            let view = await this.view2x4()
-            // 更新缓存
-            this.setCache(view)
-            return view
-        }
-    }
-
-    async view2x2() {
-        return await this.schedule.scheduleView(this.setting.family.small)
+    async view2x2(family = this.setting.family.small) {
+        return await this.schedule.scheduleView(family)
     }
 
     async view2x4() {
@@ -33,15 +21,7 @@ class ScheduleWidget extends Widget {
         let nowDate = new Date()
         const expireDate = new Date(nowDate + this.cacheLife)
         // 获取视图
-        let view2x2
-        let cache = this.getCache(this.setting.family.small)
-        if (cache && nowDate - cache.date.getTime() < this.cacheLife) {
-            view2x2 = cache.view
-        } else {
-            view2x2 = await this.view2x2()
-            // 更新缓存
-            this.setCache(view2x2)
-        }
+        let view2x2 = await this.view2x2()
         $widget.setTimeline({
             entries: [
                 {

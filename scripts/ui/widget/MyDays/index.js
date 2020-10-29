@@ -32,7 +32,7 @@ class MyDaysWidget extends Widget {
         return Math.ceil(span)
     }
 
-    view2x2() {
+    view2x2(family) {
         let myday = this.myday
         if (!myday) return {
             type: "text",
@@ -41,8 +41,7 @@ class MyDaysWidget extends Widget {
         const remainingDays = this.dateSpan(myday.date)
         return {
             type: "vstack",
-            props: {
-                link: this.setting.settingUrlScheme,
+            props: Object.assign({
                 alignment: $widget.verticalAlignment.center,
                 spacing: 0,
                 padding: 10,
@@ -58,7 +57,11 @@ class MyDaysWidget extends Widget {
                     maxWidth: Infinity,
                     maxHeight: Infinity
                 }
-            },
+            }, family !== this.setting.family.small ? {
+                link: this.setting.settingUrlScheme
+            } : {
+                    widgetURL: this.setting.settingUrlScheme
+                }),
             views: [
                 {
                     type: "text",

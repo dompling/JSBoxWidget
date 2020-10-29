@@ -267,7 +267,7 @@ class Schedule {
                 },
                 padding: $insets(15, 15, 0, 0),
                 spacing: 15
-            }, family === this.setting.family.medium ? {
+            }, family !== this.setting.family.small ? {
                 link: this.urlScheme
             } : {
                     widgetURL: this.urlScheme

@@ -33,22 +33,6 @@ class PictureWidget extends Widget {
         }
     }
 
-    /**
-     * 相册不必使用缓存
-     */
-    refreshCache() { }
-
-    joinView(mode) {
-        switch (mode) {
-            case this.setting.joinMode.small:
-                return this.view2x2()
-            case this.setting.joinMode.medium:
-                return this.view2x4()
-            default:
-                return this.errorView
-        }
-    }
-
     view2x2(family) {
         let index = 0 // 图片索引
         if (new Date().getTime() - this.data.date > this.switchInterval) { // 下一张
@@ -91,7 +75,7 @@ class PictureWidget extends Widget {
                         maxWidth: Infinity,
                         maxHeight: Infinity
                     }
-                }, family === this.setting.family.medium ? {
+                }, family !== this.setting.family.small ? {
                     link: this.urlScheme ? this.urlScheme : this.setting.settingUrlScheme
                 } : {
                         widgetURL: this.urlScheme ? this.urlScheme : this.setting.settingUrlScheme
