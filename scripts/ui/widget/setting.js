@@ -12,7 +12,7 @@ class Setting {
             $file.mkdir(assetsPath)
         }
         // 判断当前环境
-        if ($app.env === $env.widget) {
+        if (this.kernel.minimum) {
             this.setting = this.init(
                 `${rootPath}/setting.json`,
                 `${assetsPath}/setting.json`
@@ -42,17 +42,17 @@ class Setting {
 
     init(settintPath, savePath) {
         this.struct = JSON.parse($file.read(settintPath).string)
-        this.setting = {}
+        this.settingData = {}
         let user = {}
         if ($file.exists(savePath)) {
             user = JSON.parse($file.read(savePath).string)
         }
         for (let section of this.struct) {
             for (let item of section.items) {
-                this.setting[item.key] = item.key in user ? user[item.key] : item.value
+                this.settingData[item.key] = item.key in user ? user[item.key] : item.value
             }
         }
-        this.dataCenter.set("name", name)
+        return { get: key => this.settingData[key] }
     }
 
     push() {

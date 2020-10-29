@@ -11,7 +11,7 @@ function widgetInstance(widget, that) {
         return false
     }
 }
-// $app.env = $env.widget
+
 class AppKernel extends Kernel {
     constructor() {
         super()
@@ -233,24 +233,28 @@ class AppKernel extends Kernel {
     }
 }
 
+class minimumKernel extends Kernel {
+    constructor() {
+        super()
+        this.minimum = true
+        // 小组件根目录
+        this.widgetRootPath = widgetRootPath
+        this.widgetAssetsPath = widgetAssetsPath
+    }
+
+    widgetInstance(widget) {
+        return widgetInstance(widget, this)
+    }
+}
+
 module.exports = {
     run: () => {
         if ($app.env === $env.widget) {
             const Widget = require("./ui/widget/index")
-            new Widget({
-                // 实例化方法
-                widgetInstance: widget => {
-                    return widgetInstance(widget, this)
-                },
-                // 小组件根目录
-                widgetRootPath: widgetRootPath,
-                widgetAssetsPath: widgetAssetsPath
-            }).render()
+            new Widget(new minimumKernel()).render()
         } else {
-            // 实例化应用核心
-            let kernel = new AppKernel()
             const Factory = require("./ui/main/factory")
-            new Factory(kernel).render()
+            new Factory(new AppKernel()).render()
         }
     }
 }
