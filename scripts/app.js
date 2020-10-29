@@ -58,6 +58,8 @@ class AppKernel extends Kernel {
             widget = this.widgetInstance(widget.name)
             widget.refreshCache()
         }
+        // 更新时间线
+        $widget.reloadTimeline()
     }
 
     /**
@@ -250,8 +252,23 @@ class minimumKernel extends Kernel {
 module.exports = {
     run: () => {
         if ($app.env === $env.widget) {
-            const Widget = require("./ui/widget/index")
-            new Widget(new minimumKernel()).render()
+            let kernel = new minimumKernel()
+            let widgetName = $widget.inputValue
+            let widget = kernel.widgetInstance(widgetName)
+            if (widget) {
+                widget.render()
+            } else {
+                $widget.setTimeline({
+                    render: ctx => {
+                        return {
+                            type: "text",
+                            props: {
+                                text: "去主程序选择一个Widget，或者参数有误？\n注意，不需要引号"
+                            }
+                        }
+                    }
+                })
+            }
         } else {
             const Factory = require("./ui/main/factory")
             new Factory(new AppKernel()).render()
