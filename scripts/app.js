@@ -3,6 +3,11 @@ const widgetRootPath = "/scripts/ui/widget"
 const widgetAssetsPath = "/assets/widget"
 const backupPath = "/assets/backup"
 
+/**
+ * 实例化一个小组件
+ * @param {String} widget widget名
+ * @param {Kernel} that Kernel实例
+ */
 function widgetInstance(widget, that) {
     if ($file.exists(`${widgetRootPath}/${widget}/index.js`)) {
         let { Widget } = require(`./ui/widget/${widget}/index.js`)
@@ -27,8 +32,8 @@ class AppKernel extends Kernel {
         this.widgetAssetsPath = widgetAssetsPath
         // backup
         this.backupPath = backupPath
-        // 更新所有小组件缓存
-        this.refreshWidgetCache()
+        // 更新时间线
+        $widget.reloadTimeline()
         // 检查是否携带URL scheme
         if (this.query["url-scheme"]) {
             // 延时500ms后跳转
@@ -47,19 +52,6 @@ class AppKernel extends Kernel {
         s[8] = s[13] = s[18] = s[23] = "-"
 
         return s.join("")
-    }
-
-    /**
-     * 更新所有小组件缓存
-     */
-    async refreshWidgetCache() {
-        let widgets = this.getWidgetList()
-        for (let widget of widgets) {
-            widget = this.widgetInstance(widget.name)
-            widget.refreshCache()
-        }
-        // 更新时间线
-        $widget.reloadTimeline()
     }
 
     /**

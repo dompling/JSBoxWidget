@@ -31,6 +31,7 @@
 
 "GENERAL" = "一般";
 "TIPS" = "小贴士";
+"PRINT_TIME_CONSUMING" = "打印加载耗时";
 
 "BACKUP" = "备份";
 "START_BACKUP" = "开始备份";

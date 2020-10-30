@@ -31,6 +31,7 @@
 
 "GENERAL" = "General";
 "TIPS" = "Tips";
+"PRINT_TIME_CONSUMING" = "Print Time Consuming";
 
 "BACKUP" = "Backup";
 "START_BACKUP" = "Start Backup";
