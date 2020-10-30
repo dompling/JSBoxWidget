@@ -136,7 +136,7 @@
             },
             {
                 "icon": [
-                    "cloud",
+                    "cloud.fill",
                     "#996699"
                 ],
                 "title": "GET_HOLIDAY",
@@ -146,7 +146,7 @@
             },
             {
                 "icon": [
-                    "trash",
+                    "trash.fill",
                     "#FF6666"
                 ],
                 "title": "CLEAR_HOLIDAY_DATA",
