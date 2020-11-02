@@ -180,7 +180,7 @@ class Calendar {
     /**
      * 不同日期显示不同样式
      */
-    formatDay(date, calendarInfo, hasExtra, isFullMonth = true) {
+    formatDay(date, calendarInfo, hasExtra) {
         if (date === 0) { // 空白直接跳过
             return {
                 date: "",
@@ -242,7 +242,7 @@ class Calendar {
      * @param {Object} props 
      * @param {*} extra 
      */
-    dayTemplate(text, props = {}, extra = undefined) {
+    dayTemplate(text, props = {}, extra, family) {
         let views = [{
             type: "text",
             props: Object.assign({
@@ -264,10 +264,14 @@ class Calendar {
                     font: $font(12),
                     lineLimit: extra.length > 3 ? 2 : 1,
                     minimumScaleFactor: 0.5,
-                    frame: {
-                        maxWidth: Infinity,
-                        maxHeight: Infinity
-                    }
+                    frame: Object.assign({
+                        maxWidth: Infinity
+                    }, family ? {
+                        height: (() => {
+                            $widget.family = family
+                            return ($widget.displaySize.height - 20) / 13
+                        })()
+                    } : { maxHeight: Infinity })
                 }, props.ext)
             })
         }
@@ -294,7 +298,7 @@ class Calendar {
     /**
      * 周指示器模板
      */
-    weekTitleTemplate() {
+    weekIndexTemplate() {
         let title = []
         for (let i = 0; i < 7; i++) {
             title.push(this.dayTemplate(this.localizedWeek(i), {
@@ -304,16 +308,16 @@ class Calendar {
         return title
     }
 
-    formatCalendar(calendarInfo, hasExtra) {
+    formatCalendar(family, calendarInfo, hasExtra) {
         let calendar = calendarInfo.calendar
         let days = []
         for (let line of calendar) { // 设置不同日期显示不同样式
             for (let date of line) {
                 date = this.formatDay(date, calendarInfo, hasExtra)
-                days.push(this.dayTemplate(date.date, date.props, date.extra))
+                days.push(this.dayTemplate(date.date, date.props, date.extra, family))
             }
         }
-        let weekTitle = this.weekTitleTemplate()
+        let weekTitle = this.weekIndexTemplate()
         return { // 返回完整视图
             type: "vgrid",
             props: {
@@ -337,8 +341,7 @@ class Calendar {
     titleBarTemplate(family, calendarInfo) {
         // 标题栏文字内容
         let content
-        let left = "", right = "",
-            size = family === this.setting.family.small ? 12 : 18
+        let left = "", right = ""
         if (this.titleYear) {
             let year = !this.titleFullYear ? String(calendarInfo.year).slice(-2) + $l10n("YEAR") : calendarInfo.year + $l10n("YEAR")
             left = year + this.localizedMonth(calendarInfo.month)
@@ -352,16 +355,25 @@ class Calendar {
         content = {
             left: left,
             right: right,
-            size: size
+            size: family === this.setting.family.small ? 12 : 18
         }
         return {
             type: "hstack",
             props: {
                 frame: {
-                    width: Infinity,
-                    height: Infinity
+                    maxWidth: Infinity,
+                    maxHeight: Infinity
                 },
-                padding: $insets(10, 3, 5, 3)
+                padding: (() => {
+                    switch (family) {
+                        case this.setting.family.small:
+                            return $insets(0, 3, 0, 3)
+                        case this.setting.family.meduim:
+                            return $insets(0, 10, 0, 10)
+                        case this.setting.family.large:
+                            return $insets(0, 10, 0, 10)
+                    }
+                })()
             },
             views: [
                 {
@@ -398,7 +410,7 @@ class Calendar {
 
     calendarView(family, reviseFamily) {
         let calendarInfo = this.getCalendar(family === this.setting.family.large)
-        let calendar = this.formatCalendar(calendarInfo, family !== this.setting.family.small)
+        let calendar = this.formatCalendar(family, calendarInfo, family !== this.setting.family.small)
         let titleBar = this.titleBarTemplate(family, calendarInfo)
         return {
             type: "vstack",
@@ -414,7 +426,7 @@ class Calendar {
             } : {
                     widgetURL: this.setting.settingUrlScheme
                 }),
-            views: [titleBar, calendar]
+            views: [{ type: "spacer" }, titleBar, { type: "spacer" }, calendar, { type: "spacer" }]
         }
     }
 
@@ -425,7 +437,7 @@ class Calendar {
             date = this.formatDay(date, weekView, true)
             days.push(this.dayTemplate(date.date, date.props, date.extra))
         }
-        let weekTitle = this.weekTitleTemplate()
+        let weekTitle = this.weekIndexTemplate()
         let calendar = {
             type: "vgrid",
             props: {
@@ -460,7 +472,7 @@ class Calendar {
             } : {
                     widgetURL: this.setting.settingUrlScheme
                 }),
-            views: [titleBar, calendar]
+            views: [{ type: "spacer" }, titleBar, { type: "spacer" }, calendar, { type: "spacer" }]
         }
     }
 }
