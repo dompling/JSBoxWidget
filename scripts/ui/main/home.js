@@ -161,7 +161,7 @@ class HomeUI {
                                     path: `${this.kernel.widgetRootPath}/${widgetName}Copy/config.json`
                                 })
                                 // 更新列表
-                                setTimeout(() => { $("EasyWidget-home-list").data = this.getWidgetListView() }, 200)
+                                setTimeout(() => { sender.data = this.getWidgetListView() }, 200)
                             }
                         },
                         {
@@ -201,6 +201,10 @@ class HomeUI {
                         } else {
                             $ui.error($l10n("ERROR"))
                         }
+                    },
+                    pulled: sender => {
+                        sender.data = this.getWidgetListView()
+                        setTimeout(() => { sender.endRefreshing() }, 500)
                     }
                 },
                 layout: $layout.fill
