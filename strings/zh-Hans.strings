@@ -7,6 +7,7 @@
 "ERROR" = "发生错误";
 "NONE" = "什么都没有";
 "COPY" = "复制";
+"NEW_WIDGET_NAME" = "新Widget名";
 "CANNOT_COPY_THIS_WIDGET" = "无法复制该widget";
 "COPY_SUCCESS" = "复制成功";
 "FAILED_TO_LOAD_VIEW" = "加载视图失败";

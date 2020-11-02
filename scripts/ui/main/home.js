@@ -135,33 +135,40 @@ class HomeUI {
                             title: $l10n("COPY"),
                             color: $color("orange"),
                             handler: (sender, indexPath) => {
-                                let widgetName = sender.object(indexPath).name
-                                if (!$file.exists(`${this.kernel.widgetRootPath}/${widgetName}/setting.js`) || !$file.exists(`${this.kernel.widgetRootPath}/${widgetName}/config.json`)) {
-                                    $ui.error($l10n("CANNOT_COPY_THIS_WIDGET"))
-                                    return
-                                }
-                                $file.copy({
-                                    src: `${this.kernel.widgetRootPath}/${widgetName}`,
-                                    dst: `${this.kernel.widgetRootPath}/${widgetName}Copy`
+                                $input.text({
+                                    placeholder: $l10n("NEW_WIDGET_NAME"),
+                                    text: "",
+                                    handler: text => {
+                                        let widgetName = sender.object(indexPath).name
+                                        if (!$file.exists(`${this.kernel.widgetRootPath}/${widgetName}/setting.js`) || !$file.exists(`${this.kernel.widgetRootPath}/${widgetName}/config.json`)) {
+                                            $ui.error($l10n("CANNOT_COPY_THIS_WIDGET"))
+                                            return
+                                        }
+                                        let newName = text === "" ? widgetName + "Copy" : text
+                                        $file.copy({
+                                            src: `${this.kernel.widgetRootPath}/${widgetName}`,
+                                            dst: `${this.kernel.widgetRootPath}/${newName}`
+                                        })
+                                        // 更新设置文件中的NAME常量
+                                        let settingjs = $file.read(`${this.kernel.widgetRootPath}/${newName}/setting.js`).string
+                                        let firstLine = settingjs.split("\n")[0]
+                                        let newFirstLine = `const NAME = "${newName}"`
+                                        settingjs = settingjs.replace(firstLine, newFirstLine)
+                                        $file.write({
+                                            data: $data({ string: settingjs }),
+                                            path: `${this.kernel.widgetRootPath}/${newName}/setting.js`
+                                        })
+                                        // 更新config.json
+                                        let config = JSON.parse($file.read(`${this.kernel.widgetRootPath}/${newName}/config.json`).string)
+                                        config.title = newName
+                                        $file.write({
+                                            data: $data({ string: JSON.stringify(config) }),
+                                            path: `${this.kernel.widgetRootPath}/${newName}/config.json`
+                                        })
+                                        // 更新列表
+                                        setTimeout(() => { sender.data = this.getWidgetListView() }, 200)
+                                    }
                                 })
-                                // 更新设置文件中的NAME常量
-                                let settingjs = $file.read(`${this.kernel.widgetRootPath}/${widgetName}Copy/setting.js`).string
-                                let firstLine = settingjs.split("\n")[0]
-                                let newFirstLine = `const NAME = "${widgetName}Copy"`
-                                settingjs = settingjs.replace(firstLine, newFirstLine)
-                                $file.write({
-                                    data: $data({ string: settingjs }),
-                                    path: `${this.kernel.widgetRootPath}/${widgetName}Copy/setting.js`
-                                })
-                                // 更新config.json
-                                let config = JSON.parse($file.read(`${this.kernel.widgetRootPath}/${widgetName}Copy/config.json`).string)
-                                config.title = `${widgetName}Copy`
-                                $file.write({
-                                    data: $data({ string: JSON.stringify(config) }),
-                                    path: `${this.kernel.widgetRootPath}/${widgetName}Copy/config.json`
-                                })
-                                // 更新列表
-                                setTimeout(() => { sender.data = this.getWidgetListView() }, 200)
                             }
                         },
                         {
