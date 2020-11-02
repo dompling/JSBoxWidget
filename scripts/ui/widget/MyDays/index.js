@@ -18,6 +18,8 @@ class MyDaysWidget extends Widget {
         this.backgroundColorDark = this.setting.get("backgroundColorDark")
         this.backgroundImage = $cache.get("MyDays.image")
         this.isImageBackground = $file.exists(this.backgroundImage)
+        this.showMinus = this.setting.get("showMinus")
+        this.overdueColor = this.setting.get("overdueColor")
     }
 
     dateSpan(date) {
@@ -66,9 +68,11 @@ class MyDaysWidget extends Widget {
                 {
                     type: "text",
                     props: {
-                        text: remainingDays === 0 ? $l10n("TODAY") : String(remainingDays),
+                        text: remainingDays === 0 ? $l10n("TODAY") : String(
+                            this.showMinus ? remainingDays : Math.abs(remainingDays)
+                        ),
                         font: $font(this.dateFontSize),
-                        color: remainingDays >= 0 ? $color(this.dateColor, this.dateColorDark) : $color("red"),
+                        color: remainingDays >= 0 ? $color(this.dateColor, this.dateColorDark) : $color(this.overdueColor),
                         frame: {
                             alignment: $widget.alignment.topLeading,
                             maxWidth: Infinity,

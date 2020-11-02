@@ -22,13 +22,33 @@
             },
             {
                 "icon": [
-                    "wand.and.rays",
+                    "slider.horizontal.3",
                     "#FF9933"
                 ],
                 "title": "DATE_FONT_SIZE",
                 "type": "number",
                 "key": "dateFontSize",
                 "value": 40
+            },
+            {
+                "icon": [
+                    "minus.square.fill",
+                    "#0099CC"
+                ],
+                "title": "SHOW_MINUS",
+                "type": "switch",
+                "key": "showMinus",
+                "value": false
+            },
+            {
+                "icon": [
+                    "wand.and.rays",
+                    "#FF0033"
+                ],
+                "title": "OVERDUE_COLOR",
+                "type": "color",
+                "key": "overdueColor",
+                "value": "#FF0033"
             }
         ]
     },

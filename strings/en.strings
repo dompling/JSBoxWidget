@@ -151,6 +151,8 @@
 "RIGHT" = "Right";
 
 "MYDAYS" = "MyDays";
+"SHOW_MINUS" = "Show minus";
+"OVERDUE_COLOR" = "Overdue color";
 "DATE_FONT_SIZE" = "Date Font Size";
 "DATE_COLOR" = "Date Color";
 "INFO_COLOR" = "Information Color";
