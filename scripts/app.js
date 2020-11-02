@@ -99,7 +99,7 @@ class AppKernel extends Kernel {
                     // 用户选择保存位置
                     $drive.save({
                         data: $data({ path: `${this.backupPath}/backup.zip` }),
-                        name: `EasyWidgetBackup-${new Date().getTime()}.zip`,
+                        name: `${this.name}Backup-${new Date().getTime()}.zip`,
                         handler: success => {
                             //删除压缩文件
                             $file.delete(this.backupPath)
