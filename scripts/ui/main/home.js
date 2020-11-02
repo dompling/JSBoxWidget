@@ -50,7 +50,7 @@ class HomeUI {
                         views: [{
                             type: "label",
                             props: {
-                                text: "EasyWidget",
+                                text: "WAIO",
                                 font: $font(36)
                             },
                             layout: (make, view) => {
