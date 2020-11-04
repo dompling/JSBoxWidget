@@ -107,6 +107,7 @@
 "SHOW_FULL_YEAR" = "Show Full Year";
 "SHOW_LUNAR" = "Show Lunar";
 "SHOW_LUNAR_YEAR" = "Show Lunar (Year)";
+"ADD_SPACER" = "Increase spacing";
 "MONTH_DISPLAY_MODE" = "Display Mode (Month)";
 "CHINESE_CHARACTERS" = "Chars";
 "NUMBER" = "Number";

@@ -107,6 +107,7 @@
 "SHOW_FULL_YEAR" = "显示完整年";
 "SHOW_LUNAR" = "显示农历";
 "SHOW_LUNAR_YEAR" = "显示农历年";
+"ADD_SPACER" = "增加间距";
 "MONTH_DISPLAY_MODE" = "月份显示模式";
 "CHINESE_CHARACTERS" = "汉字";
 "NUMBER" = "数字";

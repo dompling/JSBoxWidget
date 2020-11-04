@@ -99,6 +99,15 @@
                 "type": "switch",
                 "key": "title.lunarYear",
                 "value": true
+            },
+            {
+                "icon": [
+                    "crop"
+                ],
+                "title": "ADD_SPACER",
+                "type": "switch",
+                "key": "title.addSpacer",
+                "value": true
             }
         ]
     },

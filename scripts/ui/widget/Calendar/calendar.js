@@ -17,6 +17,7 @@ class Calendar {
         this.titleFullYear = this.setting.get("title.fullYear")// 标题是否显示完整年
         this.titleLunar = this.setting.get("title.lunar")// 标题是否显示农历
         this.titleLunarYear = this.setting.get("title.lunarYear")// 标题是否显示农历年
+        this.titleAddSpacer = this.setting.get("title.addSpacer")// 是否在标题和日历间增加spacer
     }
 
     localizedWeek(index) {
@@ -426,7 +427,11 @@ class Calendar {
             } : {
                     widgetURL: this.setting.settingUrlScheme
                 }),
-            views: [{ type: "spacer" }, titleBar, { type: "spacer" }, calendar, { type: "spacer" }]
+            views: this.titleAddSpacer ? [
+                { type: "spacer" }, titleBar, { type: "spacer" }, calendar, { type: "spacer" }
+            ] : [
+                    { type: "spacer" }, titleBar, calendar, { type: "spacer" }
+                ]
         }
     }
 
