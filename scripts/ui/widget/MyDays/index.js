@@ -27,11 +27,21 @@ class MyDaysWidget extends Widget {
         if (typeof date === "number") date = new Date(date)
         // 重置时间
         date.setHours(0, 0, 0, 0)
-        if (date.getDate() === now.getDate()) {
-            return 0
-        }
         let span = (date.getTime() - (now.getTime())) / 1000 / 3600 / 24
         return Math.ceil(span)
+    }
+
+    dateSpanToString(span) {
+        switch (span) {
+            case 0:
+                return $l10n("TODAY")
+            case 1:
+                return $l10n("TOMORROW")
+            case -1:
+                return $l10n("YESTERDAY")
+            default:
+                return String(this.showMinus ? span : Math.abs(span))
+        }
     }
 
     view2x2(family) {
@@ -68,9 +78,7 @@ class MyDaysWidget extends Widget {
                 {
                     type: "text",
                     props: {
-                        text: remainingDays === 0 ? $l10n("TODAY") : String(
-                            this.showMinus ? remainingDays : Math.abs(remainingDays)
-                        ),
+                        text: this.dateSpanToString(remainingDays),
                         font: $font(this.dateFontSize),
                         color: remainingDays >= 0 ? $color(this.dateColor, this.dateColorDark) : $color(this.overdueColor),
                         frame: {

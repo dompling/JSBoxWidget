@@ -134,6 +134,8 @@
 "DATE" = "Date";
 "NO_DATE" = "No Date";
 "TODAY" = "Today";
+"TOMORROW" = "Tomorrow";
+"YESTERDAY" = "Yesterday";
 "ALL_DAY" = "All day";
 "NO_CALENDAR&REMINDER" = "No Schedule";
 "ITEM_LENGTH" = "Items to display";
