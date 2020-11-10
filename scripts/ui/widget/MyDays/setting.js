@@ -23,7 +23,7 @@ class MyDaysSetting extends Setting {
                 } else {
                     path.push(file)
                 }
-                break
+                return
             }
         })
         return path
