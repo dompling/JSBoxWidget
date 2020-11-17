@@ -32,8 +32,6 @@ class AppKernel extends Kernel {
         this.widgetAssetsPath = widgetAssetsPath
         // backup
         this.backupPath = backupPath
-        // 更新时间线
-        $widget.reloadTimeline()
         // 检查是否携带URL scheme
         if (this.query["url-scheme"]) {
             // 延时500ms后跳转
@@ -264,6 +262,21 @@ module.exports = {
         } else {
             const Factory = require("./ui/main/factory")
             new Factory(new AppKernel()).render()
+            // 监听运行状态
+            $app.listen({
+                // 在应用启动之后调用
+                ready: () => {
+                    $widget.reloadTimeline()
+                },
+                // 在应用退出之前调用
+                exit: () => {
+                    $widget.reloadTimeline()
+                },
+                // 在应用停止响应后调用
+                pause: () => {
+                    $widget.reloadTimeline()
+                }
+            })
         }
     }
 }
