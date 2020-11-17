@@ -24,6 +24,7 @@ class CalendarSetting extends Setting {
                 url: `http://timor.tech/api/holiday/year/${year}/`,
                 handler: response => {
                     if (response.error) {
+                        console.log(response.error)
                         $ui.error(response.error)
                         return
                     }

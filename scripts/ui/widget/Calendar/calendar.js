@@ -350,8 +350,8 @@ class Calendar {
             left = this.localizedMonth(calendarInfo.month)
         }
         if (this.titleLunar) {
-            right = this.lunar.lunarMonth + $l10n("MONTH") + this.lunar.lunarDay
-            if (this.titleLunarYear) right = this.lunar.lunarYear + $l10n("YEAR") + right
+            right = this.lunar.lunarMonth + "月" + this.lunar.lunarDay
+            if (this.titleLunarYear) right = this.lunar.lunarYear + "年" + right
         }
         content = {
             left: left,

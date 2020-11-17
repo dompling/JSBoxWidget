@@ -59,7 +59,7 @@
 "FRIDAY" = "F";
 "SATURDAY" = "S";
 
-"MONTH" = " ";
+"MONTH" = "-";
 "JANUARY_C" = "January";
 "FEBRUARY_C" = "February";
 "MARCH_C" = "March";
@@ -86,7 +86,7 @@
 "NOVEMBER_N" = "11";
 "DECEMBER_N" = "12";
 
-"YEAR" = " ";
+"YEAR" = "-";
 
 "COLOR_TONE" = "Color Tone";
 "FIRST_DAY_OF_WEEK" = "1st Day of Week";
@@ -131,7 +131,7 @@
 
 "TIME_SPAN" = "Time Span (Day)";
 "REMINDER_COLOR" = "Reminder Color";
-"DATE" = "Date";
+"DATE" = "";
 "NO_DATE" = "No Date";
 "TODAY" = "Today";
 "TOMORROW" = "Tomorrow";
