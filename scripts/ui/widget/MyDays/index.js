@@ -17,7 +17,6 @@ class MyDaysWidget extends Widget {
         this.backgroundColor = this.setting.get("backgroundColor")
         this.backgroundColorDark = this.setting.get("backgroundColorDark")
         this.backgroundImage = this.setting.getBackgroundImage()
-        console.log(this.backgroundImage)
         this.isImageBackground = $file.exists(this.backgroundImage)
         this.showMinus = this.setting.get("showMinus")
         this.overdueColor = this.setting.get("overdueColor")
