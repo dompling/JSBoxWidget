@@ -2,7 +2,7 @@ class Widget {
     constructor(kernel, setting) {
         this.startTime = new Date()
         this.kernel = kernel
-        this.setting = setting
+        this.setting = setting // 此设置是小组件的设置，主程序设置需要从kernel中取
         this.cacheDateStartFromZero = false
         this.errorView = {
             type: "text",
@@ -18,7 +18,7 @@ class Widget {
     }
 
     printTimeConsuming() {
-        if (!this.kernel.inWidgetEnv && this.setting.get("isPrintTimeConsuming"))
+        if (Boolean(!this.kernel.inWidgetEnv) && this.kernel.setting.get("isPrintTimeConsuming"))
             console.log(`Use ${new Date() - this.startTime} ms`)
     }
 
