@@ -225,10 +225,10 @@ class AppKernel extends Kernel {
     }
 }
 
-class minimumKernel extends Kernel {
+class WidgetKernel extends Kernel {
     constructor() {
         super()
-        this.minimum = true
+        this.inWidgetEnv = true
         // 小组件根目录
         this.widgetRootPath = widgetRootPath
         this.widgetAssetsPath = widgetAssetsPath
@@ -242,7 +242,7 @@ class minimumKernel extends Kernel {
 module.exports = {
     run: () => {
         if ($app.env === $env.widget) {
-            let kernel = new minimumKernel()
+            let kernel = new WidgetKernel()
             let widgetName = $widget.inputValue
             let widget = kernel.widgetInstance(widgetName)
             if (widget) {

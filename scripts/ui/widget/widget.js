@@ -18,7 +18,7 @@ class Widget {
     }
 
     printTimeConsuming() {
-        if (!this.kernel.minimum && this.setting.get("isPrintTimeConsuming"))
+        if (!this.kernel.inWidgetEnv && this.setting.get("isPrintTimeConsuming"))
             console.log(`Use ${new Date() - this.startTime} ms`)
     }
 

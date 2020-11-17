@@ -25,7 +25,7 @@ class Setting {
         const settintPath = `${rootPath}/setting.json`,
             savePath = `${assetsPath}/setting.json`
         // 判断当前环境
-        if (this.kernel.minimum) {
+        if (this.kernel.inWidgetEnv) {
             let cache = $cache.get(`setting-${this.widget}`)
             if (!cache) {
                 cache = {}
