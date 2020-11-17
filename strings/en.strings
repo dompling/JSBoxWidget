@@ -60,6 +60,7 @@
 "SATURDAY" = "S";
 
 "MONTH" = "-";
+"BLANK_MONTH" = " ";
 "JANUARY_C" = "January";
 "FEBRUARY_C" = "February";
 "MARCH_C" = "March";
@@ -131,7 +132,7 @@
 
 "TIME_SPAN" = "Time Span (Day)";
 "REMINDER_COLOR" = "Reminder Color";
-"DATE" = "";
+"DATE" = " ";
 "NO_DATE" = "No Date";
 "TODAY" = "Today";
 "TOMORROW" = "Tomorrow";

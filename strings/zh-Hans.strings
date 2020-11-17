@@ -60,6 +60,7 @@
 "SATURDAY" = "六";
 
 "MONTH" = "月";
+"BLANK_MONTH" = "月";
 "JANUARY_C" = "一";
 "FEBRUARY_C" = "二";
 "MARCH_C" = "三";

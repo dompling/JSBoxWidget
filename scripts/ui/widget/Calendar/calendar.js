@@ -53,7 +53,7 @@ class Calendar {
             $l10n("NOVEMBER" + mode),
             $l10n("DECEMBER" + mode)
         ]
-        return month[index] + $l10n("MONTH")
+        return month[index] + $l10n("BLANK_MONTH")
     }
 
     isHoliday(year, month, date) {
