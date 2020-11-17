@@ -52,6 +52,19 @@ class AppKernel extends Kernel {
         return s.join("")
     }
 
+    updateHomeScreenWidgetOptions() {
+        let config = []
+        this.getWidgetList().forEach(widget => {
+            config.push({
+                name: widget.title,
+                value: widget.name
+            })
+        })
+        $file.write({
+            data: $data({ string: JSON.stringify(config) }),
+            path: "widget-options.json"
+        })
+    }
     /**
      * 注入设置中的脚本类型方法
      */
@@ -75,16 +88,10 @@ class AppKernel extends Kernel {
             $ui.alert("每个小组件中都有README文件，点击可以得到一些信息。")
         }
 
-        this.setting.updateWidgetOptions = animate => {
+        this.setting.updateHomeScreenWidgetOptions = animate => {
             animate.touchHighlightStart()
             animate.actionStart()
-            let config = []
-            this.getWidgetList().forEach(widget => {
-                config.push({
-                    name: widget.title,
-                    value: widget.name
-                })
-            })
+            this.updateHomeScreenWidgetOptions()
             animate.actionDone()
             animate.touchHighlightEnd()
         }
@@ -256,9 +263,9 @@ class WidgetKernel extends Kernel {
 module.exports = {
     run: () => {
         if ($app.env === $env.widget) {
-            let kernel = new WidgetKernel()
-            let widgetName = $widget.inputValue
-            let widget = kernel.widgetInstance(widgetName)
+            const kernel = new WidgetKernel()
+            const widgetName = $widget.inputValue
+            const widget = kernel.widgetInstance(widgetName)
             if (widget) {
                 widget.render()
             } else {
@@ -275,20 +282,24 @@ module.exports = {
             }
         } else {
             const Factory = require("./ui/main/factory")
-            new Factory(new AppKernel()).render()
+            const kernel = new AppKernel()
+            new Factory(kernel).render()
             // 监听运行状态
             $app.listen({
                 // 在应用启动之后调用
                 ready: () => {
                     $widget.reloadTimeline()
+                    kernel.updateHomeScreenWidgetOptions()
                 },
                 // 在应用退出之前调用
                 exit: () => {
                     $widget.reloadTimeline()
+                    kernel.updateHomeScreenWidgetOptions()
                 },
                 // 在应用停止响应后调用
                 pause: () => {
                     $widget.reloadTimeline()
+                    kernel.updateHomeScreenWidgetOptions()
                 }
             })
         }

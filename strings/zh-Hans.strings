@@ -33,6 +33,7 @@
 "GENERAL" = "一般";
 "TIPS" = "小贴士";
 "PRINT_TIME_CONSUMING" = "打印加载耗时";
+"UPDATE_HOME_SCREEN_WIDGET_OPTIONS" = "更新主屏幕widget参数";
 
 "BACKUP" = "备份";
 "START_BACKUP" = "开始备份";

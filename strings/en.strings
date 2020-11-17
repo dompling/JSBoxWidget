@@ -33,6 +33,7 @@
 "GENERAL" = "General";
 "TIPS" = "Tips";
 "PRINT_TIME_CONSUMING" = "Print Time Consuming";
+"UPDATE_HOME_SCREEN_WIDGET_OPTIONS" = "Update Home Screen Widget Options";
 
 "BACKUP" = "Backup";
 "START_BACKUP" = "Start Backup";

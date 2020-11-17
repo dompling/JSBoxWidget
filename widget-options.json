@@ -1,6 +1,22 @@
 [
     {
-        "name": "请打开主程序以更新选项",
-        "value": false
+        "name": "Join",
+        "value": "Join"
+    },
+    {
+        "name": "Calendar",
+        "value": "Calendar"
+    },
+    {
+        "name": "Schedule",
+        "value": "Schedule"
+    },
+    {
+        "name": "Album",
+        "value": "Album"
+    },
+    {
+        "name": "MyDays",
+        "value": "MyDays"
     }
 ]

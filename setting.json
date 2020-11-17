@@ -23,12 +23,13 @@
             },
             {
                 "icon": [
-                    "clock.fill"
+                    "arrow.2.circlepath",
+                    "#FF9900"
                 ],
-                "title": "UPDATE_WIDGET_OPTIONS",
+                "title": "UPDATE_HOME_SCREEN_WIDGET_OPTIONS",
                 "type": "script",
-                "key": "updateWidgetOptions",
-                "value": "this.controller.updateWidgetOptions"
+                "key": "updateHomeScreenWidgetOptions",
+                "value": "this.controller.updateHomeScreenWidgetOptions"
             }
         ]
     },
