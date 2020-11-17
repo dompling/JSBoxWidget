@@ -103,12 +103,7 @@ class Schedule {
     async getListView() {
         // 获取数据
         let list = await this.getSchedule()
-        if (list.length === 0) {
-            return [{
-                type: "text",
-                props: { text: $l10n("NO_CALENDAR&REMINDER") }
-            }]
-        }
+        if (list.length === 0) return null
         let itemLength = 0, dateCollect = {}
         const isReminder = item => item.completed !== undefined
         const isExpire = date => date ? date.getTime() < new Date().getTime() : false
@@ -257,6 +252,11 @@ class Schedule {
      * 只提供正方形视图布局
      */
     async scheduleView(family) {
+        const listView = await this.getListView()
+        if (null === listView) return {
+            type: "text",
+            props: { text: $l10n("NO_CALENDAR&REMINDER") }
+        }
         return {
             type: "vstack",
             props: Object.assign({
@@ -272,7 +272,7 @@ class Schedule {
             } : {
                     widgetURL: this.urlScheme
                 }),
-            views: await this.getListView()
+            views: listView
         }
     }
 }
