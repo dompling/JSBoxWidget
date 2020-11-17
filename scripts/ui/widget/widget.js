@@ -3,7 +3,6 @@ class Widget {
         this.startTime = new Date()
         this.kernel = kernel
         this.setting = setting
-        this.isPrintTimeConsuming = this.setting.get("isPrintTimeConsuming")
         this.cacheDateStartFromZero = false
         this.errorView = {
             type: "text",
@@ -19,7 +18,7 @@ class Widget {
     }
 
     printTimeConsuming() {
-        if (!this.kernel.minimum && this.isPrintTimeConsuming)
+        if (!this.kernel.minimum && this.setting.get("isPrintTimeConsuming"))
             console.log(`Use ${new Date() - this.startTime} ms`)
     }
 
