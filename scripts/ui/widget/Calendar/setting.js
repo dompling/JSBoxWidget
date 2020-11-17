@@ -54,8 +54,8 @@ class CalendarSetting extends Setting {
     }
 
     initSettingMethods() {
-        this.setting.clearHoliday = () => {
-            this.settingComponent.view.start()
+        this.setting.clearHoliday = animate => {
+            animate.actionStart()
             let style = {}
             if ($alertActionType) {
                 style = { style: $alertActionType.destructive }
@@ -67,12 +67,12 @@ class CalendarSetting extends Setting {
                         title: $l10n("CLEAR"),
                         handler: () => {
                             $file.delete(this.holidayPath)
-                            this.settingComponent.view.done()
+                            animate.actionDone()
                         }
                     }, style),
                     {
                         title: $l10n("CANCEL"),
-                        handler: () => { this.settingComponent.view.cancel() }
+                        handler: () => { animate.actionCancel() }
                     }
                 ]
             })
@@ -80,8 +80,8 @@ class CalendarSetting extends Setting {
         /**
          * 用于设置页面手动获取节假日信息
          */
-        this.setting.getHoliday = async () => {
-            this.settingComponent.view.start()
+        this.setting.getHoliday = async animate => {
+            animate.actionStart()
             const saveHolidayAction = () => {
                 let year = new Date().getFullYear()
                 $http.get({
@@ -89,12 +89,12 @@ class CalendarSetting extends Setting {
                     handler: response => {
                         if (response.error) {
                             $ui.error(response.error)
-                            this.settingComponent.view.cancel()
+                            animate.actionCancel()
                             return
                         }
                         if (response.data.code !== 0) {
                             $ui.error($l10n("HOLIDAY_API_ERROR"))
-                            this.settingComponent.view.cancel()
+                            animate.actionCancel()
                             return
                         }
                         let content = {
@@ -105,7 +105,7 @@ class CalendarSetting extends Setting {
                             data: $data({ string: JSON.stringify(content) }),
                             path: this.holidayPath
                         })
-                        this.settingComponent.view.done()
+                        animate.actionDone()
                     }
                 })
             }
@@ -120,7 +120,7 @@ class CalendarSetting extends Setting {
                         },
                         {
                             title: $l10n("CANCEL"),
-                            handler: () => { this.settingComponent.view.cancel() }
+                            handler: () => { animate.actionCancel() }
                         }
                     ]
                 })

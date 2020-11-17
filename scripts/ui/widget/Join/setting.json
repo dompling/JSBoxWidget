@@ -9,7 +9,7 @@
                 "title": "PREVIEW",
                 "type": "script",
                 "key": "preview",
-                "value": "this.controller.preview()"
+                "value": "this.controller.preview"
             },
             {
                 "icon": [
@@ -46,7 +46,7 @@
                 "title": "SELECT_WIDGET",
                 "type": "menu",
                 "key": "left",
-                "items": "this.controller.getMenu()",
+                "items": "this.controller.getMenu",
                 "withTitle": true,
                 "value": [
                     0,
@@ -76,7 +76,7 @@
                 "title": "SELECT_WIDGET",
                 "type": "menu",
                 "key": "right",
-                "items": "this.controller.getMenu()",
+                "items": "this.controller.getMenu",
                 "withTitle": true,
                 "value": [
                     0,
@@ -96,7 +96,7 @@
                 "title": "README",
                 "type": "script",
                 "key": "album",
-                "value": "this.controller.readme()"
+                "value": "this.controller.readme"
             }
         ]
     }

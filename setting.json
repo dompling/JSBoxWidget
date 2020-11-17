@@ -10,7 +10,7 @@
                 "title": "TIPS",
                 "type": "script",
                 "key": "tips",
-                "value": "this.controller.tips()"
+                "value": "this.controller.tips"
             },
             {
                 "icon": [
@@ -20,6 +20,15 @@
                 "type": "switch",
                 "key": "isPrintTimeConsuming",
                 "value": false
+            },
+            {
+                "icon": [
+                    "clock.fill"
+                ],
+                "title": "UPDATE_WIDGET_OPTIONS",
+                "type": "script",
+                "key": "updateWidgetOptions",
+                "value": "this.controller.updateWidgetOptions"
             }
         ]
     },
@@ -33,7 +42,7 @@
                 "title": "BACKUP_TO_ICLOUD",
                 "type": "script",
                 "key": "backup",
-                "value": "this.controller.backupToICloud()"
+                "value": "this.controller.backupToICloud"
             },
             {
                 "icon": [
@@ -43,7 +52,7 @@
                 "title": "RECOVER_FROM_ICLOUD",
                 "type": "script",
                 "key": "recover",
-                "value": "this.controller.recoverFromICloud()"
+                "value": "this.controller.recoverFromICloud"
             }
         ]
     },
@@ -81,7 +90,7 @@
                 "title": "README",
                 "type": "script",
                 "key": "readme",
-                "value": "this.controller.readme()"
+                "value": "this.controller.readme"
             }
         ]
     }

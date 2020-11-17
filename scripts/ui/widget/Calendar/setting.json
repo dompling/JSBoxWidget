@@ -9,7 +9,7 @@
                 "title": "PREVIEW",
                 "type": "script",
                 "key": "preview",
-                "value": "this.controller.preview()"
+                "value": "this.controller.preview"
             },
             {
                 "icon": [
@@ -151,7 +151,7 @@
                 "title": "GET_HOLIDAY",
                 "type": "script",
                 "key": "get_holiday",
-                "value": "this.controller.getHoliday()"
+                "value": "this.controller.getHoliday"
             },
             {
                 "icon": [
@@ -161,7 +161,7 @@
                 "title": "CLEAR_HOLIDAY_DATA",
                 "type": "script",
                 "key": "clear_holiday",
-                "value": "this.controller.clearHoliday()"
+                "value": "this.controller.clearHoliday"
             }
         ]
     },
@@ -176,7 +176,7 @@
                 "title": "README",
                 "type": "script",
                 "key": "calendar",
-                "value": "this.controller.readme()"
+                "value": "this.controller.readme"
             }
         ]
     }

@@ -75,22 +75,22 @@ class Setting {
     }
 
     defaultSettingMethods() {
-        this.setting.readme = () => {
-            this.settingComponent.view.touchHighlightStart()
+        this.setting.readme = animate => {
+            animate.touchHighlightStart()
             let content = $file.read(`/scripts/ui/widget/${this.widget}/README.md`).string
-            this.settingComponent.view.push([{
+            animate.push([{
                 type: "markdown",
                 props: { content: content },
                 layout: (make, view) => {
                     make.size.equalTo(view.super)
                 }
             }], $l10n("BACK"), [], () => {
-                this.settingComponent.view.touchHighlightEnd()
+                animate.touchHighlightEnd()
             })
         }
 
-        this.setting.preview = () => {
-            this.settingComponent.view.touchHighlight()
+        this.setting.preview = animate => {
+            animate.touchHighlight()
             let widget = this.kernel.widgetInstance(this.widget)
             if (widget) {
                 widget.render()

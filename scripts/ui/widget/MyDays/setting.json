@@ -9,7 +9,7 @@
                 "title": "PREVIEW",
                 "type": "script",
                 "key": "preview",
-                "value": "this.controller.preview()"
+                "value": "this.controller.preview"
             },
             {
                 "icon": [
@@ -18,7 +18,7 @@
                 "title": "BACKGROUND_IMAGE",
                 "type": "script",
                 "key": "backgroundImage",
-                "value": "this.controller.backgroundImage()"
+                "value": "this.controller.backgroundImage"
             },
             {
                 "icon": [
@@ -169,7 +169,7 @@
                 "title": "README",
                 "type": "script",
                 "key": "calendar",
-                "value": "this.controller.readme()"
+                "value": "this.controller.readme"
             }
         ]
     }

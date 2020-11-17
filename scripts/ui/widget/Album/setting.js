@@ -9,20 +9,20 @@ class PictureSetting extends Setting {
     }
 
     initSettingMethods() {
-        this.setting.album = () => {
-            this.settingComponent.view.touchHighlightStart()
+        this.setting.album = animate => {
+            animate.touchHighlightStart()
             let views = this.album.getAlbumViews(),
                 buttons = this.album.getAlbumButtons()
             this.kernel.page.view.push(views, $l10n("BACK"), buttons, () => {
-                this.settingComponent.view.touchHighlightEnd()
+                animate.touchHighlightEnd()
             })
         }
 
-        this.setting.clearCache = () => {
-            this.settingComponent.view.touchHighlight()
-            this.settingComponent.view.start()
+        this.setting.clearCache = animate => {
+            animate.touchHighlight()
+            animate.actionStart()
             $cache.remove("switch.data")
-            this.settingComponent.view.done()
+            animate.actionDone()
         }
     }
 }

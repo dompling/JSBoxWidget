@@ -38,20 +38,20 @@ class MyDaysSetting extends Setting {
     }
 
     initSettingMethods() {
-        this.setting.backgroundImage = () => {
-            this.settingComponent.view.touchHighlightStart()
+        this.setting.backgroundImage = animate => {
+            animate.touchHighlightStart()
             $ui.menu({
                 items: [$l10n("CHOOSE_IMAGE"), $l10n("CLEAR_IMAGE")],
                 handler: (title, idx) => {
                     switch (idx) {
                         case 0:
-                            this.settingComponent.view.start()
+                            animate.actionStart()
                             $photo.pick({
                                 format: "data",
                                 handler: resp => {
                                     if (!resp.status) {
                                         if (resp.error.description !== "canceled") $ui.toast($l10n("ERROR"))
-                                        else this.settingComponent.view.cancel()
+                                        else animate.actionCancel()
                                     }
                                     if (!resp.data) return
                                     // 清除旧图片
@@ -63,19 +63,19 @@ class MyDaysSetting extends Setting {
                                         data: image,
                                         path: `${this.path}/${fileName}`
                                     })
-                                    this.settingComponent.view.done()
+                                    animate.actionDone()
                                 }
                             })
                             break
                         case 1:
                             this.clearBackgroundImage()
-                            this.settingComponent.view.done()
+                            animate.actionDone()
                             break
                     }
                 },
                 finished: (cancelled) => {
                     if (cancelled)
-                        this.settingComponent.view.touchHighlightEnd()
+                        animate.touchHighlightEnd()
                 }
             })
         }

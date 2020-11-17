@@ -9,7 +9,7 @@
                 "title": "PREVIEW",
                 "type": "script",
                 "key": "preview",
-                "value": "this.controller.preview()"
+                "value": "this.controller.preview"
             }
         ]
     },
@@ -33,7 +33,7 @@
                 "title": "ALBUM",
                 "type": "script",
                 "key": "manager",
-                "value": "this.controller.album()"
+                "value": "this.controller.album"
             }
         ]
     },
@@ -99,7 +99,7 @@
                 "title": "CLEAR_CACHE",
                 "type": "script",
                 "key": "clearCache",
-                "value": "this.controller.clearCache()"
+                "value": "this.controller.clearCache"
             },
             {
                 "icon": [
@@ -109,7 +109,7 @@
                 "title": "README",
                 "type": "script",
                 "key": "album",
-                "value": "this.controller.readme()"
+                "value": "this.controller.readme"
             }
         ]
     }

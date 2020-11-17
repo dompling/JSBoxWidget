@@ -56,27 +56,41 @@ class AppKernel extends Kernel {
      * 注入设置中的脚本类型方法
      */
     initSettingMethods() {
-        this.setting.readme = () => {
-            this.settingComponent.view.touchHighlightStart()
+        this.setting.readme = animate => {
+            animate.touchHighlightStart()
             let content = $file.read("/README.md").string
-            this.settingComponent.view.push([{
+            animate.push([{
                 type: "markdown",
                 props: { content: content },
                 layout: (make, view) => {
                     make.size.equalTo(view.super)
                 }
             }], $l10n("BACK"), [], () => {
-                this.settingComponent.view.touchHighlightEnd()
+                animate.touchHighlightEnd()
             })
         }
 
-        this.setting.tips = () => {
-            this.settingComponent.view.touchHighlight()
+        this.setting.tips = animate => {
+            animate.touchHighlight()
             $ui.alert("每个小组件中都有README文件，点击可以得到一些信息。")
         }
 
-        this.setting.backupToICloud = () => {
-            this.settingComponent.view.start()
+        this.setting.updateWidgetOptions = animate => {
+            animate.touchHighlightStart()
+            animate.actionStart()
+            let config = []
+            this.getWidgetList().forEach(widget => {
+                config.push({
+                    name: widget.title,
+                    value: widget.name
+                })
+            })
+            animate.actionDone()
+            animate.touchHighlightEnd()
+        }
+
+        this.setting.backupToICloud = animate => {
+            animate.actionStart()
             const backupAction = async () => {
                 // 保证目录存在
                 if (!$file.exists(this.backupPath)) $file.mkdir(this.backupPath)
@@ -102,14 +116,14 @@ class AppKernel extends Kernel {
                             //删除压缩文件
                             $file.delete(this.backupPath)
                             if (success) {
-                                this.settingComponent.view.done()
+                                animate.actionDone()
                             } else {
-                                this.settingComponent.view.cancel()
+                                animate.actionCancel()
                             }
                         }
                     })
                 } catch (error) {
-                    this.settingComponent.view.cancel()
+                    animate.actionCancel()
                     console.log(error)
                 }
             }
@@ -125,14 +139,14 @@ class AppKernel extends Kernel {
                     },
                     {
                         title: $l10n("CANCEL"),
-                        handler: () => { this.settingComponent.view.cancel() }
+                        handler: () => { animate.actionCancel() }
                     }
                 ]
             })
         }
 
-        this.setting.recoverFromICloud = () => {
-            this.settingComponent.view.start()
+        this.setting.recoverFromICloud = animate => {
+            animate.actionStart()
             $drive.open({
                 handler: data => {
                     // 保证目录存在
@@ -180,14 +194,14 @@ class AppKernel extends Kernel {
                                             dst: this.widgetAssetsPath
                                         })
                                         $file.delete(this.backupPath)
-                                        this.settingComponent.view.done()
+                                        animate.actionDone()
                                     } catch (error) {
-                                        this.settingComponent.view.cancel()
+                                        animate.actionCancel()
                                         console.log(error)
                                     }
                                 }
                             } else {
-                                this.settingComponent.view.cancel()
+                                animate.actionCancel()
                             }
                         }
                     })
