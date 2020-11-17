@@ -102,7 +102,7 @@ class Schedule {
 
     async getListView() {
         // 获取数据
-        let list = await this.getSchedule()
+        const list = await this.getSchedule()
         if (list.length === 0) return null
         let itemLength = 0, dateCollect = {}
         const isReminder = item => item.completed !== undefined
