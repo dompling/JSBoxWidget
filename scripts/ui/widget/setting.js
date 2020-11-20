@@ -22,7 +22,7 @@ class Setting {
         // 检查目录是否存在，不存在则创建
         if (!$file.exists(rootPath)) { $file.mkdir(rootPath) }
         if (!$file.exists(assetsPath)) { $file.mkdir(assetsPath) }
-        const settintPath = `${rootPath}/setting.json`,
+        const structPath = `${rootPath}/setting.json`,
             savePath = `${assetsPath}/setting.json`
         // 判断当前环境
         if (this.kernel.inWidgetEnv) {
@@ -33,7 +33,7 @@ class Setting {
                 if ($file.exists(savePath)) {
                     user = JSON.parse($file.read(savePath).string)
                 }
-                for (let section of JSON.parse($file.read(settintPath).string)) {
+                for (let section of JSON.parse($file.read(structPath).string)) {
                     for (let item of section.items) {
                         cache[item.key] = item.key in user ? user[item.key] : item.value
                     }
@@ -42,8 +42,12 @@ class Setting {
             }
             this.setting = { get: key => cache[key] }
         } else {
-            this.settingComponent = this.kernel._registerComponent("Setting", `${this.widget}Setting`)
-            this.setting = this.settingComponent.controller.init(settintPath, savePath)
+            this.settingComponent = this.kernel._registerComponent("Setting", {
+                name: `${this.widget}Setting`,
+                savePath: savePath,
+                structPath: structPath
+            })
+            this.setting = this.settingComponent.controller
             // 每次从主程序启动都更新设置项缓存
             $cache.set(`setting-${this.widget}`, this.setting.setting)
             this.setting.isSecondaryPage(true, () => { $ui.pop() })
