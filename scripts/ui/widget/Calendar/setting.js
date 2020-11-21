@@ -77,6 +77,7 @@ class CalendarSetting extends Setting {
                 ]
             })
         }
+        
         /**
          * 用于设置页面手动获取节假日信息
          */

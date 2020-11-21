@@ -4,16 +4,6 @@
         "items": [
             {
                 "icon": [
-                    "tag.fill",
-                    "#A569BD"
-                ],
-                "title": "TIPS",
-                "type": "script",
-                "key": "tips",
-                "value": "this.controller.tips"
-            },
-            {
-                "icon": [
                     "clock.fill"
                 ],
                 "title": "PRINT_TIME_CONSUMING",
