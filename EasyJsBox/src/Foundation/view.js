@@ -123,35 +123,44 @@ class BaseView {
                                 }
                             }
                         },
-                        { // 返回按钮
-                            type: "button",
-                            props: {
-                                bgcolor: $color("clear"),
-                                symbol: "chevron.left",
-                                tintColor: this.linkColor,
-                                title: ` ${parent}`,
-                                titleColor: this.linkColor,
-                                font: $font("bold", 16)
-                            },
-                            layout: (make, view) => {
-                                make.left.inset(10)
-                                make.centerY.equalTo(view.super)
-                            },
-                            events: {
-                                tapped: () => { $ui.pop() }
-                            }
-                        },
                         {
-                            type: "label",
-                            props: {
-                                text: title,
-                                font: $font("bold", 17)
-                            },
+                            type: "view",
                             layout: (make, view) => {
-                                make.center.equalTo(view.super)
-                            }
-                        }
-                    ].concat(navButtons)
+                                make.top.equalTo(view.super.safeAreaTop)
+                                make.bottom.width.equalTo(view.super)
+                            },
+                            views: [
+                                { // 返回按钮
+                                    type: "button",
+                                    props: {
+                                        bgcolor: $color("clear"),
+                                        symbol: "chevron.left",
+                                        tintColor: this.linkColor,
+                                        title: ` ${parent}`,
+                                        titleColor: this.linkColor,
+                                        font: $font("bold", 16)
+                                    },
+                                    layout: (make, view) => {
+                                        make.left.inset(10)
+                                        make.centerY.equalTo(view.super)
+                                    },
+                                    events: {
+                                        tapped: () => { $ui.pop() }
+                                    }
+                                },
+                                {
+                                    type: "label",
+                                    props: {
+                                        text: title,
+                                        font: $font("bold", 17)
+                                    },
+                                    layout: (make, view) => {
+                                        make.center.equalTo(view.super)
+                                    }
+                                }
+                            ].concat(navButtons)
+                        },
+                    ]
                 }
             ]
         })
