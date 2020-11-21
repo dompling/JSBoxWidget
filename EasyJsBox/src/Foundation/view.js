@@ -88,7 +88,7 @@ class BaseView {
                     type: "view",
                     views: view,
                     layout: hasTopOffset ? (make, view) => {
-                        make.top.inset(navTop)
+                        make.top.equalTo(view.super.safeAreaTop).offset(navTop)
                         make.bottom.width.equalTo(view.super)
                     } : $layout.fill
                 },
