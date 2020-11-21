@@ -13,7 +13,6 @@ class PictureWidget extends Widget {
         // 缓存
         this.data = $cache.get("switch.data")
         if (!this.data) { // 首次写入缓存
-
             this.data = {
                 date: new Date().getTime(),
                 index: this.imageSwitchMethod === 0 ? this.randomNum(0, this.pictures.length - 1) : 0
