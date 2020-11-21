@@ -653,6 +653,7 @@ class View extends BaseView {
     }
 
     createMenu(key, icon, title, items, events, withTitle) {
+        console.log(items)
         let id = `setting-menu-${this.dataCenter.get("name")}-${key}`
         return {
             type: "view",
@@ -1003,7 +1004,7 @@ class View extends BaseView {
                             }
                          */
                         if (typeof item.items === "string") {
-                            item.items = eval(`(()=>{return ${item.items}})()`)
+                            item.items = eval(`(()=>{return ${item.items}()})()`)
                         }
                         row = this.createMenu(item.key, item.icon, $l10n(item.title), item.items, item.events, item.withTitle)
                         break
