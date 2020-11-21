@@ -72,14 +72,18 @@ class AppKernel extends Kernel {
         this.setting.readme = animate => {
             animate.touchHighlightStart()
             let content = $file.read("/README.md").string
-            animate.push([{
-                type: "markdown",
-                props: { content: content },
-                layout: (make, view) => {
-                    make.size.equalTo(view.super)
+            this.UIKit.push({
+                view: [{
+                    type: "markdown",
+                    props: { content: content },
+                    layout: (make, view) => {
+                        make.size.equalTo(view.super)
+                    }
+                }],
+                title: $l10n("README"),
+                disappeared: () => {
+                    animate.touchHighlightEnd()
                 }
-            }], $l10n("BACK"), [], () => {
-                animate.touchHighlightEnd()
             })
         }
 

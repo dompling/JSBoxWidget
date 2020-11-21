@@ -58,7 +58,11 @@ class Setting {
     }
 
     push() {
-        this.kernel.UIKit.push(this.setting.getView())
+        this.kernel.UIKit.push({
+            view: this.setting.getView(),
+            title: this.widget,
+            hasTopOffset: false
+        })
     }
 
     set(key, value) {
@@ -76,14 +80,18 @@ class Setting {
         this.setting.readme = animate => {
             animate.touchHighlightStart()
             let content = $file.read(`/scripts/ui/widget/${this.widget}/README.md`).string
-            animate.push([{
-                type: "markdown",
-                props: { content: content },
-                layout: (make, view) => {
-                    make.size.equalTo(view.super)
+            this.kernel.UIKit.push({
+                view: [{
+                    type: "markdown",
+                    props: { content: content },
+                    layout: (make, view) => {
+                        make.size.equalTo(view.super)
+                    }
+                }],
+                title: $l10n("README"),
+                disappeared: () => {
+                    animate.touchHighlightEnd()
                 }
-            }], $l10n("BACK"), [], () => {
-                animate.touchHighlightEnd()
             })
         }
 
