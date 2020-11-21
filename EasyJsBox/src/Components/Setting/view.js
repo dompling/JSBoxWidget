@@ -951,7 +951,7 @@ class View extends BaseView {
                                 "title": "README",
                                 "type": "script",
                                 "key": "calendar",
-                                "value": "this.controller.readme()"
+                                "value": "this.controller.readme"
                             }
                          */
                         row = this.createScript(item.key, item.icon, $l10n(item.title), value)
@@ -999,7 +999,7 @@ class View extends BaseView {
                                 "title": "RIGHT",
                                 "type": "menu",
                                 "key": "right",
-                                "items": "this.controller.getMenu()",
+                                "items": "this.controller.getMenu",
                                 "value": 0
                             }
                          */
