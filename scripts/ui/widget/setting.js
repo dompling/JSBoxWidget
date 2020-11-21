@@ -58,13 +58,7 @@ class Setting {
     }
 
     push() {
-        $ui.push({
-            props: {
-                navBarHidden: true,
-                statusBarStyle: 0
-            },
-            views: this.settingComponent.view.getViews()
-        })
+        this.kernel.UIKit.push(this.setting.getView())
     }
 
     set(key, value) {

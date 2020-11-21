@@ -14,7 +14,7 @@ class Factory extends BaseView {
     }
 
     setting() {
-        return this.kernel.page.view.creator(this.kernel.getComponent("Setting").view.getViews(), 1, false)
+        return this.kernel.page.view.creator(this.kernel.setting.getView(), 1, false)
     }
 
     /**
