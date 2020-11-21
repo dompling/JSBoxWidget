@@ -6,6 +6,12 @@ class Album {
         this.imageMaxSize = 50 // kb
         this.mode = 0 // 0: 正常模式  1: 多选模式
         this.selected = {}
+        if (!$file.exists(this.albumPath)) {
+            $file.mkdir(this.albumPath)
+        }
+        if (!$file.exists(`${this.albumPath}/archive`)) {
+            $file.mkdir(`${this.albumPath}/archive`)
+        }
     }
 
     /**
@@ -125,12 +131,6 @@ class Album {
                     items: [$l10n("SYSTEM_ALBUM"), "iCloud"],
                     handler: (title, idx) => {
                         const saveImageAction = data => {
-                            if (!$file.exists(this.albumPath)) {
-                                $file.mkdir(this.albumPath)
-                            }
-                            if (!$file.exists(`${this.albumPath}/archive`)) {
-                                $file.mkdir(`${this.albumPath}/archive`)
-                            }
                             let fileName = new Date().getTime() + data.fileName.slice(data.fileName.lastIndexOf("."))
                             $file.write({
                                 data: data,
