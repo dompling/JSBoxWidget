@@ -255,7 +255,13 @@ class Schedule {
         const listView = await this.getListView()
         if (null === listView) return {
             type: "text",
-            props: { text: $l10n("NO_CALENDAR&REMINDER") }
+            props: Object.assign(
+                { text: $l10n("NO_CALENDAR&REMINDER") },
+                family !== this.setting.family.small ? {
+                    link: this.urlScheme
+                } : {
+                        widgetURL: this.urlScheme
+                    })
         }
         return {
             type: "vstack",
