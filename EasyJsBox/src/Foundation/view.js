@@ -56,18 +56,22 @@ class BaseView {
 
     /**
      * 重新设计$ui.push()
-     * @param {Array} views 视图
-     * @param {String} title 标题
-     * @param {String} parentTitle 上级目录名称，显示在返回按钮旁边
-     * @param {Array} navButtons 右侧按钮，需要自己调整位置
-     * @param {CallableFunction} disappeared 页面消失时触犯函数
+     * @param {Object} args 参数
+     * {
+            view: [],
+            title: "",
+            parent: "",
+            navButtons: [],
+            hasTopOffset: true,
+            disappeared: () => { },
+        }
      */
     push(args) {
         const navTop = 45,
             view = args.view,
             title = args.title !== undefined ? args.title : "",
             parent = args.parent !== undefined ? args.parent : $l10n("BACK"),
-            navButtons = args.navButtons !== undefined ? args.navButtons : [],
+            navButtons = args.navButtons !== undefined ? args.navButtons : [{}, {}],
             hasTopOffset = args.hasTopOffset !== undefined ? args.hasTopOffset : true,
             disappeared = args.disappeared !== undefined ? args.disappeared : undefined
         $ui.push({
@@ -99,12 +103,12 @@ class BaseView {
                         make.bottom.equalTo(view.super.safeAreaTop).offset(navTop)
                     },
                     views: [
-                        {
+                        { // blur
                             type: "blur",
                             props: { style: this.blurStyle },
                             layout: $layout.fill
                         },
-                        {
+                        { // canvas
                             type: "canvas",
                             layout: (make, view) => {
                                 make.top.equalTo(view.prev.bottom)
@@ -123,7 +127,7 @@ class BaseView {
                                 }
                             }
                         },
-                        {
+                        { // view
                             type: "view",
                             layout: (make, view) => {
                                 make.top.equalTo(view.super.safeAreaTop)
@@ -175,8 +179,9 @@ class BaseView {
      *     调用 done() 表明您的操作已经全部完成，默认操作成功完成，播放一个按钮变成对号的动画
      *                 若第一个参数传出false则表示运行出错
      *                 第二个参数为错误原因($ui.toast(message))
+     *      调用 cancel() 表示取消操作
      *     示例：
-     *      (start, done) => {
+     *      (start, done, cancel) => {
      *          start()
      *          const upload = (data) => { return false }
      *          if(upload(data)) { done() }
@@ -184,7 +189,7 @@ class BaseView {
      *      }
      */
     navButton(id, symbol, tapped, hidden) {
-        let actionStart = () => {
+        const actionStart = () => {
             // 隐藏button，显示spinner
             let button = $(id)
             button.alpha = 0
@@ -192,7 +197,7 @@ class BaseView {
             $("spinner-" + id).alpha = 1
         }
 
-        let actionDone = (status = true, message = $l10n("ERROR")) => {
+        const actionDone = (status = true, message = $l10n("ERROR")) => {
             $("spinner-" + id).alpha = 0
             let button = $(id)
             button.hidden = false
@@ -233,7 +238,7 @@ class BaseView {
             })
         }
 
-        let actionCancel = () => {
+        const actionCancel = () => {
             $("spinner-" + id).alpha = 0
             let button = $(id)
             button.alpha = 1
@@ -258,9 +263,7 @@ class BaseView {
                             tapped(actionStart, actionDone, actionCancel)
                         }
                     },
-                    layout: (make, view) => {
-                        make.size.equalTo(view.super)
-                    }
+                    layout: $layout.fill
                 },
                 {
                     type: "spinner",
@@ -269,14 +272,12 @@ class BaseView {
                         loading: true,
                         alpha: 0
                     },
-                    layout: (make, view) => {
-                        make.size.equalTo(view.prev)
-                    }
+                    layout: $layout.fill
                 }
             ],
             layout: (make, view) => {
-                make.size.equalTo(20)
-                if (view.prev) {
+                make.height.equalTo(view.super)
+                if (view.prev && view.prev.id !== "label") {
                     make.right.equalTo(view.prev.left).offset(-20)
                 } else {
                     make.right.inset(20)
