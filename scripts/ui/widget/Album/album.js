@@ -126,7 +126,7 @@ class Album {
 
     getAlbumButtons() {
         return [
-            this.kernel.page.view.navButton("album-add-image", "plus", (start, done, cancel) => { // 添加新图片
+            this.kernel.UIKit.navButton("album-add-image", "plus", (start, done, cancel) => { // 添加新图片
                 $ui.menu({
                     items: [$l10n("SYSTEM_ALBUM"), "iCloud"],
                     handler: (title, idx) => {
@@ -248,7 +248,7 @@ class Album {
         ]
     }
 
-    getAlbumViews() {
+    getAlbumView() {
         let pictures = this.getImages()
         let data = []
         if (pictures.length > 0) {

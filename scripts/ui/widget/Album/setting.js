@@ -11,10 +11,17 @@ class PictureSetting extends Setting {
     initSettingMethods() {
         this.setting.album = animate => {
             animate.touchHighlightStart()
-            let views = this.album.getAlbumViews(),
+            let view = this.album.getAlbumView(),
                 buttons = this.album.getAlbumButtons()
-            this.kernel.page.view.push(views, $l10n("BACK"), buttons, () => {
-                animate.touchHighlightEnd()
+            this.kernel.UIKit.push({
+                view: view,
+                title: $l10n("ALBUM"),
+                parent: this.widget,
+                navButtons: buttons,
+                hasTopOffset: true,
+                disappeared: () => {
+                    animate.touchHighlightEnd()
+                },
             })
         }
 
