@@ -71,7 +71,7 @@ class AppKernel extends Kernel {
     initSettingMethods() {
         this.setting.readme = animate => {
             animate.touchHighlightStart()
-            let content = $file.read("/README.md").string
+            const content = $file.read("/README.md").string
             this.UIKit.push({
                 view: [{
                     type: "markdown",
