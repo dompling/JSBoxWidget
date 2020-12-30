@@ -111,27 +111,6 @@ class HomeUI {
                     },
                     actions: [
                         {
-                            title: $l10n("SELECT"),
-                            color: $color("#00CC00"),
-                            handler: (sender, indexPath) => {
-                                let widget = sender.object(indexPath).name
-                                $ui.alert({
-                                    title: $l10n("ALERT_INFO"),
-                                    message: $l10n("SELECT_AND_COPY_TO_APPLY") + `\n"${widget}"`,
-                                    actions: [
-                                        {
-                                            title: $l10n("COPY"),
-                                            handler: () => {
-                                                $clipboard.text = widget
-                                                $ui.success($l10n("SUCCESS"))
-                                            }
-                                        },
-                                        { title: $l10n("CANCEL") }
-                                    ]
-                                })
-                            }
-                        },
-                        {
                             title: $l10n("COPY"),
                             color: $color("orange"),
                             handler: (sender, indexPath) => {
