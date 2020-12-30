@@ -2,14 +2,14 @@
     "info": {
         "name": "WAIO",
         "url": "https://github.com/ipuppet/WAIO",
-        "version": "1.2.4",
+        "version": "1.2.5",
         "author": "ipuppet",
         "website": "https://blog.ipuppet.cn",
         "types": 15
     },
     "settings": {
         "theme": "auto",
-        "minSDKVer": "2.12.0",
+        "minSDKVer": "2.13.0",
         "minOSVer": "14.0.0",
         "idleTimerDisabled": false,
         "autoKeyboardEnabled": true,
