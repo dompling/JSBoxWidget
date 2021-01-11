@@ -13,6 +13,15 @@
             },
             {
                 "icon": [
+                    "photo"
+                ],
+                "title": "BACKGROUND_IMAGE",
+                "type": "script",
+                "key": "backgroundImage",
+                "value": "this.controller.backgroundImage"
+            },
+            {
+                "icon": [
                     "wand.and.rays",
                     "orange"
                 ],

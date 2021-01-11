@@ -18,6 +18,7 @@ class Calendar {
         this.titleLunar = this.setting.get("title.lunar")// 标题是否显示农历
         this.titleLunarYear = this.setting.get("title.lunarYear")// 标题是否显示农历年
         this.titleAddSpacer = this.setting.get("title.addSpacer")// 是否在标题和日历间增加spacer
+        this.backgroundImage = this.setting.getBackgroundImage()// 背景图片
     }
 
     localizedWeek(index) {
@@ -426,7 +427,18 @@ class Calendar {
                 link: this.setting.settingUrlScheme
             } : {
                     widgetURL: this.setting.settingUrlScheme
-                }),
+                },
+                $file.exists(this.backgroundImage) ? {
+                    background: {
+                        type: "image",
+                        props: {
+                            image: $image(this.backgroundImage),
+                            resizable: true,
+                            scaledToFill: true
+                        }
+                    }
+                } : {}
+            ),
             views: this.titleAddSpacer ? [
                 { type: "spacer" }, titleBar, { type: "spacer" }, calendar, { type: "spacer" }
             ] : [
@@ -476,7 +488,18 @@ class Calendar {
                 link: this.setting.settingUrlScheme
             } : {
                     widgetURL: this.setting.settingUrlScheme
-                }),
+                },
+                $file.exists(this.backgroundImage) ? {
+                    background: {
+                        type: "image",
+                        props: {
+                            image: $image(this.backgroundImage),
+                            resizable: true,
+                            scaledToFill: true
+                        }
+                    }
+                } : {}
+            ),
             views: [{ type: "spacer" }, titleBar, { type: "spacer" }, calendar, { type: "spacer" }]
         }
     }
