@@ -1,0 +1,78 @@
+[
+  {
+    "title": "基础",
+    "items": [
+      {
+        "icon": ["rectangle.3.offgrid.fill"],
+        "title": "预览",
+        "type": "script",
+        "key": "preview",
+        "value": "this.controller.preview"
+      }
+    ]
+  },
+  {
+    "title": "字体颜色",
+    "items": [
+      {
+        "icon": ["highlighter", "#40a9ff"],
+        "title": "白天字体",
+        "type": "color",
+        "key": "lightFont",
+        "value": "#000"
+      },
+      {
+        "icon": ["photo", "#595959"],
+        "title": "夜间字体",
+        "type": "color",
+        "key": "nightFont",
+        "value": "#fff"
+      }
+    ]
+  },
+  {
+    "title": "组件背景",
+    "items": [
+      {
+        "icon": ["lightbulb", "#40a9ff"],
+        "title": "白天背景",
+        "type": "script",
+        "key": "lightBg",
+        "value": "this.controller.lightBg"
+      },
+      {
+        "icon": ["lightbulb.fill", "#595959"],
+        "title": "夜间背景",
+        "type": "script",
+        "key": "nightBg",
+        "value": "this.controller.nightBg"
+      },
+      {
+        "icon": ["eyedropper", "#87e8de"],
+        "title": "背景颜色",
+        "type": "color",
+        "key": "bgColor",
+        "value": "#000"
+      }
+    ]
+  },
+  {
+    "title": "关于",
+    "items": [
+      {
+        "icon": ["trash", "#CC3333"],
+        "title": "清空缓存",
+        "type": "script",
+        "key": "clearCache",
+        "value": "this.controller.clearCache"
+      },
+      {
+        "icon": ["book.fill", "#A569BD"],
+        "title": "组件信息",
+        "type": "script",
+        "key": "album",
+        "value": "this.controller.readme"
+      }
+    ]
+  }
+]

@@ -47,102 +47,11 @@
 "AUTHOR" = "作者";
 "AT_BOTTOM" = "已经到底啦~";
 
-"CALENDAR" = "日历";
-
-"_SUNDAY" = "周日";
-"_MONDAY" = "周一";
-
-"SUNDAY" = "日";
-"MONDAY" = "一";
-"TUESDAY" = "二";
-"WEDNESDAY" = "三";
-"THURSDAY" = "四";
-"FRIDAY" = "五";
-"SATURDAY" = "六";
-
-"MONTH" = "月";
-"BLANK_MONTH" = "月";
-"JANUARY_C" = "一";
-"FEBRUARY_C" = "二";
-"MARCH_C" = "三";
-"APRIL_C" = "四";
-"MAY_C" = "五";
-"JUNE_C" = "六";
-"JULY_C" = "七";
-"AUGUST_C" = "八";
-"SEPTEMBER_C" = "九";
-"OCTOBER_C" = "十";
-"NOVEMBER_C" = "十一";
-"DECEMBER_C" = "十二";
-
-"JANUARY_N" = " 1";
-"FEBRUARY_N" = " 2";
-"MARCH_N" = " 3";
-"APRIL_N" = " 4";
-"MAY_N" = " 5";
-"JUNE_N" = " 6";
-"JULY_N" = " 7";
-"AUGUST_N" = " 8";
-"SEPTEMBER_N" = " 9";
-"OCTOBER_N" = "10";
-"NOVEMBER_N" = "11";
-"DECEMBER_N" = "12";
-
-"YEAR" = "年";
-
-"COLOR_TONE" = "主色调";
-"FIRST_DAY_OF_WEEK" = "每周第一天";
-"ONLY_CURRENT_MONTH" = "仅显示本月";
-
-"HOLIDAT_COLOR" = "节假日颜色";
-"HOLIDAT_REST_NO_COLOR" = "调休颜色";
-"HOLIDAY" = "节假日";
-"CLEAR_HOLIDAY_DATA" = "清除节假日数据";
-"GET_HOLIDAY" = "获取节假日";
-"NO_NEED_TO_OBTAIN_MANUALLY" = "通常情况下不需要手动获取";
-"HOLIDAY_API_ERROR" = "节假日网络接口返回错误";
-"NEED_HOLIDAY_DATA" = "需要节假日数据，请去编辑页面获取。";
-"HOLIDAY_ALREADY_EXISTS" = "节假日数据已经存在，是否覆盖数据？";
-
-"TITLE" = "标题";
-"SHOW_YEAR" = "显示年";
-"SHOW_FULL_YEAR" = "显示完整年";
-"SHOW_LUNAR" = "显示农历";
-"SHOW_LUNAR_YEAR" = "显示农历年";
-"ADD_SPACER" = "增加间距";
-"MONTH_DISPLAY_MODE" = "月份显示模式";
-"CHINESE_CHARACTERS" = "汉字";
-"NUMBER" = "数字";
 
 "FAMILY_SMALL" = "小尺寸Widget";
 "SHOW_MODE" = "显示模式";
 
-"ALBUM" = "相册";
-"ALBUM_COLUMN" = "相册图片列数";
-"URL_SCHEME" = "URL scheme";
-"USE_COMPRESSED_IMAGE" = "使用压缩后的图片";
-"SWITCH_METHOD" = "切换方式";
-"RANDOM" = "随机";
-"SEQUENCE" = "顺序";
-"SWITCH_INTERVAL" = "切换间隔(min)";
-"SYSTEM_ALBUM" = "系统相册";
-"SAVE_TO_SYSTEM_ALBUM" = "保存到系统相册";
-"NO_IMAGE" = "无该图片";
-"CLEAR_CACHE" = "清除缓存";
-"NO_IMAGES" = "无图片";
-
-"TIME_SPAN" = "时间跨度(天)";
-"REMINDER_COLOR" = "提醒事项颜色";
-"DATE" = "日";
-"NO_DATE" = "无日期";
-"TODAY" = "今天";
-"TOMORROW" = "明天";
-"YESTERDAY" = "昨天";
-"ALL_DAY" = "全天";
-"NO_CALENDAR&REMINDER" = "最近无安排";
-"ITEM_LENGTH" = "显示条目数量";
-"CLICK_EVENT" = "点击事件";
-"REMINDER" = "提醒事项";
+"JDDou" = "京东豆";
 
 "JOIN" = "拼接";
 "JOIN_MODE" = "拼接模式";
@@ -155,17 +64,6 @@
 "LEFT" = "左边";
 "RIGHT" = "右边";
 
-"MYDAYS" = "倒数日";
-"SHOW_MINUS" = "显示负号";
-"OVERDUE_COLOR" = "过期日期颜色";
-"DATE_FONT_SIZE" = "日期字体大小";
-"DATE_COLOR" = "日期颜色";
-"INFO_COLOR" = "信息颜色";
-"BACKGROUND_COLOR" = "背景色";
-"BACKGROUND_IMAGE" = "背景图片";
+"APP_NAME" = "JsBoxTest";
 "CHOOSE_IMAGE" = "选择图片";
-"CLEAR_IMAGE" = "清除图片";
-"DARK_MODE" = "深色模式";
-"LIGHT_MODE" = "浅色模式";
-"DESCRIBE" = "描述";
-"CHOOSE_DATE" = "选择日期";
+"CLEAR_IMAGE" = "清空图片";
