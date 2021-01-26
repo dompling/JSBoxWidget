@@ -1,3 +1,3 @@
-const app = require("./scripts/app")
+const app = require('./scripts/app');
 
-app.run()
+await app.run();

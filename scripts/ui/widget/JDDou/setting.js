@@ -1,13 +1,80 @@
 const NAME = 'JDDou';
 const Setting = require('../setting');
-const Actions = require('./Actions');
 
 class CurrentSetting extends Setting {
   constructor(kernel) {
     super(kernel, NAME);
-    this.actions = new Actions(this.kernel, this);
     this.path = `${this.kernel.widgetAssetsPath}/${NAME}`;
+    if (!$file.exists(this.path)) $file.mkdir(this.path);
+    this.prefix = $cache.get('BOXJS');
   }
+
+  clearBackgroundImage() {
+    $file.list(this.path).forEach((file) => {
+      if (file.slice(0, file.indexOf('.')) === 'background') {
+        $file.delete(`${this.path}/${file}`);
+      }
+    });
+  }
+
+  boxCache = (response) => {
+    const cookies = [];
+    const data = response.data.datas;
+    if (data.CookiesJD && data.CookiesJD.length > 0) {
+      try {
+        cookies.push(...JSON.parse(data.CookiesJD));
+      } catch (e) {}
+    }
+    if (data.CookieJD) {
+      cookies.push({
+        cookie: data.CookieJD,
+        userName: data.CookieJD.match(/pt_pin=(.+?);/)[1],
+      });
+    }
+    if (data.CookieJD2) {
+      cookies.push({
+        cookie: data.CookieJD2,
+        userName: data.CookieJD2.match(/pt_pin=(.+?);/)[1],
+      });
+    }
+    if (cookies.length > 0) {
+      $ui.menu({
+        items: cookies.map((item) => item.userName),
+        handler: (userName, idx) => {
+          this.set('cookie', cookies[idx]);
+          $ui.success(`${userName}账号信息设置成功`);
+        },
+      });
+    } else {
+      $ui.toast('读取失败');
+    }
+  };
+
+  getBackgroundImage() {
+    let path = null;
+    $file.list(this.path).forEach((file) => {
+      if (file.slice(0, file.indexOf('.')) === 'background') {
+        if (path === null) {
+          path = `${this.path}/${file}`;
+        } else if (typeof path === 'string') {
+          path = [path];
+          path.push(file);
+        } else {
+          path.push(file);
+        }
+        return;
+      }
+    });
+    return path;
+  }
+
+  getBoxJsData = () => {
+    $ui.toast('读取中...');
+    $http.get({
+      url: `http://${this.prefix}/query/boxdata`,
+      handler: this.boxCache,
+    });
+  };
 
   menu(key, animate) {
     animate.touchHighlightStart();
@@ -27,7 +94,7 @@ class CurrentSetting extends Setting {
                 }
                 if (!resp.data) return;
                 // 清除旧图片
-                this.clearBackgroundImage();
+                this.clearBackgroundImage(key);
                 let fileName =
                   'background' +
                   resp.data.fileName.slice(resp.data.fileName.lastIndexOf('.'));
@@ -37,7 +104,7 @@ class CurrentSetting extends Setting {
                 );
                 $file.write({
                   data: image,
-                  path: `${this.path}/${fileName}_${key}`,
+                  path: `${this.path}/${fileName}`,
                 });
                 animate.actionDone();
               },
@@ -56,11 +123,15 @@ class CurrentSetting extends Setting {
   }
 
   initSettingMethods() {
-    this.setting.lightBg = (animate) => {
-      this.menu('lightBg', animate);
+    this.setting.background = (animate) => {
+      this.menu('', animate);
     };
-    this.setting.nightBg = (animate) => {
-      this.menu('nightBg', animate);
+
+    this.setting.getBoxJsData = (animate) => {
+      animate.touchHighlight();
+      animate.actionStart();
+      this.getBoxJsData();
+      animate.actionDone();
     };
 
     this.setting.clearCache = (animate) => {
@@ -70,32 +141,9 @@ class CurrentSetting extends Setting {
       animate.actionDone();
     };
   }
-
-  getBackgroundImage(key) {
-    let path = null;
-    $file.list(this.path).forEach((file) => {
-      if (file.slice(0, file.indexOf('.')) === 'background') {
-        if (path === null) {
-          path = `${this.path}/${file}_${key}`;
-        } else if (typeof path === 'string') {
-          path = [path];
-          path.push(file);
-        } else {
-          path.push(file);
-        }
-        return;
-      }
-    });
-    return path;
-  }
-
-  clearBackgroundImage(key) {
-    $file.list(this.path).forEach((file) => {
-      if (file.slice(0, file.indexOf('.')) === 'background') {
-        $file.delete(`${this.path}/${file}_${key}`);
-      }
-    });
-  }
 }
 
-module.exports = CurrentSetting;
+module.exports = {
+  Setting: CurrentSetting,
+  NAME,
+};

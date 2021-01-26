@@ -55,6 +55,18 @@ class AppKernel extends Kernel {
     return s.join('');
   }
 
+  setBoxJsPrefix() {
+    $input.text({
+      type: $kbType.default,
+      text: $cache.get('BOXJS'),
+      placeholder: '请输入 boxjs 域名，默认 boxjs.net',
+      handler: function (text) {
+        $cache.set('BOXJS', text || 'boxjs.net');
+        $ui.success(`当前 BoxJS 域名为：${text}`);
+      },
+    });
+  }
+
   updateHomeScreenWidgetOptions() {
     let config = [];
     this.getWidgetList().forEach((widget) => {
@@ -101,6 +113,14 @@ class AppKernel extends Kernel {
       animate.touchHighlightStart();
       animate.actionStart();
       this.updateHomeScreenWidgetOptions();
+      animate.actionDone();
+      animate.touchHighlightEnd();
+    };
+
+    this.setting.setBoxJsPrefix = (animate) => {
+      animate.touchHighlightStart();
+      animate.actionStart();
+      this.setBoxJsPrefix();
       animate.actionDone();
       animate.touchHighlightEnd();
     };
@@ -283,13 +303,14 @@ class WidgetKernel extends Kernel {
 }
 
 module.exports = {
-  run: () => {
+  widgetAssetsPath,
+  run: async () => {
     if ($app.env === $env.widget) {
       const kernel = new WidgetKernel();
-      const widgetName = $widget.inputValue;
+      const widgetName = $widget.inputValue || 'JDDou';
       const widget = kernel.widgetInstance(widgetName);
       if (widget) {
-        widget.render();
+        await widget.render();
       } else {
         $widget.setTimeline({
           render: (ctx) => {
@@ -306,7 +327,7 @@ module.exports = {
     } else {
       const Factory = require('./ui/main/factory');
       const kernel = new AppKernel();
-      new Factory(kernel).render();
+      await new Factory(kernel).render();
       // 监听运行状态
       $app.listen({
         // 在应用启动之后调用

@@ -16,6 +16,8 @@ class Setting {
     };
   }
 
+  setting = {};
+
   init() {
     const rootPath = `${this.kernel.widgetRootPath}/${this.widget}`,
       assetsPath = `${this.kernel.widgetAssetsPath}/${this.widget}`;
@@ -30,21 +32,7 @@ class Setting {
       savePath = `${assetsPath}/setting.json`;
     // 判断当前环境
     if (this.kernel.inWidgetEnv) {
-      let cache = $cache.get(`setting-${this.widget}`);
-      if (!cache) {
-        cache = {};
-        let user = {}; // 用户的设置
-        if ($file.exists(savePath)) {
-          user = JSON.parse($file.read(savePath).string);
-        }
-        for (let section of JSON.parse($file.read(structPath).string)) {
-          for (let item of section.items) {
-            cache[item.key] = item.key in user ? user[item.key] : item.value;
-          }
-        }
-        $cache.set(`setting-${this.widget}`, cache);
-      }
-      this.setting = { get: (key) => cache[key] };
+      this.widgetCache(structPath, savePath);
     } else {
       this.settingComponent = this.kernel._registerComponent('Setting', {
         name: `${this.widget}Setting`,
@@ -60,6 +48,13 @@ class Setting {
       this.setting.setFooter({ type: 'view' });
       this.defaultSettingMethods();
       this.initSettingMethods();
+      let user = {}; // 用户的设置
+      if ($file.exists(savePath)) {
+        user = JSON.parse($file.read(savePath).string);
+      }
+      Object.keys(user).forEach((key) => {
+        this.set(key, user[key]);
+      });
     }
   }
 
@@ -81,6 +76,22 @@ class Setting {
   get(key) {
     return this.setting.get(key);
   }
+
+  widgetCache = (structPath, savePath) => {
+    let cache = $cache.get(`setting-${this.widget}`) || {};
+
+    let user = {}; // 用户的设置
+    if ($file.exists(savePath)) {
+      user = JSON.parse($file.read(savePath).string);
+    }
+    for (let section of JSON.parse($file.read(structPath).string)) {
+      for (let item of section.items) {
+        cache[item.key] = item.key in user ? user[item.key] : item.value;
+      }
+    }
+    if (!cache) $cache.set(`setting-${this.widget}`, cache);
+    this.setting = { get: (key) => cache[key] };
+  };
 
   defaultSettingMethods() {
     this.setting.readme = (animate) => {
