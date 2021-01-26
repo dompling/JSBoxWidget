@@ -138,6 +138,10 @@ class CurrentSetting extends Setting {
       animate.touchHighlight();
       animate.actionStart();
       $cache.remove('switch.data');
+      const assetsPath = `${this.kernel.widgetAssetsPath}/${this.widget}`;
+      const savePath = `${assetsPath}/setting.json`;
+      if ($file.exists(savePath)) $file.delete(savePath);
+      $cache.remove(`setting-${this.widget}`);
       animate.actionDone();
     };
   }
