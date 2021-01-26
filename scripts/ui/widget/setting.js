@@ -55,6 +55,7 @@ class Setting {
       Object.keys(user).forEach((key) => {
         this.set(key, user[key]);
       });
+      this.set('boxjs', $cache.get('BOXJS') || 'boxjs.net');
     }
   }
 

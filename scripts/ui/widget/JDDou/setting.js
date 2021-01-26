@@ -6,7 +6,7 @@ class CurrentSetting extends Setting {
     super(kernel, NAME);
     this.path = `${this.kernel.widgetAssetsPath}/${NAME}`;
     if (!$file.exists(this.path)) $file.mkdir(this.path);
-    this.prefix = $cache.get('BOXJS');
+    this.prefix = this.get('boxjs');
   }
 
   clearBackgroundImage() {

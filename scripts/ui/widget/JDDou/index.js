@@ -15,7 +15,6 @@ class Index extends Widget {
       $cache.set('switch.data', this.data);
     }
     this.actions = new Actions(this.kernel, this.setting);
-    console.log(this.setting.get('cookie'));
     this.service = new Service(this.setting.get('cookie'));
   }
 

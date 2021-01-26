@@ -58,7 +58,7 @@ class AppKernel extends Kernel {
   setBoxJsPrefix() {
     $input.text({
       type: $kbType.default,
-      text: $cache.get('BOXJS'),
+      text: $cache.get('BOXJS') || 'boxjs.net',
       placeholder: '请输入 boxjs 域名，默认 boxjs.net',
       handler: function (text) {
         $cache.set('BOXJS', text || 'boxjs.net');
