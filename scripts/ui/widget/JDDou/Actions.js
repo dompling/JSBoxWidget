@@ -9,7 +9,7 @@ const gbImg =
   'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-imgbed/3947a83b-7aa6-4a53-be34-8fed610ddb77.png';
 const headerColor = $color('#e4393c');
 const minimumScaleFactor = 0.5;
-// const border = { width: 1, color: $color('red') };
+const border = { width: 1, color: $color('red') };
 class Actions {
   constructor(setting, config, state) {
     this.setting = setting;
@@ -45,7 +45,7 @@ class Actions {
         },
         headerSize: {
           font1: 16,
-          font2: 14,
+          font2: 12,
         },
         logo: {
           width: 20,
@@ -66,12 +66,12 @@ class Actions {
       font2: 18,
     },
     headerSize: {
-      font1: 20,
-      font2: 15,
+      font1: 18,
+      font2: 14,
     },
     logo: {
-      width: 30,
-      height: 30,
+      width: 25,
+      height: 25,
     },
     labelSpacer: 10,
     footerSpacer: 20,
@@ -180,8 +180,9 @@ class Actions {
     return {
       type: 'vstack',
       props: {
+        // border,
         spacing: this.sizeConfig.labelSpacer,
-        alignment: $widget.verticalAlignment.center,
+        alignment: $widget.horizontalAlignment.center,
         // frame: { width: this.sizeConfig.jddouSize.width },
       },
       views: [
@@ -373,13 +374,13 @@ class Actions {
       type: 'vstack',
       props: {
         alignment: $widget.verticalAlignment.center,
-        spacing: 5,
+        spacing: 12,
       },
       views: [this.header(), this.body(), this.footer()],
     };
   };
 
-  containerProps = () => {
+  containerProps = () => { 
     const background = this.is_bg
       ? {
           type: 'image',
