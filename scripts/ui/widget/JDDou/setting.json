@@ -77,9 +77,16 @@
       },
       {
         "icon": ["eyedropper", "#87e8de"],
-        "title": "背景颜色",
+        "title": "白天背景色",
         "type": "color",
-        "key": "bgColor",
+        "key": "lightColor",
+        "value": "#fff"
+      },
+      {
+        "icon": ["eyedropper", "#595959"],
+        "title": "夜间背景色",
+        "type": "color",
+        "key": "nightColor",
         "value": "#000"
       }
     ]

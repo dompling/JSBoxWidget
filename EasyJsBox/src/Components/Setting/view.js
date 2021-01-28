@@ -550,6 +550,8 @@ class View extends BaseView {
               props: {
                 id: `setting-${this.dataCenter.get('name')}-color-${key}`,
                 bgcolor: $color(this.controller.get(key)),
+                borderWidth: 2,
+                borderColor: $color('#e8e8e8'),
                 circular: true,
               },
               events: {

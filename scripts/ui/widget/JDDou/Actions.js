@@ -9,7 +9,7 @@ const gbImg =
   'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-imgbed/3947a83b-7aa6-4a53-be34-8fed610ddb77.png';
 const headerColor = $color('#e4393c');
 const minimumScaleFactor = 0.5;
-const border = { width: 1, color: $color('red') };
+// const border = { width: 1, color: $color('red') };
 class Actions {
   constructor(setting, config, state) {
     this.setting = setting;
@@ -23,6 +23,10 @@ class Actions {
     this.opacity = setting.get('opacity');
     this.state = state;
     this.config = config;
+    this.bgColor = $color({
+      light: setting.get('lightColor'),
+      dark: setting.get('nightColor'),
+    });
   }
 
   config = {};
@@ -375,80 +379,104 @@ class Actions {
     };
   };
 
+  containerProps = () => {
+    const background = this.is_bg
+      ? {
+          type: 'image',
+          props: {
+            image: $image(this.backgroundImage),
+            resizable: true,
+            scaledToFill: true,
+          },
+        }
+      : {
+          type: 'color',
+          props: {
+            color: this.bgColor,
+          },
+        };
+
+    return {
+      frame: this.config.displaySize,
+      alignment: $widget.alignment.center,
+      background,
+    };
+  };
+
+  contentProps = (spacing = 20) => {
+    return {
+      spacing,
+      frame: this.config.displaySize,
+      alignment: $widget.horizontalAlignment.center,
+      ...(this.is_bg && {
+        background: {
+          type: 'color',
+          props: {
+            color: $color('#000'),
+            opacity: this.opacity,
+          },
+        },
+      }),
+    };
+  };
+
   small = () => {
     return {
       type: 'zstack',
-      props: {
-        frame: this.config.displaySize,
-        alignment: $widget.alignment.center,
-        ...(this.is_bg
-          ? {
-              background: {
-                type: 'image',
-                props: {
-                  image: $image(this.backgroundImage),
-                  resizable: true,
-                  scaledToFill: true,
-                },
-              },
-            }
-          : {}),
-      },
+      props: this.containerProps(),
       views: [
         {
-          type: 'hstack',
-          props: {
-            frame: this.config.displaySize,
-            alignment: $widget.horizontalAlignment.center,
-            ...(this.is_bg && {
-              background: {
-                type: 'color',
-                props: {
-                  color: $color('#000'),
-                  opacity: this.opacity,
-                },
-              },
-            }),
-          },
+          type: 'vstack',
+          props: this.contentProps(10),
           views: [
+            this.header(),
+            this.body(),
             {
-              type: 'vstack',
+              type: 'hstack',
               props: {
                 alignment: $widget.verticalAlignment.center,
-                spacing: 10,
+                spacing: 5,
               },
               views: [
-                this.header(),
-                this.body(),
                 {
-                  type: 'hstack',
+                  type: 'vstack',
                   props: {
-                    alignment: $widget.verticalAlignment.center,
+                    alignment: $widget.horizontalAlignment.center,
+                    spacing: this.sizeConfig.footerSpacer,
+                  },
+                  views: [
+                    this.iconText(
+                      jtImg,
+                      '#f95e4c',
+                      `${this.state.jt_and_gb.jintie}津贴`,
+                      true,
+                    ),
+                    this.iconText(
+                      gbImg,
+                      '#f95e4c',
+                      `${this.state.jt_and_gb.gangbeng}钢镚`,
+                      true,
+                    ),
+                  ],
+                },
+                {
+                  type: 'vstack',
+                  props: {
+                    alignment: $widget.horizontalAlignment.center,
                     spacing: 5,
                   },
                   views: [
+                    this.avatar(30),
                     {
-                      type: 'vstack',
+                      type: 'text',
                       props: {
-                        alignment: $widget.horizontalAlignment.center,
-                        spacing: this.sizeConfig.footerSpacer,
+                        text: this.state.userInfo.nickname,
+                        color: this.fontColor,
+                        lineLimit: 1,
+                        minimumScaleFactor,
+                        font: { size: 10 },
                       },
-                      views: [
-                        this.iconText(
-                          jtImg,
-                          '#f95e4c',
-                          `${this.state.jt_and_gb.jintie}津贴`,
-                          true,
-                        ),
-                        this.iconText(
-                          gbImg,
-                          '#f95e4c',
-                          `${this.state.jt_and_gb.gangbeng}钢镚`,
-                          true,
-                        ),
-                      ],
                     },
-                    this.avatar(40),
                   ],
                 },
               ],
@@ -462,40 +490,11 @@ class Actions {
   medium = () => {
     return {
       type: 'zstack',
-      props: {
-        alignment: $widget.alignment.center,
-        clipped: true,
-        frame: this.config.displaySize,
-        ...(this.is_bg
-          ? {
-              background: {
-                type: 'image',
-                props: {
-                  image: $image(this.backgroundImage),
-                  resizable: true,
-                  scaledToFill: true,
-                },
-              },
-            }
-          : {}),
-      },
+      props: this.containerProps(),
       views: [
         {
           type: 'hstack',
-          props: {
-            frame: this.config.displaySize,
-            spacing: 20,
-            alignment: $widget.horizontalAlignment.center,
-            ...(this.is_bg && {
-              background: {
-                type: 'color',
-                props: {
-                  color: $color('#000'),
-                  opacity: this.opacity,
-                },
-              },
-            }),
-          },
+          props: this.contentProps(),
           views: [this.left(), this.right()],
         },
       ],

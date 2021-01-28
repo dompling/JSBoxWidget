@@ -1,7 +1,7 @@
 class Service {
   constructor(cookie) {
     this.account = cookie || {};
-    this.timerKeys = this.getDay(1);
+    this.timerKeys = this.getDay(0);
   }
 
   account = {};
@@ -109,11 +109,13 @@ class Service {
       },
     };
     const response = await $http.post(options);
-    if (response.data.base.jdNum) {
-      this.set('beanCount', response.data.base.jdNum);
+    if (response.data) {
+      if (response.data.base.jdNum) {
+        this.set('beanCount', response.data.base.jdNum);
+      }
+      this.set('userInfo', response.data.base);
+      this.set('isPlusVip', response.data.isPlusVip);
     }
-    this.set('userInfo', response.data.base);
-    this.set('isPlusVip', response.data.isPlusVip);
     return response.data;
   }
 
@@ -158,10 +160,12 @@ class Service {
       },
     };
     const GBData = await $http.post(gb_opt);
-    this.set('jt_and_gb', {
-      jintie: JTData.data.resultData.data['balance'],
-      gangbeng: GBData.data.gbBalance,
-    });
+    if (JTData.data) {
+      this.set('jt_and_gb', {
+        jintie: JTData.data.resultData.data['balance'],
+        gangbeng: GBData.data.gbBalance,
+      });
+    }
   }
 }
 
