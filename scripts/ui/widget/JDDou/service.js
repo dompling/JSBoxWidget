@@ -4,14 +4,39 @@ class Service {
     this.timerKeys = this.getDay(1);
   }
 
-  incomeBean = 0;
-  expenseBean = 0;
-  beanCount = 0;
   account = {};
 
+  state = {
+    incomeBean: 0,
+    expenseBean: 0,
+    beanCount: 0,
+    userInfo: {
+      headImageUrl:
+        'https://img11.360buyimg.com/jdphoto/s120x120_jfs/t21160/90/706848746/2813/d1060df5/5b163ef9N4a3d7aa6.png',
+    },
+    isPlusVip: false,
+    jt_and_gb: {
+      jintie: 0,
+      gangbeng: 0,
+    },
+  };
+
+  set = (key, value) => {
+    this.state[key] = value;
+  };
+
+  get = (key) => {
+    return this.state[key];
+  };
+
   fetch = async () => {
-    await this.TotalBean();
-    await this.getAmountData();
+    try {
+      await this.TotalBean();
+      await this.getMainData();
+      await this.getAmountData();
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   async getAmountData() {
@@ -35,8 +60,10 @@ class Service {
             if (this.timerKeys.indexOf(dates[0]) > -1) {
               if (this.timerKeys[0] === dates[0]) {
                 const amount = Number(item.amount);
-                if (amount > 0) this.incomeBean += amount;
-                if (amount < 0) this.expenseBean += amount;
+                if (amount > 0)
+                  this.set('incomeBean', this.get('incomeBean') + amount);
+                if (amount < 0)
+                  this.set('expenseBean', this.get('expenseBean') + amount);
               }
             } else {
               i = 1;
@@ -82,7 +109,11 @@ class Service {
       },
     };
     const response = await $http.post(options);
-    if (response.data.base.jdNum) this.beanCount = response.data.base.jdNum;
+    if (response.data.base.jdNum) {
+      this.set('beanCount', response.data.base.jdNum);
+    }
+    this.set('userInfo', response.data.base);
+    this.set('isPlusVip', response.data.isPlusVip);
     return response.data;
   }
 
@@ -106,6 +137,31 @@ class Service {
     };
     const response = await $http.post(options);
     return response.data;
+  }
+
+  async getMainData() {
+    //津贴查询
+    const JTReq_opt = {
+      url: 'https://ms.jr.jd.com/gw/generic/uc/h5/m/mySubsidyBalance',
+      header: {
+        cookie: this.account.cookie,
+        Referer: 'https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&',
+      },
+    };
+    const JTData = await $http.post(JTReq_opt);
+    //钢镚查询
+    const gb_opt = {
+      url: 'https://coin.jd.com/m/gb/getBaseInfo.html',
+      header: {
+        cookie: this.account.cookie,
+        Referer: 'https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&',
+      },
+    };
+    const GBData = await $http.post(gb_opt);
+    this.set('jt_and_gb', {
+      jintie: JTData.data.resultData.data['balance'],
+      gangbeng: GBData.data.gbBalance,
+    });
   }
 }
 

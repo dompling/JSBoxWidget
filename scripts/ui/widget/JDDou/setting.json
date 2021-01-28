@@ -69,6 +69,13 @@
         "value": "this.controller.background"
       },
       {
+        "icon": ["photo.on.rectangle.angled"],
+        "title": "透明背景",
+        "type": "script",
+        "key": "shotBackground",
+        "value": "this.controller.getWidgetScreenShot"
+      },
+      {
         "icon": ["eyedropper", "#87e8de"],
         "title": "背景颜色",
         "type": "color",

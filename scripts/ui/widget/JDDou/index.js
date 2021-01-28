@@ -14,17 +14,29 @@ class Index extends Widget {
       this.data = { date: new Date().getTime() };
       $cache.set('switch.data', this.data);
     }
-    this.actions = new Actions(this.kernel, this.setting);
     this.service = new Service(this.setting.get('cookie'));
   }
 
+  state = {};
+
+  getActions = (config) => {
+    const render = new Actions(this.setting, config, this.state);
+    render.init();
+    return render;
+  };
+
+  view2x2(config) {
+    return this.getActions(config).small();
+  }
+
   view2x4(config) {
-    return this.actions.medium(config, this.service);
+    return this.getActions(config).medium();
   }
 
   async render() {
     const expireDate = new Date(this.data.date + this.switchInterval);
     await this.service.fetch();
+    this.state = this.service.state;
     $widget.setTimeline({
       entries: [
         {
@@ -38,6 +50,8 @@ class Index extends Widget {
       render: (config) => {
         this.printTimeConsuming();
         switch (config.family) {
+          case 0:
+            return this.view2x2(config);
           case 1:
             return this.view2x4(config);
           default:
