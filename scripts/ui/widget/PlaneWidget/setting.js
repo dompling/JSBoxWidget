@@ -1,4 +1,4 @@
-const NAME = 'JDDou';
+const NAME = 'PlaneWidget';
 const Setting = require('../setting');
 
 class CurrentSetting extends Setting {
@@ -17,40 +17,6 @@ class CurrentSetting extends Setting {
     });
   }
 
-  boxCache = (response) => {
-    const cookies = [];
-    const data = response.data.datas;
-    if (data.CookiesJD && data.CookiesJD.length > 0) {
-      try {
-        cookies.push(...JSON.parse(data.CookiesJD));
-      } catch (e) {}
-    }
-    if (data.CookieJD) {
-      cookies.push({
-        cookie: data.CookieJD,
-        userName: data.CookieJD.match(/pt_pin=(.+?);/)[1],
-      });
-    }
-    if (data.CookieJD2) {
-      cookies.push({
-        cookie: data.CookieJD2,
-        userName: data.CookieJD2.match(/pt_pin=(.+?);/)[1],
-      });
-    }
-    if (cookies.length > 0) {
-      $ui.menu({
-        items: cookies.map((item) => item.userName),
-        handler: (userName, idx) => {
-          this.set('cookie', cookies[idx].cookie);
-          this.set('userName', cookies[idx].userName);
-          $ui.success(`${userName}账号信息设置成功`);
-        },
-      });
-    } else {
-      $ui.toast('读取失败');
-    }
-  };
-
   getBackgroundImage() {
     let path = null;
     $file.list(this.path).forEach((file) => {
@@ -68,14 +34,6 @@ class CurrentSetting extends Setting {
     });
     return path;
   }
-
-  getBoxJsData = () => {
-    $ui.toast('读取中...');
-    $http.get({
-      url: `http://${this.prefix}/query/boxdata`,
-      handler: this.boxCache,
-    });
-  };
 
   menu(key, animate) {
     animate.touchHighlightStart();
@@ -158,6 +116,7 @@ class CurrentSetting extends Setting {
   generateAlert = async (_, options) => {
     return $ui.menu({ items: options });
   };
+
   async getWidgetScreenShot(title = null) {
     // Crop an image into the specified rect.
     function cropImage(img, rect) {
@@ -170,7 +129,6 @@ class CurrentSetting extends Setting {
           options.size = $size(rect.width, rect.height);
           ctx.drawImage($rect(-rect.x, -rect.y, img.size.width, img.size.height), img);
         });
-        console.log(image);
         return image;
       } catch (e) {
         console.log(e);
@@ -376,7 +334,6 @@ class CurrentSetting extends Setting {
 
     // 清除旧图片
     this.clearBackgroundImage();
-    // console.log(resp.data.image);
     const fileName =
       'background' +
       resp.data.fileName.slice(resp.data.fileName.lastIndexOf('.'));

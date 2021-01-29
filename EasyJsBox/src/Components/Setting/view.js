@@ -785,6 +785,7 @@ class View extends BaseView {
               layout: (make, view) => {
                 make.right.inset(0);
                 make.height.equalTo(view.super);
+                make.width.lessThanOrEqualTo(200);
               },
             },
           ],
@@ -800,6 +801,68 @@ class View extends BaseView {
                   }
                   if (this.updateSetting(key, text)) {
                     $(`${id}-label`).text = text;
+                    if (events) eval(`(()=>{return ${events}})()`);
+                  }
+                },
+              });
+            },
+          },
+          layout: (make, view) => {
+            make.right.inset(15);
+            make.height.equalTo(50);
+            make.width.equalTo(view.super);
+          },
+        },
+      ],
+      layout: $layout.fill,
+    };
+  }
+
+  createImage(key, icon, title, events) {
+    let id = `setting-image-${this.dataCenter.get('name')}-${key}`;
+    return {
+      type: 'view',
+      views: [
+        this.createLineLabel(title, icon),
+        {
+          type: 'view',
+          views: [
+            {
+              type: 'view',
+              views: [
+                {
+                  type: 'image',
+                  props: {
+                    id: `${id}-image`,
+                    tintColor: $color('white'),
+                    image: $image(this.controller.get(key)),
+                    cornerRadius: 4,
+                  },
+                  layout: (make, view) => {
+                    make.center.equalTo(view.super);
+                    make.size.equalTo(30);
+                  },
+                },
+              ],
+              layout: (make, view) => {
+                make.centerY.equalTo(view.super);
+                make.right.inset(0);
+                make.size.equalTo(20);
+              },
+            },
+          ],
+          events: {
+            tapped: async () => {
+              $input.text({
+                text: this.controller.get(key),
+                placeholder: title,
+                handler: (text) => {
+                  if (text === '') {
+                    $ui.toast($l10n('INVALID_VALUE'));
+                    return;
+                  }
+                  if (this.updateSetting(key, text)) {
+                    $(`${id}-image`).image = $image(text);
                     if (events) eval(`(()=>{return ${events}})()`);
                   }
                 },
@@ -1083,6 +1146,14 @@ class View extends BaseView {
             break;
           case 'input':
             row = this.createInput(
+              item.key,
+              item.icon,
+              $l10n(item.title),
+              item.events,
+            );
+            break;
+          case 'image':
+            row = this.createImage(
               item.key,
               item.icon,
               $l10n(item.title),

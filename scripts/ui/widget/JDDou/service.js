@@ -1,19 +1,17 @@
+const { requestFailed } = require('../../../utils/index');
+
 class Service {
   constructor(cookie) {
-    this.account = cookie || {};
+    this.cookie = cookie || {};
     this.timerKeys = this.getDay(0);
   }
-
-  account = {};
-
+  headImageUrl =
+    'https://img11.360buyimg.com/jdphoto/s120x120_jfs/t21160/90/706848746/2813/d1060df5/5b163ef9N4a3d7aa6.png';
   state = {
     incomeBean: 0,
     expenseBean: 0,
     beanCount: 0,
-    userInfo: {
-      headImageUrl:
-        'https://img11.360buyimg.com/jdphoto/s120x120_jfs/t21160/90/706848746/2813/d1060df5/5b163ef9N4a3d7aa6.png',
-    },
+    userInfo: { headImageUrl: this.headImageUrl },
     isPlusVip: false,
     jt_and_gb: {
       jintie: 0,
@@ -30,13 +28,9 @@ class Service {
   };
 
   fetch = async () => {
-    try {
-      await this.TotalBean();
-      await this.getMainData();
-      await this.getAmountData();
-    } catch (e) {
-      console.log(e);
-    }
+    await this.TotalBean();
+    await this.getMainData();
+    await this.getAmountData();
   };
 
   async getAmountData() {
@@ -102,20 +96,27 @@ class Service {
         'Accept-Encoding': 'gzip, deflate, br',
         'Accept-Language': 'zh-cn',
         Connection: 'keep-alive',
-        Cookie: this.account.cookie,
+        Cookie: this.cookie,
         Referer: 'https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2',
         'User-Agent':
           'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1',
       },
     };
-    const response = await $http.post(options);
-    if (response.data) {
-      if (response.data.base.jdNum) {
-        this.set('beanCount', response.data.base.jdNum);
-      }
-      this.set('userInfo', response.data.base);
-      this.set('isPlusVip', response.data.isPlusVip);
+
+    const key = `${this.cookie}_total`;
+    let response = await $http.post(options);
+    if (requestFailed(response) || !response.data.base) {
+      response = $cache.get(key);
+    } else {
+      $cache.set(key, response);
     }
+    this.set('beanCount', response.data.base.jdNum);
+    this.set('userInfo', response.data.base);
+    this.set('isPlusVip', response.data.isPlusVip);
+    const avatar = response.data.base.headImageUrl || this.headImageUrl;
+    let file = await $http.download({ url: avatar });
+    file = !requestFailed(file) ? $cache.get(avatar) : $cache.set(avatar, file);
+    this.state.userInfo.headImageUrl = file.data.image;
     return response.data;
   }
 
@@ -130,7 +131,7 @@ class Service {
         'Content-Type': `application/x-www-form-urlencoded; charset=UTF-8`,
         Origin: `https://bean.m.jd.com`,
         'User-Agent': `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Safari/605.1.15`,
-        Cookie: this.account.cookie,
+        Cookie: this.cookie,
         Host: `bean.m.jd.com`,
         Referer: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`,
         'Accept-Language': `zh-cn`,
@@ -146,7 +147,7 @@ class Service {
     const JTReq_opt = {
       url: 'https://ms.jr.jd.com/gw/generic/uc/h5/m/mySubsidyBalance',
       header: {
-        cookie: this.account.cookie,
+        cookie: this.cookie,
         Referer: 'https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&',
       },
     };
@@ -155,7 +156,7 @@ class Service {
     const gb_opt = {
       url: 'https://coin.jd.com/m/gb/getBaseInfo.html',
       header: {
-        cookie: this.account.cookie,
+        cookie: this.cookie,
         Referer: 'https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&',
       },
     };

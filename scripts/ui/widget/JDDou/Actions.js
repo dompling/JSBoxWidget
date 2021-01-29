@@ -1,19 +1,14 @@
-const avatarBg =
-  'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-b1ebbd3c-ca49-405b-957b-effe60782276/11fbba4a-4f92-4f7c-8fb3-dcff653fe20c.png';
-const logo = 'https://raw.githubusercontent.com/Orz-3/task/master/jd.png';
-const jddou =
-  'https://gitee.com/scriptableJS/Scriptable/raw/master/JDDou/jdd.png';
-const jtImg =
-  'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-imgbed/dacbd8f6-8115-4fd6-aedc-95cce83788a9.png';
-const gbImg =
-  'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-imgbed/3947a83b-7aa6-4a53-be34-8fed610ddb77.png';
+const avatarBg = $image('assets/icon/JDDou/vip.png');
+const logo = $image('assets/icon/JDDou/icon.png');
+const jddou = $image('assets/icon/JDDou/jdd.png');
+const jtImg = $image('assets/icon/JDDou/jt.png');
+const gbImg = $image('assets/icon/JDDou/gb.png');
 const headerColor = $color('#e4393c');
 const minimumScaleFactor = 0.5;
 const border = { width: 1, color: $color('red') };
 class Actions {
   constructor(setting, config, state) {
     this.setting = setting;
-    this.setting.family.small;
     this.fontColor = $color({
       light: setting.get('lightFont'),
       dark: setting.get('nightFont'),
@@ -63,7 +58,7 @@ class Actions {
     },
     labelSize: {
       font1: 24,
-      font2: 18,
+      font2: 16,
     },
     headerSize: {
       font1: 18,
@@ -77,24 +72,6 @@ class Actions {
     footerSpacer: 20,
   };
 
-  family = 1;
-  state = {
-    incomeBean: 0,
-    expenseBean: 0,
-    beanCount: 0,
-    userInfo: {
-      jvalue: 0,
-      nickname: '未登录',
-      headImageUrl:
-        'https://img11.360buyimg.com/jdphoto/s120x120_jfs/t21160/90/706848746/2813/d1060df5/5b163ef9N4a3d7aa6.png',
-    },
-    isPlusVip: false,
-    jt_and_gb: {
-      jintie: 0,
-      gangbeng: 0,
-    },
-  };
-
   avatar = (size = 90) => {
     return {
       type: 'hstack',
@@ -104,6 +81,7 @@ class Actions {
         background: {
           type: 'image',
           props: {
+            image: this.state.userInfo.headImageUrl,
             uri: this.state.userInfo.headImageUrl,
             resizable: true,
             scaledToFit: true,
@@ -119,7 +97,7 @@ class Actions {
           {
             type: 'image',
             props: {
-              uri: avatarBg,
+              image: avatarBg,
               resizable: true,
               frame: {
                 width: 90,
@@ -151,7 +129,7 @@ class Actions {
                   },
                 }
               : {
-                  uri: icon,
+                  image: icon,
                   resizable: true,
                   scaledToFit: true,
                   frame: {
@@ -261,7 +239,7 @@ class Actions {
             {
               type: 'image',
               props: {
-                uri: logo,
+                image: logo,
                 cornerRadius: {
                   value: this.sizeConfig.logo.width / 2,
                   style: 1, // 0: circular, 1: continuous
@@ -331,7 +309,7 @@ class Actions {
         {
           type: 'image',
           props: {
-            uri: jddou,
+            image: jddou,
             resizable: true,
             scaledToFit: true,
             frame: this.sizeConfig.jddouSize,
@@ -380,7 +358,7 @@ class Actions {
     };
   };
 
-  containerProps = () => { 
+  containerProps = () => {
     const background = this.is_bg
       ? {
           type: 'image',
@@ -442,7 +420,7 @@ class Actions {
                 {
                   type: 'vstack',
                   props: {
-                    alignment: $widget.horizontalAlignment.center,
+                    alignment: $widget.horizontalAlignment.leading,
                     spacing: this.sizeConfig.footerSpacer,
                   },
                   views: [
