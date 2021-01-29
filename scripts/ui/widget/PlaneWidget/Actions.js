@@ -25,6 +25,7 @@ class Actions {
         chartsSize: 80,
         labelTextFont: 12,
         circle: 15,
+        labelSpacer: 0,
       };
     }
   };
@@ -134,7 +135,6 @@ class Actions {
                 lineLimit: 1,
                 color: this.fontColor,
                 font: { size: this.sizeConfig.labelTextFont },
-                minimumScaleFactor,
               },
             }
           : null,
@@ -231,7 +231,8 @@ class Actions {
             {
               type: 'hstack',
               props: {
-                alignment: $widget.verticalAlignment.center,
+                alignment: $widget.horizontalAlignment.center,
+                spacing: 20,
               },
               views: [
                 this.labelText(
@@ -240,7 +241,6 @@ class Actions {
                   '',
                   true,
                 ),
-                { type: 'spacer', props: { minLength: 5 } },
                 {
                   type: 'text',
                   props: {
