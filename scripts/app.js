@@ -211,10 +211,10 @@ class AppKernel extends Kernel {
                     $file.mkdir(`${this.backupPath}/widgets`);
                     $file.mkdir(`${this.backupPath}/userdata`);
                     // 解压
-                    await $archiver.unzip({
-                      path: `${this.backupPath}/widgets.zip`,
-                      dest: `${this.backupPath}/widgets`,
-                    });
+                    // await $archiver.unzip({
+                    //   path: `${this.backupPath}/widgets.zip`,
+                    //   dest: `${this.backupPath}/widgets`,
+                    // });
                     await $archiver.unzip({
                       path: `${this.backupPath}/userdata.zip`,
                       dest: `${this.backupPath}/userdata`,
@@ -224,17 +224,17 @@ class AppKernel extends Kernel {
                     $file.delete(`${this.backupPath}/widgets.zip`);
                     $file.delete(`${this.backupPath}/userdata.zip`);
                     // 恢复
-                    $file.list(`${this.backupPath}/widgets`).forEach((item) => {
-                      if (
-                        $file.isDirectory(`${this.backupPath}/widgets/${item}`)
-                      ) {
-                        $file.delete(`${this.widgetRootPath}/${item}`);
-                        $file.move({
-                          src: `${this.backupPath}/widgets/${item}`,
-                          dst: `${this.widgetRootPath}/${item}`,
-                        });
-                      }
-                    });
+                    // $file.list(`${this.backupPath}/widgets`).forEach((item) => {
+                    //   if (
+                    //     $file.isDirectory(`${this.backupPath}/widgets/${item}`)
+                    //   ) {
+                    //     $file.delete(`${this.widgetRootPath}/${item}`);
+                    //     $file.move({
+                    //       src: `${this.backupPath}/widgets/${item}`,
+                    //       dst: `${this.widgetRootPath}/${item}`,
+                    //     });
+                    //   }
+                    // });
                     $file.move({
                       src: `${this.backupPath}/userdata`,
                       dst: this.widgetAssetsPath,

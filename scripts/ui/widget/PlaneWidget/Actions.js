@@ -231,7 +231,6 @@ class Actions {
             {
               type: 'hstack',
               props: {
-                spacing: 20,
                 alignment: $widget.verticalAlignment.center,
               },
               views: [
@@ -241,6 +240,7 @@ class Actions {
                   '',
                   true,
                 ),
+                { type: 'spacer', props: { minLength: 5 } },
                 {
                   type: 'text',
                   props: {
