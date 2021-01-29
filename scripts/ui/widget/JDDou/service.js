@@ -115,7 +115,11 @@ class Service {
     this.set('isPlusVip', response.data.isPlusVip);
     const avatar = response.data.base.headImageUrl || this.headImageUrl;
     let file = await $http.download({ url: avatar });
-    file = !requestFailed(file) ? $cache.get(avatar) : $cache.set(avatar, file);
+    if (requestFailed(file)) {
+      file = $cache.get(avatar);
+    } else {
+      $cache.set(avatar, file);
+    }
     this.state.userInfo.headImageUrl = file.data.image;
     return response.data;
   }
