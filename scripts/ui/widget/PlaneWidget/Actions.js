@@ -25,7 +25,7 @@ class Actions {
         chartsSize: 80,
         labelTextFont: 12,
         circle: 15,
-        labelSpacer: 0,
+        labelSpacer: 2,
       };
     }
   };
