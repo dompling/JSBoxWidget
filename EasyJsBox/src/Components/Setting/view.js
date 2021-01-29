@@ -13,9 +13,9 @@ class View extends BaseView {
     this.info = info ? info : JSON.parse($file.read('/config.json'))['info'];
   }
 
-  updateSetting(key, value) {
+  updateSetting = (key, value) => {
     return this.controller.set(key, value);
-  }
+  };
 
   createLineLabel(title, icon) {
     if (!icon[1]) icon[1] = '#00CC00';
@@ -146,7 +146,10 @@ class View extends BaseView {
               if (!this.updateSetting(key, sender.on)) {
                 sender.on = !sender.on;
               } else {
-                if (events) eval(`(()=>{return ${events}})()`);
+                if (events)
+                  eval(
+                    `(()=>{return ${events}(sender.on,this.updateSetting,key,this.dataCenter.get('name'))})()`,
+                  );
               }
             },
           },
@@ -210,7 +213,10 @@ class View extends BaseView {
                       tapped: () => {
                         if (this.updateSetting(key, $(key).text)) {
                           popover.dismiss();
-                          if (events) eval(`(()=>{return ${events}})()`);
+                          if (events)
+                            eval(
+                              `(()=>{return ${events}($(key).text,this.updateSetting,key,this.dataCenter.get('name'))})()`,
+                            );
                         }
                       },
                     },
@@ -259,7 +265,10 @@ class View extends BaseView {
                   }
                   if (this.updateSetting(key, text)) {
                     $(key).text = text;
-                    if (events) eval(`(()=>{return ${events}})()`);
+                    if (events)
+                      eval(
+                        `(()=>{return ${events}(text,this.updateSetting,key,this.dataCenter.get('name'))})()`,
+                      );
                   }
                 },
               });
@@ -309,7 +318,10 @@ class View extends BaseView {
               if (!this.updateSetting(key, value)) {
                 $(key).text = this.controller.get(key);
               } else {
-                if (events) eval(`(()=>{return ${events}})()`);
+                if (events)
+                  eval(
+                    `(()=>{return ${events}(value,this.updateSetting,key,this.dataCenter.get('name'))})()`,
+                  );
               }
             },
           },
@@ -355,7 +367,10 @@ class View extends BaseView {
               if (!this.updateSetting(key, sender.value)) {
                 $(key).text = this.controller.get(key);
               } else {
-                if (events) eval(`(()=>{return ${events}})()`);
+                if (events)
+                  eval(
+                    `(()=>{return ${events}(sneder.value,this.updateSetting,key,this.dataCenter.get('name'))})()`,
+                  );
               }
             },
           },
@@ -487,7 +502,9 @@ class View extends BaseView {
                     touchHighlightEnd: touchHighlightEnd,
                   };
                   // 执行代码
-                  eval(`(()=>{return ${script}(animate)})()`);
+                  eval(
+                    `(()=>{return ${script}(animate,this.updateSetting,key,this.dataCenter.get('name'))})()`,
+                  );
                 },
               },
               layout: (make, view) => {
@@ -527,7 +544,10 @@ class View extends BaseView {
             changed: (sender) => {
               let value = withTitle ? [sender.index, title] : sender.index;
               this.updateSetting(key, value);
-              if (events) eval(`(()=>{return ${events}})()`);
+              if (events)
+                eval(
+                  `(()=>{return ${events}(value,this.updateSetting,key,this.dataCenter.get('name'))})()`,
+                );
             },
           },
         },
@@ -561,7 +581,10 @@ class View extends BaseView {
                       color: $color(this.controller.get(key).trim()),
                     });
                     this.updateSetting(key, newColor.hexCode);
-                    if (events) eval(`(()=>{return ${events}})()`);
+                    if (events)
+                      eval(
+                        `(()=>{return ${events}(newColor.hexCode,this.updateSetting,key,this.dataCenter.get('name'))})()`,
+                      );
                     $(
                       `setting-${this.dataCenter.get('name')}-color-${key}`,
                     ).bgcolor = $color(newColor.hexCode);
@@ -598,7 +621,10 @@ class View extends BaseView {
                               rgb[2],
                             );
                             this.updateSetting(key, newColor);
-                            if (events) eval(`(()=>{return ${events}})()`);
+                            if (events)
+                              eval(
+                                `(()=>{return ${events}(newColor,this.updateSetting,key,this.dataCenter.get('name'))})()`,
+                              );
                             $(
                               `setting-${this.dataCenter.get(
                                 'name',
@@ -683,7 +709,10 @@ class View extends BaseView {
             handler: (title, idx) => {
               let value = withTitle ? [idx, title] : idx;
               this.updateSetting(key, value);
-              if (events) eval(`(()=>{return ${events}})()`);
+              if (events)
+                eval(
+                  `(()=>{return ${events}(value,this.updateSetting,key,this.dataCenter.get('name'))})()`,
+                );
               $(id).text = $l10n(title);
             },
             finished: () => {
@@ -750,9 +779,13 @@ class View extends BaseView {
                   date: settingData ? settingData : new Date(),
                 },
               });
-              if (events) eval(`(()=>{return ${events}})()`);
-              this.updateSetting(key, date.getTime());
+              const value = date.getTime();
+              this.updateSetting(key, value);
               $(`${id}-label`).text = getFormatDate(date);
+              if (events)
+                eval(
+                  `(()=>{return ${events}(value,this.updateSetting,key,this.dataCenter.get('name'))})()`,
+                );
             },
           },
           layout: (make, view) => {
@@ -801,7 +834,10 @@ class View extends BaseView {
                   }
                   if (this.updateSetting(key, text)) {
                     $(`${id}-label`).text = text;
-                    if (events) eval(`(()=>{return ${events}})()`);
+                    if (events)
+                      eval(
+                        `(()=>{return ${events}(text,this.updateSetting,key,this.dataCenter.get('name'))})()`,
+                      );
                   }
                 },
               });
@@ -863,7 +899,10 @@ class View extends BaseView {
                   }
                   if (this.updateSetting(key, text)) {
                     $(`${id}-image`).image = $image(text);
-                    if (events) eval(`(()=>{return ${events}})()`);
+                    if (events)
+                      eval(
+                        `(()=>{return ${events}(text,this.updateSetting,key,this.dataCenter.get('name'))})()`,
+                      );
                   }
                 },
               });

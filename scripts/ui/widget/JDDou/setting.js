@@ -17,7 +17,7 @@ class CurrentSetting extends Setting {
     });
   }
 
-  boxCache = (response) => {
+  boxCache = (response, update, name) => {
     const cookies = [];
     const data = response.data.datas;
     if (data.CookiesJD && data.CookiesJD.length > 0) {
@@ -41,8 +41,12 @@ class CurrentSetting extends Setting {
       $ui.menu({
         items: cookies.map((item) => item.userName),
         handler: (userName, idx) => {
-          this.set('cookie', cookies[idx].cookie);
-          this.set('userName', cookies[idx].userName);
+          const ckId = `setting-input-${name}-cookie-label`;
+          const uId = `setting-input-${name}-userName-label`;
+          update('cookie', cookies[idx].cookie);
+          update('userName', cookies[idx].userName);
+          $(ckId).text = cookies[idx].cookie;
+          $(uId).text = cookies[idx].userName;
           $ui.success(`${userName}账号信息设置成功`);
         },
       });
@@ -69,11 +73,11 @@ class CurrentSetting extends Setting {
     return path;
   }
 
-  getBoxJsData = () => {
+  getBoxJsData = (update, name) => {
     $ui.toast('读取中...');
     $http.get({
       url: `http://${this.prefix}/query/boxdata`,
-      handler: this.boxCache,
+      handler: (res) => this.boxCache(res, update, name),
     });
   };
 
@@ -128,10 +132,11 @@ class CurrentSetting extends Setting {
       this.menu('', animate);
     };
 
-    this.setting.getBoxJsData = (animate) => {
+    this.setting.getBoxJsData = async (animate, update, _, name) => {
+      console.log(name);
       animate.touchHighlight();
       animate.actionStart();
-      this.getBoxJsData();
+      this.getBoxJsData(update, name);
       animate.actionDone();
     };
 
@@ -139,18 +144,6 @@ class CurrentSetting extends Setting {
       animate.touchHighlight();
       animate.actionStart();
       this.getWidgetScreenShot();
-      animate.actionDone();
-    };
-
-    this.setting.clearCache = (animate) => {
-      animate.touchHighlight();
-      animate.actionStart();
-      $cache.remove('switch.data');
-      const assetsPath = `${this.kernel.widgetAssetsPath}/${this.widget}`;
-      const savePath = `${assetsPath}/setting.json`;
-      if ($file.exists(savePath)) $file.delete(savePath);
-      $cache.remove(`setting-${this.widget}`);
-      $ui.toast('清空缓存成功，请重新进入该页面');
       animate.actionDone();
     };
   }

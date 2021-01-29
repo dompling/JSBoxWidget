@@ -30,8 +30,12 @@ class Service {
   };
 
   fetch = async () => {
-    await this.login(`${this.account.url}/api/v1/passport/auth/login`);
-    await this.getSubscribe(`${this.account.url}/api/v1/user/getSubscribe`);
+    try {
+      await this.login(`${this.account.url}/api/v1/passport/auth/login`);
+      await this.getSubscribe(`${this.account.url}/api/v1/user/getSubscribe`);
+    } catch (e) {
+      console.log(e);
+    }
     await this.createChart(360);
   };
 
@@ -75,7 +79,7 @@ class Service {
     const data1 = Math.floor((parseInt(restData) / total) * 100);
     const data = [data1 || 0, data2 || 0, data3 || 0];
 
-    this.dataSource.todayData = `${todayData}天后`;
+    this.dataSource.todayData = `${todayData} D`;
     this.dataSource.usedData = this.formatFileSize(parseInt(usedData));
     this.dataSource.restData = this.formatFileSize(parseInt(restData));
 

@@ -1,5 +1,6 @@
 const NAME = 'PlaneWidget';
 const Setting = require('../setting');
+const { requestFailed } = require('../../../utils/index');
 
 class CurrentSetting extends Setting {
   constructor(kernel) {
@@ -100,16 +101,25 @@ class CurrentSetting extends Setting {
       animate.actionDone();
     };
 
-    this.setting.clearCache = (animate) => {
-      animate.touchHighlight();
-      animate.actionStart();
-      $cache.remove('switch.data');
-      const assetsPath = `${this.kernel.widgetAssetsPath}/${this.widget}`;
-      const savePath = `${assetsPath}/setting.json`;
-      if ($file.exists(savePath)) $file.delete(savePath);
-      $cache.remove(`setting-${this.widget}`);
-      $ui.toast('清空缓存成功，请重新进入该页面');
-      animate.actionDone();
+    this.setting.setIcon = (url, update, key) => {
+      if (url.match(/^(http||https):\/\//)) {
+        $http.download({
+          url,
+          showsProgress: true, // Optional, default is true
+          handler: (resp) => {
+            if (requestFailed(resp)) {
+              return;
+            }
+            const savePath = `${this.path}/icon.png`;
+            const { image } = resp.data;
+            update(key, savePath);
+            $file.write({
+              data: image.jpg(),
+              path: savePath,
+            });
+          },
+        });
+      }
     };
   }
 

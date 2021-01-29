@@ -31,9 +31,13 @@ class Service {
   };
 
   fetch = async () => {
-    await this.login();
-    await this.checkin();
-    await this.dataResults();
+    try {
+      await this.login();
+      await this.checkin();
+      await this.dataResults();
+    } catch (e) {
+      console.log(e);
+    }
     await this.createChart(360);
   };
 

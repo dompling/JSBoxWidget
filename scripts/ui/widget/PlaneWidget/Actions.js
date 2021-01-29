@@ -1,4 +1,5 @@
 const border = { width: 1, color: $color('red') };
+const minimumScaleFactor = 0.5;
 class Actions {
   constructor(setting, config, service) {
     this.setting = setting;
@@ -22,7 +23,7 @@ class Actions {
       this.sizeConfig = {
         ...this.sizeConfig,
         chartsSize: 80,
-        labelTextFont: 14,
+        labelTextFont: 12,
         circle: 15,
       };
     }
@@ -31,7 +32,7 @@ class Actions {
   sizeConfig = {
     chartsSize: 140,
     labelSpacer: 5,
-    labelTextFont: 16,
+    labelTextFont: 14,
     circle: 20,
   };
 
@@ -74,7 +75,7 @@ class Actions {
       ? {
           type: 'image',
           props: {
-            uri: icon,
+            image: $image(icon),
             resizable: true,
             scaledToFill: true,
             cornerRadius: {
@@ -133,6 +134,7 @@ class Actions {
                 lineLimit: 1,
                 color: this.fontColor,
                 font: { size: this.sizeConfig.labelTextFont },
+                minimumScaleFactor,
               },
             }
           : null,

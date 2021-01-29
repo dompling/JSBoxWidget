@@ -12,6 +12,7 @@
 "COPY_SUCCESS" = "复制成功";
 "FAILED_TO_LOAD_VIEW" = "加载视图失败";
 "VIEW_NOT_PROVIDED" = "未提供该视图";
+"INVALID_VALUE" = "非法参数";
 
 "HOME" = "首页";
 "SELECT" = "选用";

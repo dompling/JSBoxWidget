@@ -187,6 +187,7 @@ class Actions {
               weight: 'bold',
             },
             color: this.fontColor,
+            minimumScaleFactor,
           },
         },
       ],

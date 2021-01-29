@@ -27,14 +27,15 @@
         "title": "机场图标",
         "type": "image",
         "key": "logo",
-        "value": "https://raw.githubusercontent.com/58xinian/icon/master/glados_animation.gif"
+        "value": "/assets/icon/PlaneWidget/icon.gif",
+        "events": "this.controller.setIcon"
       },
       {
         "icon": ["eyeglasses", "#ffd591"],
         "title": "机场名称",
         "type": "input",
         "key": "title",
-        "value": "机场小组件"
+        "value": "机场组件"
       },
       {
         "icon": ["link", "#f5222d"],

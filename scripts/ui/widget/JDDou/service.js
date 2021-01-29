@@ -28,6 +28,10 @@ class Service {
   };
 
   fetch = async () => {
+    if (!this.cookie) {
+      $ui.toast('请填写京东 CK 信息');
+      return;
+    }
     await this.TotalBean();
     await this.getMainData();
     await this.getAmountData();

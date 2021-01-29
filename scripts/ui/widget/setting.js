@@ -116,6 +116,18 @@ class Setting {
       });
     };
 
+    this.setting.clearCache = (animate) => {
+      animate.touchHighlight();
+      animate.actionStart();
+      $cache.remove('switch.data');
+      const assetsPath = `${this.kernel.widgetAssetsPath}/${this.widget}`;
+      if ($file.exists(assetsPath)) $file.delete(assetsPath);
+      $cache.remove(`setting-${this.widget}`);
+      $ui.pop();
+      $ui.toast('清空缓存成功，请重新进入该页面');
+      animate.actionDone();
+    };
+
     this.setting.preview = (animate) => {
       animate.touchHighlight();
       let widget = this.kernel.widgetInstance(this.widget);
