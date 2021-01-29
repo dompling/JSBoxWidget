@@ -31,7 +31,7 @@ class Actions {
   sizeConfig = {
     chartsSize: 140,
     labelSpacer: 5,
-    labelTextFont: 18,
+    labelTextFont: 16,
     circle: 20,
   };
 
