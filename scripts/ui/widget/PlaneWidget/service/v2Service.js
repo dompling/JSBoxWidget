@@ -1,4 +1,5 @@
 const { getChartConfig, getDaysInMonth } = require('./func');
+const { requestFailed } = require('../../../../utils/index');
 class Service {
   constructor(account) {
     this.account = account;
@@ -31,7 +32,7 @@ class Service {
   fetch = async () => {
     await this.login(`${this.account.url}/api/v1/passport/auth/login`);
     await this.getSubscribe(`${this.account.url}/api/v1/user/getSubscribe`);
-    await this.createChart();
+    await this.createChart(360);
   };
 
   login = async (url) => {
@@ -39,36 +40,23 @@ class Service {
       email: this.account.email,
       password: this.account.password,
     };
-    let params = Object.keys(data).map(
-      (key) => `${key}=${encodeURIComponent(data[key])}`,
-    );
-    params = params.join('&');
-    const response = await $http.post({ url: url, body: params });
-    if (response.data.errors) return console.log(JSON.stringify(response.data));
-    response.cookies.forEach((item) => {
-      this.cookies[item.name] = item.value;
-    });
+    const res = await $http.post({ url, form: data });
+    if (res.data.errors) return console.log(JSON.stringify(res.data));
+    this.cookies = res.response.headers['Set-Cookie'];
   };
 
   getSubscribe = async (url) => {
-    let cookie = Object.keys(this.cookies).map(
-      (key) => `${key}=${this.cookies[key]}`,
-    );
-    cookie = cookie.join('; ');
-    const response = await $http.post({
-      url: url,
-      body: params,
+    const res = await $http.get({
+      url,
       header: {
-        cookie,
+        cookie: this.cookies,
         referer: `${this.account.url}/`,
         'accept-language': 'zh-CN,zh;q=0.9',
       },
     });
-    if (response.data.errors) return console.log(JSON.stringify(response.data));
-    response.cookies.forEach((item) => {
-      this.cookies[item.name] = item.value;
-    });
-    const subscribe = response.data.data;
+    if (res.data.errors) return console.log(JSON.stringify(res.data));
+    this.cookies = res.response.headers['Set-Cookie'];
+    const subscribe = res.data.data;
     this.dataSource.totalData = `${subscribe.transfer_enable}`;
     this.dataSource.usedData = `${subscribe.d + subscribe.u}`;
     this.dataSource.restData = `${

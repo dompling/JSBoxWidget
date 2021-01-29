@@ -30,28 +30,28 @@
         "value": "https://raw.githubusercontent.com/58xinian/icon/master/glados_animation.gif"
       },
       {
-        "icon": ["eyeglasses", "#9cf0ea"],
+        "icon": ["eyeglasses", "#ffd591"],
         "title": "机场名称",
         "type": "input",
         "key": "title",
         "value": "机场小组件"
       },
       {
-        "icon": ["link", "#9cf0ea"],
+        "icon": ["link", "#f5222d"],
         "title": "订阅/登陆",
         "type": "input",
         "key": "url",
         "value": ""
       },
       {
-        "icon": ["envelope.open", "#9cf0ea"],
+        "icon": ["envelope.open", "#f5222d"],
         "title": "邮箱账号",
         "type": "input",
         "key": "email",
         "value": ""
       },
       {
-        "icon": ["record.circle", "#9cf0ea"],
+        "icon": ["record.circle", "#f5222d"],
         "title": "密码",
         "type": "input",
         "key": "password",

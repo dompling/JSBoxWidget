@@ -1,5 +1,5 @@
 const { getChartConfig } = require('./func');
-
+const { requestFailed } = require('../../../../utils/index');
 class Service {
   constructor(account) {
     this.account = account;
@@ -34,7 +34,7 @@ class Service {
     await this.login();
     await this.checkin();
     await this.dataResults();
-    await this.createChart();
+    await this.createChart(360);
   };
 
   async login() {
@@ -47,14 +47,9 @@ class Service {
         loginPath +
         `?email=${this.account.email}&passwd=${this.account.password}&rumber-me=week`,
     };
-
-    const data = await $http.post(table);
+    const data = (await $http.post(table)).data;
     try {
-      if (
-        JSON.parse(data).msg.match(
-          /邮箱不存在|邮箱或者密码错误|Mail or password is incorrect/,
-        )
-      ) {
+      if (typeof data === 'object') {
         this.loginok = false;
         $ui.toast('邮箱或者密码错误');
         console.log('登陆失败');
@@ -74,90 +69,88 @@ class Service {
     const checkinreqest = {
       url: url.replace(/(auth|user)\/login(.php)*/g, '') + checkinPath,
     };
-    const data = (await $http.post(checkinreqest)).data;
-    if (data.match(/\"msg\"\:/)) {
-      console.log('签到成功');
-      this.dataSource.isCheckIn = true;
-    } else {
-      console.log('签到失败');
-    }
+    return await $http.post(checkinreqest);
   }
 
   async dataResults() {
-    const url = this.account.url;
-    const userPath =
-      url.indexOf('auth/login') != -1 ? 'user' : 'user/index.php';
-    const datarequest = {
-      url: url.replace(/(auth|user)\/login(.php)*/g, '') + userPath,
-    };
-    const data = await $http.get(datarequest);
-    if (data.match(/login|请填写邮箱|登陆/)) {
-      this.loginok = false;
-    } else {
-      let resultData = '';
-      let result = [];
-      if (data.match(/theme\/malio/)) {
-        let flowInfo = data.match(/trafficDountChat\s*\(([^\)]+)/);
-        if (flowInfo) {
-          let flowData = flowInfo[1].match(/\d[^\']+/g);
-          let usedData = flowData[0];
-          let todatUsed = flowData[1];
-          let restData = flowData[2];
-          this.dataSource.todayUsed = todatUsed;
-          this.dataSource.usedData = usedData;
-          this.dataSource.restData = restData;
-          result.push(
-            `今日：${todatUsed}\n已用：${usedData}\n剩余：${restData}`,
-          );
-        }
-        let userInfo = data.match(/ChatraIntegration\s*=\s*({[^}]+)/);
-        if (userInfo) {
-          let user_name = userInfo[1].match(/name.+'(.+)'/)[1];
-          let user_class = userInfo[1].match(/Class.+'(.+)'/)[1];
-          let class_expire = userInfo[1].match(/Class_Expire.+'(.+)'/)[1];
-          let money = userInfo[1].match(/Money.+'(.+)'/)[1];
-          result.push(
-            `用户名：${user_name}\n用户等级：lv${user_class}\n余额：${money}\n到期时间：${class_expire}`,
-          );
-        }
-        if (result.length != 0) {
-          resultData = result.join('\n\n');
-        }
+    try {
+      const url = this.account.url;
+      const userPath =
+        url.indexOf('auth/login') != -1 ? 'user' : 'user/index.php';
+      const datarequest = {
+        url: url.replace(/(auth|user)\/login(.php)*/g, '') + userPath,
+      };
+      const data = (await $http.get(datarequest)).data;
+      if (data.match(/login|请填写邮箱|登陆/)) {
+        this.loginok = false;
       } else {
-        let todayUsed = data.match(/>*\s*今日(已用|使用)*[^B]+/);
-        if (todayUsed) {
-          todayUsed = this.flowFormat(todayUsed[0]);
-          result.push(`今日：${todayUsed}`);
-          this.dataSource.todayUsed = `${todayUsed}`;
+        let resultData = '';
+        let result = [];
+        if (data.match(/theme\/malio/)) {
+          let flowInfo = data.match(/trafficDountChat\s*\(([^\)]+)/);
+          if (flowInfo) {
+            let flowData = flowInfo[1].match(/\d[^\']+/g);
+            let usedData = flowData[0];
+            let todatUsed = flowData[1];
+            let restData = flowData[2];
+            this.dataSource.todayUsed = todatUsed;
+            this.dataSource.usedData = usedData;
+            this.dataSource.restData = restData;
+            result.push(
+              `今日：${todatUsed}\n已用：${usedData}\n剩余：${restData}`,
+            );
+          }
+          let userInfo = data.match(/ChatraIntegration\s*=\s*({[^}]+)/);
+          if (userInfo) {
+            let user_name = userInfo[1].match(/name.+'(.+)'/)[1];
+            let user_class = userInfo[1].match(/Class.+'(.+)'/)[1];
+            let class_expire = userInfo[1].match(/Class_Expire.+'(.+)'/)[1];
+            let money = userInfo[1].match(/Money.+'(.+)'/)[1];
+            result.push(
+              `用户名：${user_name}\n用户等级：lv${user_class}\n余额：${money}\n到期时间：${class_expire}`,
+            );
+          }
+          if (result.length != 0) {
+            resultData = result.join('\n\n');
+          }
         } else {
-          this.dataSource.todayUsed = `0`;
-          result.push(`今日已用获取失败`);
+          let todayUsed = data.match(/>*\s*今日(已用|使用)*[^B]+/);
+          if (todayUsed) {
+            todayUsed = this.flowFormat(todayUsed[0]);
+            result.push(`今日：${todayUsed}`);
+            this.dataSource.todayUsed = `${todayUsed}`;
+          } else {
+            this.dataSource.todayUsed = `0`;
+            result.push(`今日已用获取失败`);
+          }
+          let usedData = data.match(
+            /(Used Transfer|>过去已用|>已用|>总已用|\"已用)[^B]+/,
+          );
+          if (usedData) {
+            usedData = this.flowFormat(usedData[0]);
+            result.push(`已用：${usedData}`);
+            this.dataSource.usedData = `${usedData}`;
+          } else {
+            this.dataSource.usedData = `0`;
+            result.push(`累计使用获取失败`);
+          }
+          let restData = data.match(
+            /(Remaining Transfer|>剩余流量|>流量剩余|>可用|\"剩余)[^B]+/,
+          );
+          if (restData) {
+            restData = this.flowFormat(restData[0]);
+            result.push(`剩余：${restData}`);
+            this.dataSource.restData = `${restData}`;
+          } else {
+            this.dataSource.restData = `0`;
+            result.push(`剩余流量获取失败`);
+          }
+          resultData = result.join('\n');
         }
-        let usedData = data.match(
-          /(Used Transfer|>过去已用|>已用|>总已用|\"已用)[^B]+/,
-        );
-        if (usedData) {
-          usedData = this.flowFormat(usedData[0]);
-          result.push(`已用：${usedData}`);
-          this.dataSource.usedData = `${usedData}`;
-        } else {
-          this.dataSource.usedData = `0`;
-          result.push(`累计使用获取失败`);
-        }
-        let restData = data.match(
-          /(Remaining Transfer|>剩余流量|>流量剩余|>可用|\"剩余)[^B]+/,
-        );
-        if (restData) {
-          restData = this.flowFormat(restData[0]);
-          result.push(`剩余：${restData}`);
-          this.dataSource.restData = `${restData}`;
-        } else {
-          this.dataSource.restData = `0`;
-          result.push(`剩余流量获取失败`);
-        }
-        resultData = result.join('\n');
+        console.log(resultData);
       }
-      console.log(resultData);
+    } catch (e) {
+      console.log(e);
     }
   }
 
@@ -181,20 +174,20 @@ class Service {
         data.value = Math.floor(parseFloat(value) * item.value * 100) / 100;
       }
     });
-    return `${data.value} ${data.unit}`;
+    return data.value;
   }
 
   createChart = async (size) => {
-    const { restData, usedData, todayData, totalData } = this.dataSource;
+    const restData = this.translateFlow(this.dataSource.restData);
+    const usedData = this.translateFlow(this.dataSource.usedData);
+    const todayData = this.translateFlow(this.dataSource.todayData);
+    const totalData = this.translateFlow(this.dataSource.totalData);
+
     const total = parseFloat(totalData) || 1;
     const data3 = Math.floor((parseInt(todayData) / total) * 100);
     const data2 = Math.floor((parseInt(usedData) / total) * 100);
     const data1 = Math.floor((parseInt(restData) / total) * 100);
     const data = [data1 || 0, data2 || 0, data3 || 0];
-
-    this.dataSource.todayData = this.translateFlow(parseInt(todayData));
-    this.dataSource.usedData = this.translateFlow(parseInt(usedData));
-    this.dataSource.restData = this.translateFlow(parseInt(restData));
 
     const { template1, template2, template3 } = getChartConfig(
       data,

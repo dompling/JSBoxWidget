@@ -39,8 +39,10 @@ class Index extends Widget {
     switch (planeType) {
       case 0:
         this.service = new V2Service(account);
+        break;
       case 1:
         this.service = new BaseService(account);
+        break;
       case 2:
         this.service = new Service(account);
         break;
