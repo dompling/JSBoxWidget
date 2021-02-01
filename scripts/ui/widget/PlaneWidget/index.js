@@ -17,7 +17,7 @@ class Index extends Widget {
       $cache.set('switch.data', this.data);
     }
     const isDarkMode = $widget.isDarkMode;
-    this.fontColor = isDarkMode
+    this.fontColor = !isDarkMode
       ? this.setting.get('nightFont')
       : this.setting.get('lightFont');
     this.run();
