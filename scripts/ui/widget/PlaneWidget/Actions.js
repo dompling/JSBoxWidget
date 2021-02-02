@@ -144,12 +144,7 @@ class Actions {
   };
 
   right = () => {
-    const {
-      todayData,
-      usedData,
-      restData,
-      isCheckIn,
-    } = this.service.dataSource;
+    const { todayData, usedData, restData } = this.service.dataSource;
     return {
       type: 'vstack',
       props: {
