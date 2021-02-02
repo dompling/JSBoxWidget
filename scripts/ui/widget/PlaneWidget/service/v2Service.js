@@ -21,6 +21,13 @@ class Service {
     todayData: '0',
   };
 
+  label = {
+    restData: '剩余',
+    usedData: '已用',
+    totalData: '总量',
+    todayData: '重置',
+  };
+
   account = {
     url: '',
     logo: '',

@@ -124,6 +124,7 @@ class Actions {
             text: label,
             lineLimit: 1,
             color: this.fontColor,
+            minimumScaleFactor,
             font: { size: this.sizeConfig.labelTextFont },
           },
         },
@@ -149,7 +150,6 @@ class Actions {
       restData,
       isCheckIn,
     } = this.service.dataSource;
-    const data1 = isCheckIn !== undefined ? `今日：` : `重置：`;
     return {
       type: 'vstack',
       props: {
@@ -163,9 +163,21 @@ class Actions {
           '',
           true,
         ),
-        this.labelText(this.service.color3, data1, todayData),
-        this.labelText(this.service.color2, '累计：', `${usedData}`),
-        this.labelText(this.service.color1, '剩余：', `${restData}`),
+        this.labelText(
+          this.service.color3,
+          `${this.service.label.todayData}：`,
+          todayData,
+        ),
+        this.labelText(
+          this.service.color2,
+          `${this.service.label.usedData}：`,
+          `${usedData}`,
+        ),
+        this.labelText(
+          this.service.color1,
+          `${this.service.label.restData}:`,
+          `${restData}`,
+        ),
       ],
     };
   };
@@ -212,14 +224,7 @@ class Actions {
   };
 
   small = () => {
-    const {
-      todayData,
-      usedData,
-      restData,
-      isCheckIn,
-    } = this.service.dataSource;
-    const data1 =
-      isCheckIn !== undefined ? `今日：${todayData}` : `重置：${todayData}`;
+    const { todayData, usedData, restData } = this.service.dataSource;
     return {
       type: 'zstack',
       props: this.containerProps(),
@@ -244,7 +249,7 @@ class Actions {
                 {
                   type: 'text',
                   props: {
-                    text: data1,
+                    text: `${this.service.label.todayData}：${todayData}`,
                     color: this.fontColor,
                     font: { size: this.sizeConfig.labelTextFont },
                   },
@@ -260,7 +265,7 @@ class Actions {
               views: [
                 this.labelText(
                   this.service.color2,
-                  '累计',
+                  this.service.label.usedData,
                   ``,
                   false,
                   'vstack',
@@ -268,7 +273,7 @@ class Actions {
                 this.charts(this.sizeConfig.chartsSize),
                 this.labelText(
                   this.service.color1,
-                  `剩余`,
+                  this.service.label.restData,
                   ``,
                   false,
                   'vstack',

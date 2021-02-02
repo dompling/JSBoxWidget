@@ -14,6 +14,13 @@ class Service {
     isCheckIn: false,
   };
 
+  label = {
+    restData: '剩余',
+    usedData: '已用',
+    totalData: '总量',
+    todayData: '上传',
+  };
+
   account = { logo: '', title: '', url: '' };
 
   chart1 = '';
