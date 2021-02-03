@@ -64,6 +64,7 @@ class Actions {
       frame: this.config.displaySize,
       alignment: $widget.alignment.center,
       background,
+      link: `youtube://www.youtube.com/channel/${this.service.id}`,
     };
   };
 
