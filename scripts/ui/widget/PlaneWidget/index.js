@@ -20,7 +20,6 @@ class Index extends Widget {
     this.fontColor = !isDarkMode
       ? this.setting.get('nightFont')
       : this.setting.get('lightFont');
-    this.run();
   }
 
   service = {
@@ -78,6 +77,7 @@ class Index extends Widget {
 
   async render() {
     const expireDate = new Date(this.data.date + this.switchInterval);
+    this.run();
     await this.service.fetch();
     $widget.setTimeline({
       entries: [
