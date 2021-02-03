@@ -15,21 +15,21 @@
     "title": "油管配置",
     "items": [
       {
-        "icon": ["rectangle.3.offgrid", "#ffd6e7"],
+        "icon": ["key.icloud", "#ffd6e7"],
         "title": "ApiKey",
         "type": "input",
         "key": "ApiKey",
         "value": ""
       },
       {
-        "icon": ["rectangle.3.offgrid.bubble.left", "#d3adf7"],
+        "icon": ["heart", "#d3adf7"],
         "title": "频道 ID",
         "type": "input",
         "key": "channelID",
         "value": ""
       },
       {
-        "icon": ["faceid", "#adc6ff"],
+        "icon": ["u.circle", "#adc6ff"],
         "title": "自定义频道名",
         "type": "input",
         "key": "channelName",
