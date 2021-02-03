@@ -1,4 +1,4 @@
-# 京东豆小组件
+# 油管频道订阅
 
 > 谷歌的 API KEY 需要自行申请，地址：<a href="https://developers.google.com/youtube/v3/getting-started">YouTube DataAPI</a>
 
