@@ -27,9 +27,7 @@ class Actions {
     this.counterView();
   };
 
-  counter_view = [];
-  type_view = [];
-  sizeConfig = {};
+  video_view = [];
 
   spacerMaker(height, width) {
     return {
@@ -64,7 +62,6 @@ class Actions {
       frame: this.config.displaySize,
       alignment: $widget.alignment.center,
       background,
-      link: `youtube://www.youtube.com/channel/${this.service.id}`,
     };
   };
 
@@ -86,14 +83,17 @@ class Actions {
   };
 
   avatar = () => {
-    const height = this.config.displaySize.height;
     return {
       type: 'image',
       props: {
         resizable: true,
         scaledToFit: true,
         uri: this.service.channel.snippet.thumbnails.high.url,
-        frame: { width: height, height: height },
+        cornerRadius: {
+          value: 10,
+          style: 1,
+        },
+        frame: { width: 20, height: 20 },
       },
     };
   };
@@ -119,105 +119,215 @@ class Actions {
   }
 
   counterView = () => {
-    const counters = this.service.channel.statistics;
-    label.forEach((key) => {
-      this.counter_view.push({
-        type: 'text',
+    const { videos } = this.service;
+    videos.items.forEach((item, index) => {
+      if (index >= 3) return;
+      const publishedAt = new Date(item.snippet.publishedAt);
+      this.video_view.push({
+        type: 'hstack',
         props: {
-          text: this.abbreviateNumber(counters[key], 1),
-          font: $font('bold', 13),
-          color: this.fontColor,
-          minimumScaleFactor,
-          lineLimit: 1,
+          alignment: $widget.verticalAlignment.center,
+          spacing: 5,
+          frame: { height: 40 },
+          link: `youtube://www.youtube.com/watch?v=${item.id}`,
         },
-      });
-      this.type_view.push({
-        type: 'text',
-        props: {
-          text: key.replace('Count', ''),
-          font: $font(10),
-          color: $color('#aaaaaa'),
-          minimumScaleFactor,
-          lineLimit: 1,
-        },
+        views: [
+          {
+            type: 'image',
+            props: {
+              uri: item.snippet.thumbnails.standard.url,
+              resizable: true,
+              scaledToFill: true,
+              frame: { width: 64, height: 40 },
+              cornerRadius: {
+                value: 4,
+                style: 1,
+              },
+            },
+          },
+          {
+            type: 'vstack',
+            props: {
+              alignment: $widget.horizontalAlignment.leading,
+              spacing: 5,
+            },
+            views: [
+              {
+                type: 'text',
+                props: {
+                  text: item.snippet.title,
+                  lineLimit: 1,
+                  font: $font('bold', 12),
+                  color: this.fontColor,
+                },
+              },
+              {
+                type: 'text',
+                props: {
+                  text: `${publishedAt.getFullYear()}/${
+                    publishedAt.getMonth() + 1
+                  }/${publishedAt.getDate()} ${publishedAt.getHours()}:${publishedAt.getMinutes()}`,
+                  lineLimit: 1,
+                  minimumScaleFactor,
+                  font: $font(10),
+                  color: this.fontColor,
+                  opacity: 0.8,
+                },
+              },
+            ],
+          },
+        ],
       });
     });
   };
 
-  content = () => {
-    const { width, height } = this.config.displaySize;
+  content = (width, height) => {
+    const counters = this.service.channel.statistics;
+    let today = new Date();
+    let updateTime = `${today.getMonth() + 1}/${today.getDate()} ${this.zeroPad(
+      today.getHours(),
+    )}:${this.zeroPad(today.getMinutes())}`;
     return {
       type: 'vstack',
       props: {
-        alignment: $widget.horizontalAlignment.leading,
-        spacing: 13,
-        frame: {
-          width: width - height - 15,
-          height: height,
-        },
+        ...this.contentProps(10),
+        frame: { width, height },
+        link: `youtube://www.youtube.com/channel/${this.service.id}`,
       },
       views: [
         {
-          type: 'hstack',
+          type: 'vstack',
           props: {
-            alignment: $widget.verticalAlignment.center,
+            alignment: $widget.horizontalAlignment.center,
+            spacing: 2,
           },
           views: [
             {
-              type: 'vstack',
+              type: 'text',
               props: {
-                alignment: $widget.horizontalAlignment.leading,
+                text: this.abbreviateNumber(counters.subscriberCount, 1),
+                font: $font('bold', 24),
+                color: this.fontColor,
+                minimumScaleFactor,
               },
-              views: [
-                {
-                  type: 'text',
-                  props: {
-                    text: this.service.channel.snippet.title,
-                    font: $font('bold', 20),
-                    color: this.fontColor,
-                    minimumScaleFactor,
-                    lineLimit: 1,
-                  },
-                },
-                {
-                  type: 'text',
-                  props: {
-                    text: '@' + this.setting.get('channelName'),
-                    font: $font(10),
-                    color: $color('#2481cc'),
-                    minimumScaleFactor,
-                    lineLimit: 1,
-                  },
-                },
-              ],
+            },
+            {
+              type: 'text',
+              props: {
+                text: 'Subscribers',
+                font: $font('AppleSDGothicNeo-SemiBold', 12),
+                color: this.fontColor,
+                minimumScaleFactor,
+              },
             },
           ],
         },
         {
-          type: 'text',
+          type: 'vstack',
           props: {
-            text: this.service.channel.snippet.description,
-            font: $font(10),
-            color: this.fontColor,
-            minimumScaleFactor,
-            lineLimit: 3,
+            alignment: $widget.horizontalAlignment.center,
+            spacing: 2,
           },
+          views: [
+            {
+              type: 'hstack',
+              props: {
+                alignment: $widget.horizontalAlignment.center,
+                spacing: 5,
+              },
+              views: [
+                {
+                  type: 'image',
+                  props: {
+                    symbol: {
+                      glyph: 'play.fill',
+                      size: 14,
+                    },
+                    color: this.fontColor,
+                  },
+                },
+                {
+                  type: 'text',
+                  props: {
+                    text: this.abbreviateNumber(counters.viewCount, 1),
+                    font: $font('AppleSDGothicNeo-SemiBold', 20),
+                    color: this.fontColor,
+                    minimumScaleFactor,
+                  },
+                },
+              ],
+            },
+            {
+              type: 'text',
+              props: {
+                text: 'view',
+                font: $font('AppleSDGothicNeo-SemiBold', 14),
+                color: this.fontColor,
+                minimumScaleFactor,
+              },
+            },
+          ],
         },
         {
-          type: 'vgrid',
+          type: 'hstack',
           props: {
-            columns: Array(
-              this.counter_view.concat(this.type_view).length / 2,
-            ).fill({
-              flexible: {
-                minimum: 10,
-                maximum: Infinity,
-              },
-            }),
+            alignment: $widget.horizontalAlignment.center,
+            spacing: 5,
           },
-          views: this.counter_view.concat(this.type_view),
+          views: [
+            this.avatar(),
+            {
+              type: 'text',
+              props: {
+                text: `@${this.setting.get('channelName')}`,
+                font: $font('AppleSDGothicNeo-SemiBold', 12),
+                color: this.fontColor,
+                minimumScaleFactor,
+              },
+            },
+          ],
+        },
+        {
+          type: 'hstack',
+          props: {
+            alignment: $widget.horizontalAlignment.center,
+            spacing: 5,
+          },
+          views: [
+            {
+              type: 'image',
+              props: {
+                symbol: {
+                  glyph: 'arrow.triangle.2.circlepath',
+                  size: 10,
+                },
+                color: this.fontColor,
+              },
+            },
+            {
+              type: 'text',
+              props: {
+                text: updateTime,
+                font: $font('Baskerville-SemiBoldItalic', 10),
+                color: this.fontColor,
+                opacity: 0.9,
+                minimumScaleFactor,
+              },
+            },
+          ],
         },
       ],
+    };
+  };
+
+  right = () => {
+    return {
+      type: 'vstack',
+      props: {
+        spacing: 10,
+        alignment: $widget.horizontalAlignment.leading,
+      },
+      views: this.video_view,
     };
   };
 
@@ -230,133 +340,11 @@ class Actions {
   }
 
   small = () => {
-    const counters = this.service.channel.statistics;
-    let today = new Date();
-    let updateTime = `${today.getMonth() + 1}/${today.getDate()} ${this.zeroPad(
-      today.getHours(),
-    )}:${this.zeroPad(today.getMinutes())}`;
+    const { width, height } = this.config.displaySize;
     return {
       type: 'zstack',
       props: this.containerProps(),
-      views: [
-        {
-          type: 'vstack',
-          props: this.contentProps(10),
-          views: [
-            {
-              type: 'vstack',
-              props: {
-                alignment: $widget.horizontalAlignment.center,
-                spacing: 2,
-              },
-              views: [
-                {
-                  type: 'text',
-                  props: {
-                    text: this.abbreviateNumber(counters.subscriberCount, 1),
-                    font: $font('bold', 24),
-                    color: this.fontColor,
-                    minimumScaleFactor,
-                  },
-                },
-                {
-                  type: 'text',
-                  props: {
-                    text: 'Subscribers',
-                    font: $font('AppleSDGothicNeo-SemiBold', 12),
-                    color: this.fontColor,
-                    minimumScaleFactor,
-                  },
-                },
-              ],
-            },
-            {
-              type: 'vstack',
-              props: {
-                alignment: $widget.horizontalAlignment.center,
-                spacing: 2,
-              },
-              views: [
-                {
-                  type: 'hstack',
-                  props: {
-                    alignment: $widget.horizontalAlignment.center,
-                    spacing: 5,
-                  },
-                  views: [
-                    {
-                      type: 'image',
-                      props: {
-                        symbol: {
-                          glyph: 'play.fill',
-                          size: 14,
-                        },
-                        color: this.fontColor,
-                      },
-                    },
-                    {
-                      type: 'text',
-                      props: {
-                        text: this.abbreviateNumber(counters.viewCount, 1),
-                        font: $font('AppleSDGothicNeo-SemiBold', 20),
-                        color: this.fontColor,
-                        minimumScaleFactor,
-                      },
-                    },
-                  ],
-                },
-                {
-                  type: 'text',
-                  props: {
-                    text: 'view',
-                    font: $font('AppleSDGothicNeo-SemiBold', 14),
-                    color: this.fontColor,
-                    minimumScaleFactor,
-                  },
-                },
-              ],
-            },
-            {
-              type: 'text',
-              props: {
-                text: `@${this.setting.get('channelName')}`,
-                font: $font('AppleSDGothicNeo-SemiBold', 12),
-                color: this.fontColor,
-                minimumScaleFactor,
-              },
-            },
-            {
-              type: 'hstack',
-              props: {
-                alignment: $widget.horizontalAlignment.center,
-                spacing: 5,
-              },
-              views: [
-                {
-                  type: 'image',
-                  props: {
-                    symbol: {
-                      glyph: 'arrow.triangle.2.circlepath',
-                      size: 10,
-                    },
-                    color: this.fontColor,
-                  },
-                },
-                {
-                  type: 'text',
-                  props: {
-                    text: updateTime,
-                    font: $font('Baskerville-SemiBoldItalic', 10),
-                    color: this.fontColor,
-                    opacity: 0.9,
-                    minimumScaleFactor,
-                  },
-                },
-              ],
-            },
-          ],
-        },
-      ],
+      views: [this.content(width, height)],
     };
   };
 
@@ -369,7 +357,18 @@ class Actions {
         {
           type: 'hstack',
           props: this.contentProps(7.5),
-          views: [this.avatar(), this.content(), this.spacerMaker(height, 0)],
+          views: [
+            this.content(height / 1.3, height),
+            {
+              type: 'divider',
+              props: {
+                color: $color('#e8e8e8'),
+                frame: { width: 2, height: height },
+              },
+            },
+            this.right(),
+            this.spacerMaker(height, 0),
+          ],
         },
       ],
     };
