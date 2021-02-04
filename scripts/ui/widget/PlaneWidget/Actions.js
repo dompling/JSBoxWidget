@@ -184,7 +184,7 @@ class Actions {
         ),
         this.labelText(
           this.service.color1,
-          `${this.service.label.restData}:`,
+          `${this.service.label.restData}：`,
           `${restData}`,
         ),
       ],
