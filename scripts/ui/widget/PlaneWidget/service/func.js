@@ -88,7 +88,7 @@ const getChartConfig = (data, color, value, fontColor) => {
         centerPercentage: 70,
         rotation: Math.PI / 2,
         centerArea: {
-          displayText: true,
+          displayText: false,
           fontColor: '${fontColor}',
           fontSize: 20,
           text:(value)=>{

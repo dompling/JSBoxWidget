@@ -64,6 +64,20 @@ class Actions {
             {
               type: 'zstack',
               props: getStackProps(1),
+              views: [
+                {
+                  type: 'text',
+                  props: {
+                    text: this.service.dataSource.restData,
+                    color: this.fontColor,
+                    minimumScaleFactor,
+                    lineLimit: 1,
+                    font: !this.config.family
+                      ? $font('bold', 5)
+                      : $font('bold', 7),
+                  },
+                },
+              ],
             },
           ],
         },

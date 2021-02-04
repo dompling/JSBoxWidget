@@ -125,6 +125,19 @@ class AppKernel extends Kernel {
       animate.touchHighlightEnd();
     };
 
+    this.setting.clearCache = (animate) => {
+      animate.touchHighlightStart();
+      animate.actionStart();
+      const assetsPath = `${widgetAssetsPath}`;
+      $file.list(assetsPath).forEach((path) => {
+        const deletedPath = `${assetsPath}/${path}`;
+        if ($file.exists(deletedPath)) $file.delete(deletedPath);
+      });
+      $ui.toast('缓存清除成功');
+      animate.actionDone();
+      animate.touchHighlightEnd();
+    };
+
     this.setting.backupToICloud = (animate) => {
       animate.actionStart();
       const backupAction = async () => {
