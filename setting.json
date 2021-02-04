@@ -54,7 +54,7 @@
     "items": [
       {
         "icon": ["delete.right"],
-        "title": "全组件缓存",
+        "title": "清除组件缓存",
         "type": "script",
         "key": "clear",
         "value": "this.controller.clearCache"
