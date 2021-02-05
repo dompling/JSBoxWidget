@@ -74,11 +74,13 @@ class Actions {
 
   avatar = (size = 90) => {
     return {
-      type: 'hstack',
+      type: 'zstack',
       props: {
         frame: { width: size, height: size },
-        alignment: $widget.horizontalAlignment.center,
-        background: {
+        alignment: $widget.alignment.center,
+      },
+      views: [
+        {
           type: 'image',
           props: {
             image: this.state.userInfo.headImageUrl,
@@ -91,22 +93,22 @@ class Actions {
             },
           },
         },
-      },
-      ...(this.state.isPlusVip && {
-        views: [
-          {
-            type: 'image',
-            props: {
-              image: avatarBg,
-              resizable: true,
-              frame: {
-                width: 90,
-                height: 90,
+        ...(this.state.isPlusVip
+          ? [
+              {
+                type: 'image',
+                props: {
+                  image: avatarBg,
+                  resizable: true,
+                  frame: {
+                    width: size,
+                    height: size,
+                  },
+                },
               },
-            },
-          },
-        ],
-      }),
+            ]
+          : []),
+      ],
     };
   };
 
