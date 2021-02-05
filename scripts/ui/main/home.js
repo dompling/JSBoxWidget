@@ -16,7 +16,7 @@ class HomeUI {
   }
 
   getWidgetListView() {
-    let data = this.kernel.getWidgetList();
+    let listItems = this.kernel.getWidgetList();
     const template = (data) => {
       return {
         icon: {
@@ -32,7 +32,7 @@ class HomeUI {
         name: data.name,
       };
     };
-    return data.map((item) => template(item));
+    return listItems.map((item) => template(item));
   }
 
   getViews() {
@@ -208,6 +208,7 @@ class HomeUI {
           didSelect: (sender, indexPath, data) => {
             let widgetName = data.name;
             let widget = this.kernel.widgetInstance(widgetName);
+            sender.data = this.getWidgetListView();
             if (widget) {
               widget.custom();
             } else {
@@ -215,10 +216,12 @@ class HomeUI {
             }
           },
           pulled: (sender) => {
-            sender.data = this.getWidgetListView();
             setTimeout(() => {
               sender.endRefreshing();
             }, 500);
+          },
+          willEndDragging: (sender) => {
+            sender.data = this.getWidgetListView();
           },
         },
         layout: $layout.fill,

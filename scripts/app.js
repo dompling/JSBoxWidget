@@ -224,10 +224,10 @@ class AppKernel extends Kernel {
                     $file.mkdir(`${this.backupPath}/widgets`);
                     $file.mkdir(`${this.backupPath}/userdata`);
                     // 解压
-                    // await $archiver.unzip({
-                    //   path: `${this.backupPath}/widgets.zip`,
-                    //   dest: `${this.backupPath}/widgets`,
-                    // });
+                    await $archiver.unzip({
+                      path: `${this.backupPath}/widgets.zip`,
+                      dest: `${this.backupPath}/widgets`,
+                    });
                     await $archiver.unzip({
                       path: `${this.backupPath}/userdata.zip`,
                       dest: `${this.backupPath}/userdata`,
@@ -237,17 +237,58 @@ class AppKernel extends Kernel {
                     $file.delete(`${this.backupPath}/widgets.zip`);
                     $file.delete(`${this.backupPath}/userdata.zip`);
                     // 恢复
-                    // $file.list(`${this.backupPath}/widgets`).forEach((item) => {
-                    //   if (
-                    //     $file.isDirectory(`${this.backupPath}/widgets/${item}`)
-                    //   ) {
-                    //     $file.delete(`${this.widgetRootPath}/${item}`);
-                    //     $file.move({
-                    //       src: `${this.backupPath}/widgets/${item}`,
-                    //       dst: `${this.widgetRootPath}/${item}`,
-                    //     });
-                    //   }
-                    // });
+                    $file.list(`${this.backupPath}/widgets`).forEach((item) => {
+                      if (
+                        $file.isDirectory(`${this.backupPath}/widgets/${item}`)
+                      ) {
+                        if (
+                          !$file.exists(
+                            `${this.backupPath}/widgets/${item}/config.json`,
+                          )
+                        )
+                          return;
+                        let config = JSON.parse(
+                          $file.read(
+                            `${this.backupPath}/widgets/${item}/config.json`,
+                          ).string,
+                        );
+                        if (config.source) {
+                          const defaultConfig = { ...config };
+                          let widgetName = defaultConfig.source;
+                          let newName = defaultConfig.title;
+                          $file.copy({
+                            src: `${this.widgetRootPath}/${widgetName}`,
+                            dst: `${this.widgetRootPath}/${newName}`,
+                          });
+                          // 更新设置文件中的NAME常量
+                          let settingjs = $file.read(
+                            `${this.widgetRootPath}/${newName}/setting.js`,
+                          ).string;
+                          let firstLine = settingjs.split('\n')[0];
+                          let newFirstLine = `const NAME = "${newName}"`;
+                          settingjs = settingjs.replace(
+                            firstLine,
+                            newFirstLine,
+                          );
+                          $file.write({
+                            data: $data({ string: settingjs }),
+                            path: `${this.widgetRootPath}/${newName}/setting.js`,
+                          });
+                          // 更新config.json
+                          let newConfig = JSON.parse(
+                            $file.read(
+                              `${this.widgetRootPath}/${newName}/config.json`,
+                            ).string,
+                          );
+                          newConfig.title = newName;
+                          newConfig.source = widgetName;
+                          $file.write({
+                            data: $data({ string: JSON.stringify(newConfig) }),
+                            path: `${this.widgetRootPath}/${newName}/config.json`,
+                          });
+                        }
+                      }
+                    });
                     $file.move({
                       src: `${this.backupPath}/userdata`,
                       dst: this.widgetAssetsPath,
