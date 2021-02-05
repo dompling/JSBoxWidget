@@ -325,6 +325,7 @@ class Actions {
       type: 'vstack',
       props: {
         spacing: 10,
+        frame: { minWidth: 200 },
         alignment: $widget.horizontalAlignment.leading,
       },
       views: this.video_view,
@@ -356,7 +357,7 @@ class Actions {
       views: [
         {
           type: 'hstack',
-          props: this.contentProps(7.5),
+          props: this.contentProps(0),
           views: [
             this.content(height / 1.3, height),
             {
@@ -366,8 +367,9 @@ class Actions {
                 frame: { width: 2, height: height },
               },
             },
+            { type: 'spacer', props: { minLength: 5 } },
             this.right(),
-            this.spacerMaker(height, 0),
+            { type: 'spacer', props: { minLength: 5 } },
           ],
         },
       ],
