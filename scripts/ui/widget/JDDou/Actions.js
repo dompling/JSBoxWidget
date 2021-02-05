@@ -145,6 +145,7 @@ class Actions {
             text: `${text}`,
             color: this.fontColor,
             lineLimit: 1,
+            minimumScaleFactor,
             font: {
               size: 14,
             },
@@ -174,6 +175,7 @@ class Actions {
               size: this.sizeConfig.labelSize.font1,
               weight: 'bold',
             },
+            minimumScaleFactor,
             color: $color('#ffef03'),
           },
         },
@@ -207,6 +209,8 @@ class Actions {
           props: {
             alignment: $widget.horizontalAlignment.leading,
             spacing: 5,
+            frame: { width: 100 },
+            clipped: true,
           },
           views: [
             this.avatar(),
@@ -257,6 +261,7 @@ class Actions {
                 font: $font('bold', this.sizeConfig.headerSize.font1),
                 text: '京东',
                 lineLimit: 1,
+                minimumScaleFactor,
               },
             },
           ],
@@ -288,6 +293,7 @@ class Actions {
                 font: $font('bold', this.sizeConfig.headerSize.font2),
                 text: '京豆',
                 lineLimit: 1,
+                minimumScaleFactor,
               },
             },
           ],
@@ -354,6 +360,7 @@ class Actions {
       props: {
         alignment: $widget.verticalAlignment.center,
         spacing: 12,
+        frame: { width: 200 },
       },
       views: [this.header(), this.body(), this.footer()],
     };
@@ -381,7 +388,7 @@ class Actions {
       alignment: $widget.alignment.center,
       background,
       widgetURL:
-        'https://bean.m.jd.com\/beanDetail\/index.action?resourceValue=bean',
+        'https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean',
     };
   };
 
@@ -476,7 +483,7 @@ class Actions {
       views: [
         {
           type: 'hstack',
-          props: this.contentProps(),
+          props: this.contentProps(7.5),
           views: [this.left(), this.right()],
         },
       ],
