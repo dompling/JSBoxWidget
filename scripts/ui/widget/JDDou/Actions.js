@@ -380,6 +380,8 @@ class Actions {
       frame: this.config.displaySize,
       alignment: $widget.alignment.center,
       background,
+      widgetURL:
+        'https://bean.m.jd.com\/beanDetail\/index.action?resourceValue=bean',
     };
   };
 

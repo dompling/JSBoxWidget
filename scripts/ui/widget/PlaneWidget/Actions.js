@@ -38,48 +38,34 @@ class Actions {
   };
 
   charts = (size) => {
+    const frame = { width: size, height: size };
     const getchart = (image) => {
       return {
         type: 'image',
-        props: { image, resizable: true, scaledToFill: true },
-      };
-    };
-    const getStackProps = (key) => {
-      const frame = { width: size, height: size };
-      return {
         frame,
-        alignment: $widget.alignment.center,
-        background: getchart(this.service[`chart${key}`]),
+        props: { image, resizable: true, scaledToFill: true },
       };
     };
 
     return {
       type: 'zstack',
-      props: getStackProps(3),
+      props: {
+        frame,
+        alignment: $widget.alignment.center,
+      },
       views: [
+        getchart(this.service[`chart${3}`]),
+        getchart(this.service[`chart${2}`]),
+        getchart(this.service[`chart${1}`]),
         {
-          type: 'zstack',
-          props: getStackProps(2),
-          views: [
-            {
-              type: 'zstack',
-              props: getStackProps(1),
-              views: [
-                {
-                  type: 'text',
-                  props: {
-                    text: this.service.dataSource.restData,
-                    color: this.fontColor,
-                    minimumScaleFactor,
-                    lineLimit: 1,
-                    font: !this.config.family
-                      ? $font('bold', 5)
-                      : $font('bold', 7),
-                  },
-                },
-              ],
-            },
-          ],
+          type: 'text',
+          props: {
+            text: this.service.dataSource.restData,
+            color: this.fontColor,
+            minimumScaleFactor,
+            lineLimit: 1,
+            font: !this.config.family ? $font('bold', 5) : $font('bold', 7),
+          },
         },
       ],
     };

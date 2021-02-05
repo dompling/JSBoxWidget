@@ -192,7 +192,7 @@ class Actions {
       props: {
         ...this.contentProps(10),
         frame: { width, height },
-        link: `youtube://www.youtube.com/channel/${this.service.id}`,
+        widgetURL: `youtube://www.youtube.com\/channel\/${this.service.id}`,
       },
       views: [
         {

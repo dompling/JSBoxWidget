@@ -320,7 +320,7 @@ module.exports = {
   run: async () => {
     if ($app.env === $env.widget) {
       const kernel = new WidgetKernel();
-      const widgetName = $widget.inputValue || 'JDDou';
+      const widgetName = $widget.inputValue || 'PlaneWidget';
       const widget = kernel.widgetInstance(widgetName);
       if (widget) {
         await widget.render();

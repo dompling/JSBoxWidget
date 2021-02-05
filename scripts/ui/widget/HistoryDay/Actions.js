@@ -106,12 +106,12 @@ class Actions {
     const { width, height } = this.config.displaySize;
     let { j, t } = this.data;
     const [year, desc] = t.split(' ');
-    const link = `https://www.baidu.com/s?word=${desc}`;
-    console.log(link);
+    const link = `https://www.google.com\/search?q=`+encodeURIComponent(desc);
     return {
       type: 'zstack',
       props: {
         ...this.containerProps(),
+        widgetURL: link,
       },
       views: [
         {
@@ -135,7 +135,6 @@ class Actions {
             alignment: $widget.horizontalAlignment.center,
             spacing: 10,
             frame: { width, height },
-            link,
           },
           views: [
             { type: 'spacer', props: { minLength: 20 } },

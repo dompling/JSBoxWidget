@@ -20,6 +20,7 @@ class Index extends Widget {
     this.fontColor = !isDarkMode
       ? this.setting.get('nightFont')
       : this.setting.get('lightFont');
+    this.run();
   }
 
   service = {
@@ -27,38 +28,33 @@ class Index extends Widget {
   };
 
   run = () => {
-    const planeType = this.setting.get('planeType');
-    const account = {
-      url: this.setting.get('url'),
-      logo: this.setting.get('logo'),
-      title: this.setting.get('title'),
-      email: this.setting.get('email'),
-      password: this.setting.get('password'),
-    };
+    try {
+      const planeType = this.setting.get('planeType');
+      const account = {
+        url: this.setting.get('url'),
+        logo: this.setting.get('logo'),
+        title: this.setting.get('title'),
+        email: this.setting.get('email'),
+        password: this.setting.get('password'),
+      };
 
-    switch (planeType) {
-      case 0:
-        if (!account.email || !account.url || !account.password) {
-          $ui.toast('请填写机场信息');
-        }
-        this.service = new V2Service(account);
-        break;
-      case 1:
-        if (!account.email || !account.url || !account.password) {
-          $ui.toast('请填写机场信息');
-        }
-        this.service = new BaseService(account);
-        break;
-      case 2:
-        if (!account.url) {
-          $ui.toast('请填写机场订阅');
-        }
-        this.service = new Service(account);
-        break;
-      default:
-        break;
+      switch (planeType) {
+        case 0:
+          this.service = new V2Service(account);
+          break;
+        case 1:
+          this.service = new BaseService(account);
+          break;
+        case 2:
+          this.service = new Service(account);
+          break;
+        default:
+          break;
+      }
+      this.service.fontColor = this.fontColor;
+    } catch (e) {
+      console.log(e);
     }
-    this.service.fontColor = this.fontColor;
   };
 
   getActions = (config) => {
@@ -77,7 +73,6 @@ class Index extends Widget {
 
   async render() {
     const expireDate = new Date(this.data.date + this.switchInterval);
-    this.run();
     await this.service.fetch();
     $widget.setTimeline({
       entries: [
