@@ -1,5 +1,5 @@
 const { getChartConfig, getDaysInMonth } = require('./func');
-const { requestFailed } = require('../../../../utils/index');
+const { cacheRequest } = require('../../../../utils/index');
 class Service {
   constructor(account) {
     this.account = account;
@@ -42,6 +42,7 @@ class Service {
       await this.getSubscribe(`${this.account.url}/api/v1/user/getSubscribe`);
     } catch (e) {
       console.log(e);
+      console.log(2222);
     }
     await this.createChart(360);
   };
@@ -51,29 +52,35 @@ class Service {
       email: this.account.email,
       password: this.account.password,
     };
-    const res = await $http.post({ url, form: data });
-    if (res.data.errors) return console.log(JSON.stringify(res.data));
-    this.cookies = res.response.headers['Set-Cookie'];
+    let res = await $http.post({ url, form: data, timeout: 2 });
+    res = cacheRequest(`${this.account.url}_cookie_${this.account.email}`, res);
+    if (!res.data.errors) this.cookies = res.response.headers['Set-Cookie'];
   };
 
   getSubscribe = async (url) => {
-    const res = await $http.get({
+    let res = await $http.get({
       url,
+      timeout: 2,
       header: {
         cookie: this.cookies,
         referer: `${this.account.url}/`,
         'accept-language': 'zh-CN,zh;q=0.9',
       },
     });
-    if (res.data.errors) return console.log(JSON.stringify(res.data));
-    this.cookies = res.response.headers['Set-Cookie'];
-    const subscribe = res.data.data;
-    this.dataSource.totalData = `${subscribe.transfer_enable}`;
-    this.dataSource.usedData = `${subscribe.d + subscribe.u}`;
-    this.dataSource.restData = `${
-      subscribe.transfer_enable - (subscribe.d + subscribe.u)
-    }`;
-    this.dataSource.todayData = `${subscribe.reset_day}`;
+    res = cacheRequest(
+      `${this.account.url}_subscribe_${this.account.email}`,
+      res,
+    );
+    if (!res.data.errors) {
+      this.cookies = res.response.headers['Set-Cookie'];
+      const subscribe = res.data.data;
+      this.dataSource.totalData = `${subscribe.transfer_enable}`;
+      this.dataSource.usedData = `${subscribe.d + subscribe.u}`;
+      this.dataSource.restData = `${
+        subscribe.transfer_enable - (subscribe.d + subscribe.u)
+      }`;
+      this.dataSource.todayData = `${subscribe.reset_day}`;
+    }
   };
 
   createChart = async (size) => {
@@ -101,12 +108,8 @@ class Service {
       const cacheKey = this.account.url + '_' + this.account.email + key;
       const parmas = encodeURIComponent(chart);
       const url = `https://quickchart.io/chart?w=${size}&h=${size}&f=png&c=${parmas}`;
-      let file = await $http.download({ url });
-      if (requestFailed(file)) {
-        file = $cache.get(cacheKey);
-      } else {
-        $cache.set(cacheKey, file);
-      }
+      let file = await $http.download({ url, timeout: 2 });
+      file = cacheRequest(cacheKey, file);
       return file.data.image;
     };
 

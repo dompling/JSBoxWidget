@@ -1,4 +1,4 @@
-const { requestFailed } = require('../../../../utils/index');
+const { cacheRequest } = require('../../../../utils/index');
 
 class Service {
   constructor() {}
@@ -15,17 +15,14 @@ class Service {
     }
   };
 
-  dataSource = {};
+  dataSource = [];
   imgUri = 'http://img.lssdjt.com';
 
   getHistoryList = async () => {
     const url = `http://code.lssdjt.com/jsondata/history.${this.today}.js`;
-    let response = await $http.get({ url });
-    if (requestFailed(response)) {
-      response = $cache.get('historyDay');
-    } else {
-      $cache.set('historyDay', response);
-    }
+    let response = await $http.get({ url, timeout: 2 });
+    response = cacheRequest(`history_day`, response);
+    console.log(response);
     response = response.data;
     if (response && response.d.length > 0) {
       const dataSource = response.d;

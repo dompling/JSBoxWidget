@@ -1,6 +1,5 @@
 const { getChartConfig } = require('./func');
-const { requestFailed } = require('../../../../utils/index');
-
+const { cacheRequest } = require('../../../../utils/index');
 class Service {
   constructor(account) {
     this.account = account;
@@ -42,7 +41,6 @@ class Service {
       this.dataSource.totalData = total;
       this.dataSource.usedData = use;
       this.dataSource.todayData = today;
-      console.log(this.dataSource);
       await this.createChart(360);
     } catch (e) {
       console.log(e);
@@ -51,18 +49,13 @@ class Service {
 
   async getdata(url) {
     let req = await $http.get({ url });
-    if (requestFailed(req)) {
-      req = $cache.get(url);
-    } else {
-      $cache.set(url, req);
-    }
+    req = cacheRequest(this.account.url, req);
     let resp = req.response.headers['subscription-userinfo'];
     resp = [
       parseInt(resp.match(/upload=([0-9]+);?/)[1]).toFixed(2),
       parseInt(resp.match(/download=([0-9]+);?/)[1]).toFixed(2),
       parseInt(resp.match(/total=([0-9]+);?/)[1]).toFixed(2),
     ];
-    console.log(resp);
     return resp;
   }
 
@@ -110,11 +103,7 @@ class Service {
       const parmas = encodeURIComponent(chart);
       const url = `https://quickchart.io/chart?w=${size}&h=${size}&f=png&c=${parmas}`;
       let file = await $http.download({ url });
-      if (requestFailed(file)) {
-        file = $cache.get(cacheKey);
-      } else {
-        $cache.set(cacheKey, file);
-      }
+      file = cacheRequest(cacheKey, file);
       return file.data.image;
     };
 

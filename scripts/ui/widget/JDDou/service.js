@@ -1,4 +1,4 @@
-const { requestFailed } = require('../../../utils/index');
+const { cacheRequest } = require('../../../utils/index');
 
 class Service {
   constructor(cookie) {
@@ -94,6 +94,7 @@ class Service {
   async TotalBean() {
     const options = {
       url: 'https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2',
+      timeout: 2,
       header: {
         Accept: 'application/json,text/plain, */*',
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -109,29 +110,23 @@ class Service {
 
     const key = `${this.cookie}_total`;
     let response = await $http.post(options);
-    if (requestFailed(response) || !response.data.base) {
-      response = $cache.get(key);
-    } else {
-      $cache.set(key, response);
+    response = cacheRequest(key, response);
+    if (response.data.base) {
+      this.set('beanCount', response.data.base.jdNum);
+      this.set('userInfo', response.data.base);
+      this.set('isPlusVip', response.data.isPlusVip);
+      const avatar = response.data.base.headImageUrl || this.headImageUrl;
+      let file = await $http.download({ url: avatar });
+      file = cacheRequest(avatar, file);
+      this.state.userInfo.headImageUrl = file.data.image;
     }
-    this.set('beanCount', response.data.base.jdNum);
-    this.set('userInfo', response.data.base);
-    this.set('isPlusVip', response.data.isPlusVip);
-    const avatar = response.data.base.headImageUrl || this.headImageUrl;
-    let file = await $http.download({ url: avatar });
-    if (requestFailed(file)) {
-      file = $cache.get(avatar);
-    } else {
-      $cache.set(avatar, file);
-    }
-    this.state.userInfo.headImageUrl = file.data.image;
-    return response.data;
   }
 
   async getJingBeanBalanceDetail(page) {
     const options = {
       url: `https://bean.m.jd.com/beanDetail/detail.json`,
       body: `page=${page}`,
+      timeout: 2,
       header: {
         'X-Requested-With': `XMLHttpRequest`,
         Connection: `keep-alive`,
@@ -146,7 +141,8 @@ class Service {
         Accept: `application/json, text/javascript, */*; q=0.01`,
       },
     };
-    const response = await $http.post(options);
+    let response = await $http.post(options);
+    response = cacheRequest(`jddou_${this.cookie}`, response);
     return response.data;
   }
 
@@ -154,21 +150,25 @@ class Service {
     //津贴查询
     const JTReq_opt = {
       url: 'https://ms.jr.jd.com/gw/generic/uc/h5/m/mySubsidyBalance',
+      timeout: 2,
       header: {
         cookie: this.cookie,
         Referer: 'https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&',
       },
     };
-    const JTData = await $http.post(JTReq_opt);
+    let JTData = await $http.post(JTReq_opt);
+    JTData = cacheRequest(`JTData_${this.cookie}`, JTData);
     //钢镚查询
     const gb_opt = {
       url: 'https://coin.jd.com/m/gb/getBaseInfo.html',
+      timeout: 2,
       header: {
         cookie: this.cookie,
         Referer: 'https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&',
       },
     };
-    const GBData = await $http.post(gb_opt);
+    let GBData = await $http.post(gb_opt);
+    GBData = cacheRequest(`GBData_${this.cookie}`, GBData);
     if (JTData.data) {
       this.set('jt_and_gb', {
         jintie: JTData.data.resultData.data['balance'],

@@ -1,4 +1,4 @@
-const { requestFailed } = require('../../../../utils/index');
+const { cacheRequest } = require('../../../../utils/index');
 const baseApi = 'https://www.googleapis.com/youtube/v3';
 class Service {
   constructor(key, id) {
@@ -45,11 +45,10 @@ class Service {
       const params = Object.keys(data).map((key) => `${key}=${data[key]}`);
       const url = `${baseApi}/${key}?${params.join('&')}`;
       let response = await $http.get({ url, timeout: 2 });
-      if (requestFailed(response)) {
-        response = $cache.get(`youtube_${key}_${this.id}`);
-      } else {
-        $cache.set(`youtube_${key}_${this.id}`, response);
-      }
+      response = cacheRequest(
+        `youtube_${key}_${this.id}_${params.join('&')}`,
+        response,
+      );
       return response.data;
     } catch (e) {
       console.log(e);
