@@ -159,7 +159,7 @@ class Actions {
 
   small = () => {
     const { width, height } = this.config.displaySize;
-    const { phoneNumbers, emailAddresses, note } = this.service.dataSource;
+    const { phoneNumbers, emailAddresses } = this.service.dataSource;
     const phone = phoneNumbers[0] || {};
     const phoneNum = phone.content.split(' ').join('');
     const email = emailAddresses[0] || {};
