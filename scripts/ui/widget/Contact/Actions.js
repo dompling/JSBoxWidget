@@ -61,7 +61,7 @@ class Actions {
       spacing,
       clipped: true,
       frame: this.config.displaySize,
-      alignment: $widget.horizontalAlignment.center,
+      alignment: $widget.verticalAlignment.center,
       ...(this.is_bg && {
         background: {
           type: 'color',
@@ -97,8 +97,13 @@ class Actions {
         {
           type: 'hstack',
           props: {
-            alignment: $widget.horizontalAlignment.center,
             spacing: 5,
+            alignment: $widget.verticalAlignment.center,
+            // padding: $insets(5, 0, 0, 0),
+            frame: {
+              height: 30,
+              width: height * (this.config.family ? 1.5 : 0.8),
+            },
           },
           views: [
             ...(this.config.family
@@ -269,7 +274,7 @@ class Actions {
                 padding: $insets(0, 10, 0, 10),
               },
             },
-            { type: 'spacer', props: { minLength: 10 } },
+            { type: 'spacer', props: { minLength: 2 } },
           ],
         },
       ],
