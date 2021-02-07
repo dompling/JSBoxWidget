@@ -236,6 +236,38 @@ class View extends BaseView {
     };
   }
 
+  createText(key, icon, title, events) {
+    return {
+      type: 'view',
+      views: [
+        this.createLineLabel(title, icon),
+        {
+          type: 'label',
+          props: {
+            id: `text_${key}`,
+            align: $align.right,
+            text: this.controller.get(key),
+          },
+          events: {
+            tapped: () => {
+              if (events)
+                eval(
+                  `(()=>{return ${events}(this.updateSetting,key,this.dataCenter.get('name'))})()`,
+                );
+            },
+          },
+          layout: (make, view) => {
+            make.centerY.equalTo(view.prev);
+            make.right.inset(15);
+            make.height.equalTo(50);
+            make.width.equalTo(100);
+          },
+        },
+      ],
+      layout: $layout.fill,
+    };
+  }
+
   createNumber(key, icon, title, events) {
     return {
       type: 'view',
@@ -828,10 +860,6 @@ class View extends BaseView {
                 text: this.controller.get(key),
                 placeholder: title,
                 handler: (text) => {
-                  if (text === '') {
-                    $ui.toast($l10n('INVALID_VALUE'));
-                    return;
-                  }
                   if (this.updateSetting(key, text)) {
                     $(`${id}-label`).text = text;
                     if (events)
@@ -1191,6 +1219,14 @@ class View extends BaseView {
               item.events,
             );
             break;
+          case 'text':
+            row = this.createText(
+              item.key,
+              item.icon,
+              $l10n(item.title),
+              item.events,
+            );
+            break;
           case 'image':
             row = this.createImage(
               item.key,
@@ -1199,6 +1235,7 @@ class View extends BaseView {
               item.events,
             );
             break;
+
           default:
             continue;
         }

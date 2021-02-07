@@ -1,0 +1,109 @@
+[
+  {
+    "title": "基础",
+    "items": [
+      {
+        "icon": ["rectangle.3.offgrid.fill"],
+        "title": "预览",
+        "type": "script",
+        "key": "preview",
+        "value": "this.controller.preview"
+      }
+    ]
+  },
+  {
+    "title": "通讯录",
+    "items": [
+      {
+        "icon": ["person", "#ffa39e"],
+        "title": "联系人",
+        "type": "text",
+        "key": "contact",
+        "value": "",
+        "events": "this.controller.contact"
+      }
+    ]
+  },
+  {
+    "title": "组件设置",
+    "items": [
+      {
+        "icon": ["pencil.circle", "#40a9ff"],
+        "title": "白天字体",
+        "type": "color",
+        "key": "lightFont",
+        "value": "#d9d9d9"
+      },
+      {
+        "icon": ["pencil.circle.fill", "#595959"],
+        "title": "夜间字体",
+        "type": "color",
+        "key": "nightFont",
+        "value": "#f5f5f5"
+      },
+      {
+        "icon": ["rectangle.split.3x1.fill", "#FF6666"],
+        "title": "刷新时间",
+        "type": "stepper",
+        "key": "switchInterval",
+        "min": 10,
+        "max": 60,
+        "value": 30
+      },
+      {
+        "icon": ["circle.lefthalf.fill", "#5cdbd3"],
+        "title": "遮罩透明",
+        "type": "slider",
+        "key": "opacity",
+        "value": 0.5
+      },
+      {
+        "icon": ["photo", "#40a9ff"],
+        "title": "背景图片",
+        "type": "script",
+        "key": "background",
+        "value": "this.controller.background"
+      },
+      {
+        "icon": ["photo.on.rectangle.angled"],
+        "title": "透明背景",
+        "type": "script",
+        "key": "shotBackground",
+        "value": "this.controller.getWidgetScreenShot"
+      },
+      {
+        "icon": ["eyedropper", "#87e8de"],
+        "title": "白天背景色",
+        "type": "color",
+        "key": "lightColor",
+        "value": "#fff"
+      },
+      {
+        "icon": ["eyedropper", "#595959"],
+        "title": "夜间背景色",
+        "type": "color",
+        "key": "nightColor",
+        "value": "#000"
+      }
+    ]
+  },
+  {
+    "title": "关于",
+    "items": [
+      {
+        "icon": ["trash", "#CC3333"],
+        "title": "清空缓存",
+        "type": "script",
+        "key": "clearCache",
+        "value": "this.controller.clearCache"
+      },
+      {
+        "icon": ["book.fill", "#A569BD"],
+        "title": "组件信息",
+        "type": "script",
+        "key": "componentInfo",
+        "value": "this.controller.readme"
+      }
+    ]
+  }
+]
