@@ -882,7 +882,7 @@ class View extends BaseView {
     };
   }
 
-  createImage(key, icon, title, events) {
+  createImage(key, icon, title, events, input = true) {
     let id = `setting-image-${this.dataCenter.get('name')}-${key}`;
     return {
       type: 'view',
@@ -917,23 +917,30 @@ class View extends BaseView {
           ],
           events: {
             tapped: async () => {
-              $input.text({
-                text: this.controller.get(key),
-                placeholder: title,
-                handler: (text) => {
-                  if (text === '') {
-                    $ui.toast($l10n('INVALID_VALUE'));
-                    return;
-                  }
-                  if (this.updateSetting(key, text)) {
-                    $(`${id}-image`).image = $image(text);
-                    if (events)
-                      eval(
-                        `(()=>{return ${events}(text,this.updateSetting,key,this.dataCenter.get('name'))})()`,
-                      );
-                  }
-                },
-              });
+              if (input !== false) {
+                $input.text({
+                  text: this.controller.get(key),
+                  placeholder: title,
+                  handler: (text) => {
+                    if (text === '') {
+                      $ui.toast($l10n('INVALID_VALUE'));
+                      return;
+                    }
+                    if (this.updateSetting(key, text)) {
+                      $(`${id}-image`).image = $image(text);
+                      if (events)
+                        eval(
+                          `(()=>{return ${events}(text,this.updateSetting,key,this.dataCenter.get('name'))})()`,
+                        );
+                    }
+                  },
+                });
+              } else {
+                if (events)
+                  eval(
+                    `(()=>{return ${events}(this.updateSetting,key,this.dataCenter.get('name'))})()`,
+                  );
+              }
             },
           },
           layout: (make, view) => {
@@ -1233,6 +1240,7 @@ class View extends BaseView {
               item.icon,
               $l10n(item.title),
               item.events,
+              item.input,
             );
             break;
 
