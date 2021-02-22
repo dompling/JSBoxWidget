@@ -97,7 +97,7 @@ class Setting {
   defaultSettingMethods() {
     this.setting.readme = (animate) => {
       animate.touchHighlightStart();
-      let content = $file.read(`/scripts/ui/widget/${this.widget}/README.md`)
+      let content = $file.read(`/scripts/pages/widget/${this.widget}/README.md`)
         .string;
       this.kernel.UIKit.push({
         view: [

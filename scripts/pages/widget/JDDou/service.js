@@ -1,13 +1,20 @@
 const { cacheRequest } = require('../../../utils/index');
 
 class Service {
-  constructor(cookie) {
-    this.cookie = cookie || {};
-    this.timerKeys = this.getDay(0);
+  constructor(setting) {
+    this.setting = setting;
+    this.cookie = setting.get('cookie') || {};
+    this.ctType = setting.get('ctType');
+    this.timerKeys = this.getDay(this.ctType ? 4 : 0);
+    this.now = this.format(new Date());
   }
+
   headImageUrl =
     'https://img11.360buyimg.com/jdphoto/s120x120_jfs/t21160/90/706848746/2813/d1060df5/5b163ef9N4a3d7aa6.png';
+
   state = {
+    charts: {},
+    chart: null,
     incomeBean: 0,
     expenseBean: 0,
     beanCount: 0,
@@ -28,13 +35,29 @@ class Service {
   };
 
   fetch = async () => {
-    if (!this.cookie) {
-      $ui.toast('请填写京东 CK 信息');
-      return;
+    try {
+      if (!this.cookie) {
+        $ui.toast('请填写京东 CK 信息');
+        return;
+      }
+      await this.TotalBean();
+      await this.getMainData();
+      const key = `jddouK_${this.cookie}`;
+      const charts = $cache.get(key);
+      Object.keys(this.state.charts).forEach((ckey) => {
+        if (charts && charts[ckey] !== undefined && ckey !== this.now) {
+          this.state.charts[ckey] = charts[ckey];
+          const index = this.timerKeys.indexOf(ckey);
+          this.timerKeys.splice(index, 1);
+        }
+      });
+      await this.getAmountData();
+      $cache.set(key, this.state.charts);
+      await this.createChart();
+      console.log(this.state);
+    } catch (e) {
+      console.log(e);
     }
-    await this.TotalBean();
-    await this.getMainData();
-    await this.getAmountData();
   };
 
   async getAmountData() {
@@ -56,13 +79,14 @@ class Service {
           for (let item of detailList) {
             const dates = item.date.split(' ');
             if (this.timerKeys.indexOf(dates[0]) > -1) {
-              if (this.timerKeys[0] === dates[0]) {
+              if (this.now === dates[0]) {
                 const amount = Number(item.amount);
                 if (amount > 0)
                   this.set('incomeBean', this.get('incomeBean') + amount);
                 if (amount < 0)
                   this.set('expenseBean', this.get('expenseBean') + amount);
               }
+              this.state.charts[dates[0]] += Number(item.amount);
             } else {
               i = 1;
               break;
@@ -73,19 +97,25 @@ class Service {
     } while (i === 0);
   }
 
+  format = (date) => {
+    const year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    month = month >= 10 ? month : `0${month}`;
+    let day = date.getDate();
+    day = day >= 10 ? day : `0${day}`;
+    return `${year}-${month}-${day}`;
+  };
+
   getDay(dayNumber) {
     let data = [];
     let i = dayNumber;
     do {
       const today = new Date();
-      const year = today.getFullYear();
       const targetday_milliseconds = today.getTime() - 1000 * 60 * 60 * 24 * i;
       today.setTime(targetday_milliseconds); //注意，这行是关键代码
-      let month = today.getMonth() + 1;
-      month = month >= 10 ? month : `0${month}`;
-      let day = today.getDate();
-      day = day >= 10 ? day : `0${day}`;
-      data.push(`${year}-${month}-${day}`);
+      const key = this.format(today);
+      data.push(key);
+      this.state.charts[key] = 0;
       i--;
     } while (i >= 0);
     return data;
@@ -142,7 +172,7 @@ class Service {
       },
     };
     let response = await $http.post(options);
-    response = cacheRequest(`jddou_${this.cookie}`, response);
+    response = cacheRequest(`jddou_${this.cookie}_${page}`, response);
     return response.data;
   }
 
@@ -176,6 +206,110 @@ class Service {
       });
     }
   }
+
+  chartConfig = (labels = [], datas = []) => {
+    let template = `
+{
+  'type': 'bar',
+  'data': {
+    'labels': __LABELS__,
+    'datasets': [
+      {
+        type: 'line',
+        backgroundColor: '#fff',
+        borderColor: getGradientFillHelper('vertical', ['#c8e3fa', '#e62490']),
+        'borderWidth': 6,
+        pointRadius: 10,
+        'fill': false,
+        'data': __DATAS__,
+      },
+    ],
+  },
+  'options': {
+      plugins: {
+        datalabels: {
+          display: true,
+          align: 'top',
+          color: __COLOR__,
+          font: {
+             size: '32'
+          }
+        },
+      },
+      layout: {
+          padding: {
+              left: 0,
+              right: 0,
+              top: 50,
+              bottom: 0
+          }
+      },
+      responsive: true,
+      maintainAspectRatio: true,
+      'legend': {
+        'display': false,
+      },
+      'title': {
+        'display': false,
+      },
+      scales: {
+        xAxes: [ // X 轴线
+          {
+            gridLines: {
+              display: false,
+              color: __COLOR__,
+            },
+            ticks: {
+              display: true, 
+              fontColor: __COLOR__,
+              fontSize: '28',
+            },
+          },
+        ],
+        yAxes: [
+          {
+            ticks: {
+              display: false,
+              beginAtZero: true,
+              fontColor: __COLOR__,
+            },
+            gridLines: {
+              borderDash: [7, 5],
+              display: false,
+              color: __COLOR__,
+            },
+          },
+        ],
+      },
+    },
+ }`;
+    const color = !$widget.isDarkMode
+      ? this.setting.get('lightFont')
+      : this.setting.get('nightFont');
+    template = template.replaceAll('__COLOR__', `'${color}'`);
+    template = template.replace('__LABELS__', `${JSON.stringify(labels)}`);
+    template = template.replace('__DATAS__', `${JSON.stringify(datas)}`);
+    return template;
+  };
+
+  createChart = async () => {
+    let labels = [],
+      data = [];
+    Object.keys(this.state.charts).forEach((month) => {
+      const value = this.state.charts[month];
+      const arrMonth = month.split('-');
+      labels.push(`${arrMonth[1]}.${arrMonth[2]}`);
+      data.push(value);
+    });
+    const chartStr = this.chartConfig(labels, data);
+    const url = `https://quickchart.io/chart?w=580&h=190&f=png&c=${encodeURIComponent(
+      chartStr,
+    )}`;
+    console.log(url);
+    let file = await $http.download({ url, timeout: 2 });
+    file = cacheRequest(`jddouchart_${this.cookie}`, file);
+    this.state.chart = file.data.image;
+  };
 }
 
 module.exports = Service;

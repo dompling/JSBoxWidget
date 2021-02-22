@@ -22,6 +22,7 @@ class Actions {
       light: setting.get('lightColor'),
       dark: setting.get('nightColor'),
     });
+    this.ctType = setting.get('ctType');
   }
 
   config = {};
@@ -305,31 +306,45 @@ class Actions {
   };
 
   body = () => {
-    return {
-      type: 'hstack',
-      props: {
-        alignment: $widget.verticalAlignment.center,
-      },
-      views: [
-        this.labelItem({
-          label: '收入',
-          value: this.state.incomeBean,
-        }),
-        {
+    return !this.ctType
+      ? {
+          type: 'hstack',
+          props: {
+            alignment: $widget.verticalAlignment.center,
+          },
+          views: [
+            this.labelItem({
+              label: '收入',
+              value: this.state.incomeBean,
+            }),
+            {
+              type: 'image',
+              props: {
+                image: jddou,
+                resizable: true,
+                scaledToFit: true,
+                frame: this.sizeConfig.jddouSize,
+              },
+            },
+            this.labelItem({
+              label: '支出',
+              value: this.state.expenseBean,
+            }),
+          ],
+        }
+      : {
           type: 'image',
           props: {
-            image: jddou,
+            border,
+            image: this.state.chart,
             resizable: true,
             scaledToFit: true,
-            frame: this.sizeConfig.jddouSize,
+            frame: {
+              width: this.config.displaySize.height,
+              height: (this.config.displaySize.height / 6) * 2,
+            },
           },
-        },
-        this.labelItem({
-          label: '支出',
-          value: this.state.expenseBean,
-        }),
-      ],
-    };
+        };
   };
 
   footer = () => {

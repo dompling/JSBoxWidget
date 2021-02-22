@@ -1,5 +1,5 @@
 const { Kernel } = require('../EasyJsBox/src/kernel');
-const widgetRootPath = '/scripts/ui/widget';
+const widgetRootPath = '/scripts/pages/widget';
 const widgetAssetsPath = '/assets/widget';
 const backupPath = '/assets/backup';
 
@@ -10,7 +10,7 @@ const backupPath = '/assets/backup';
  */
 function widgetInstance(widget, that) {
   if ($file.exists(`${widgetRootPath}/${widget}/index.js`)) {
-    let { Widget } = require(`./ui/widget/${widget}/index.js`);
+    let { Widget } = require(`./pages/widget/${widget}/index.js`);
     return new Widget(that);
   } else {
     return false;
@@ -379,7 +379,7 @@ module.exports = {
         });
       }
     } else {
-      const Factory = require('./ui/main/factory');
+      const Factory = require('./pages/main/factory');
       const kernel = new AppKernel();
       await new Factory(kernel).render();
       // 监听运行状态
