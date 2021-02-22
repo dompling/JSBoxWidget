@@ -335,10 +335,10 @@ class Actions {
       : {
           type: 'image',
           props: {
-            border,
+            // border,
             image: this.state.chart,
             resizable: true,
-            scaledToFit: true,
+            scaledToFill: true,
             frame: {
               width: this.config.displaySize.height,
               height: (this.config.displaySize.height / 6) * 2,
@@ -376,7 +376,7 @@ class Actions {
       type: 'vstack',
       props: {
         alignment: $widget.verticalAlignment.center,
-        spacing: 12,
+        spacing: 10,
         frame: { width: 200 },
       },
       views: [this.header(), this.body(), this.footer()],
