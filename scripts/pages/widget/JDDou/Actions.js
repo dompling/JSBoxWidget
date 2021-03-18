@@ -221,7 +221,7 @@ class Actions {
             this.iconText(
               'creditcard.circle',
               '#f7de65',
-              `${userInfo.jvalue}京享`,
+              `${userInfo.xbScore}信用`,
             ),
           ],
         },

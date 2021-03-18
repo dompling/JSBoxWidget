@@ -122,30 +122,36 @@ class Service {
   }
 
   async TotalBean() {
+    const headers = {
+      Cookie: this.cookie,
+      Accept: `*/*`,
+      Connection: `keep-alive`,
+      Referer: `https://home.m.jd.com/myJd/newhome.action`,
+      'Accept-Encoding': `gzip, deflate, br`,
+      Host: `me-api.jd.com`,
+      'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 14_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1 Mobile/15E148 Safari/604.1`,
+      'Accept-Language': `zh-cn`,
+    };
     const options = {
-      url: 'https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2',
+      url: 'https://me-api.jd.com/user_new/info/GetJDUserInfoUnion',
       timeout: 2,
-      header: {
-        Accept: 'application/json,text/plain, */*',
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Accept-Language': 'zh-cn',
-        Connection: 'keep-alive',
-        Cookie: this.cookie,
-        Referer: 'https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2',
-        'User-Agent':
-          'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1',
-      },
+      header: headers,
     };
 
-    const key = `${this.cookie}_total`;
-    let response = await $http.post(options);
+    const key = `${this.cookie}_new_total`;
+    let response = await $http.get(options);
     response = cacheRequest(key, response);
-    if (response.data.base) {
-      this.set('beanCount', response.data.base.jdNum);
-      this.set('userInfo', response.data.base);
-      this.set('isPlusVip', response.data.isPlusVip);
-      const avatar = response.data.base.headImageUrl || this.headImageUrl;
+    const JDData = response.data.data;
+    console.log(JDData);
+    if (JDData.userInfo) {
+      const baseInfo = JDData.userInfo.baseInfo;
+      baseInfo.xbScore = JDData.userInfo.xbScore;
+      const beanCount = JDData.assetInfo.beanNum;
+      const isPlusVip = JDData.userInfo.isPlusVip === '1';
+      this.set('beanCount', beanCount);
+      this.set('userInfo', baseInfo);
+      this.set('isPlusVip', isPlusVip);
+      const avatar = baseInfo.headImageUrl || this.headImageUrl;
       let file = await $http.download({ url: avatar });
       file = cacheRequest(avatar, file);
       this.state.userInfo.headImageUrl = file.data.image;
