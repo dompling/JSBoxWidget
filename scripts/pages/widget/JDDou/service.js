@@ -126,10 +126,10 @@ class Service {
       Cookie: this.cookie,
       Accept: `*/*`,
       Connection: `keep-alive`,
-      Referer: `https://home.m.jd.com/myJd/newhome.action`,
+      Referer: `https://home.m.jd.com/myJd/newhome.action?scriptable=1`,
       'Accept-Encoding': `gzip, deflate, br`,
       Host: `me-api.jd.com`,
-      'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 14_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1 Mobile/15E148 Safari/604.1`,
+      'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 14_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1 Mobile/15E148 Safari/604.1 scriptable`,
       'Accept-Language': `zh-cn`,
     };
     const options = {
