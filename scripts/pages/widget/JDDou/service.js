@@ -43,7 +43,7 @@ class Service {
         return;
       }
       await this.TotalBean();
-      const key = `jddouK_${this.cookie}`;
+      const key = `jddouK_${this.cookie}_chart`;
       const charts = $cache.get(key);
       Object.keys(this.state.charts).forEach((ckey) => {
         if (charts && charts[ckey] !== undefined && ckey !== this.now) {
@@ -52,8 +52,8 @@ class Service {
           this.timerKeys.splice(index, 1);
         }
       });
-      $cache.set(key, this.state.charts);
       await this.getAmountData();
+      $cache.set(key, this.state.charts);
       await this.getMainData();
       if (this.ctType) await this.createChart();
     } catch (e) {
@@ -125,7 +125,7 @@ class Service {
       Referer: `https://home.m.jd.com/myJd/newhome.action?scriptable=1`,
       'Accept-Encoding': `gzip, deflate, br`,
       Host: `me-api.jd.com`,
-      'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 14_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1 Mobile/15E148 Safari/604.1 scriptable`,
+      'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 14_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1 Mobile/15E148 Safari/604.1`,
       'Accept-Language': `zh-cn`,
     };
     const options = {
@@ -137,6 +137,7 @@ class Service {
     const key = `${this.cookie}_new_total`;
     let response;
     if ($device.networkType) response = await $http.get(options);
+    console.log(response);
     response = cacheRequest(key, response);
     try {
       const JDData = response.data.data;

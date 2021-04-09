@@ -20,6 +20,7 @@ class CurrentSetting extends Setting {
   boxCache = (response, update, name) => {
     const cookies = [];
     const data = response.data.datas;
+    console.log(data.CookiesJD);
     if (data.CookiesJD && data.CookiesJD.length > 0) {
       try {
         cookies.push(...JSON.parse(data.CookiesJD));
@@ -76,7 +77,7 @@ class CurrentSetting extends Setting {
   getBoxJsData = (update, name) => {
     $ui.toast('读取中...');
     $http.get({
-      url: `http://${this.prefix}/query/boxdata`,
+      url: `http://${this.prefix}/query/boxdata?test=1`,
       handler: (res) => this.boxCache(res, update, name),
     });
   };
