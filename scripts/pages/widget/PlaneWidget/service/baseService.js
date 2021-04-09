@@ -212,14 +212,15 @@ class Service {
       this.fontColor,
     );
 
-    const getUrl = async (chart) => {
+    const getUrl = async (chart, key) => {
+      const cacheKey = this.account.url + '_' + this.account.email + key;
       const parmas = encodeURIComponent(chart);
       const url = `https://quickchart.io/chart?w=${size}&h=${size}&f=png&c=${parmas}`;
       let file;
-      file = cacheRequest(url, file);
+      if (!$device.networkType) file = cacheRequest(cacheKey, file);
       if (!file) {
         file = await $http.download({ url, timeout: 2 });
-        file = cacheRequest(url, file);
+        file = cacheRequest(cacheKey, file);
       }
       return file.data.image;
     };

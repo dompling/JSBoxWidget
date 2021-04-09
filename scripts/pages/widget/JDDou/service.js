@@ -137,7 +137,6 @@ class Service {
     const key = `${this.cookie}_new_total`;
     let response;
     if ($device.networkType) response = await $http.get(options);
-    console.log(response);
     response = cacheRequest(key, response);
     try {
       const JDData = response.data.data;
@@ -318,10 +317,12 @@ class Service {
       chartStr,
     )}`;
     let file;
-    if ($cache.get(chartStr)) file = $cache.get(chartStr);
+    const key = `jdk_${this.cookie}`;
+    if ($cache.get(key)) file = $cache.get(key);
+    console.log(file);
     if (!file) {
       file = await $http.download({ url, timeout: 2 });
-      file = cacheRequest(chartStr, file);
+      file = cacheRequest(key, file);
     }
     this.state.chart = file.data.image;
   };
