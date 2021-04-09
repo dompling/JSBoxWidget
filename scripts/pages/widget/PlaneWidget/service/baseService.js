@@ -1,5 +1,5 @@
 const { getChartConfig } = require('./func');
-const { requestFailed } = require('../../../../utils/index');
+const { cacheRequest } = require('../../../../utils/index');
 class Service {
   constructor(account) {
     this.account = account;
@@ -57,6 +57,7 @@ class Service {
         url.replace(/(auth|user)\/login(.php)*/g, '') +
         loginPath +
         `?email=${this.account.email}&passwd=${this.account.password}&rumber-me=week`,
+      timeout: 2,
     };
     const data = (await $http.post(table)).data;
     try {
@@ -79,6 +80,7 @@ class Service {
       url.indexOf('auth/login') != -1 ? 'user/checkin' : 'user/_checkin.php';
     const checkinreqest = {
       url: url.replace(/(auth|user)\/login(.php)*/g, '') + checkinPath,
+      timeout: 2,
     };
     return await $http.post(checkinreqest);
   }
@@ -90,8 +92,11 @@ class Service {
         url.indexOf('auth/login') != -1 ? 'user' : 'user/index.php';
       const datarequest = {
         url: url.replace(/(auth|user)\/login(.php)*/g, '') + userPath,
+        timeout: 2,
       };
-      const data = (await $http.get(datarequest)).data;
+      let data;
+      if ($device.networkType) data = (await $http.get(datarequest)).data;
+      data = cacheRequest(`${this.account.url}_${this.account.email}`, data);
       if (data.match(/login|请填写邮箱|登陆/)) {
         this.loginok = false;
       } else {
@@ -207,15 +212,14 @@ class Service {
       this.fontColor,
     );
 
-    const getUrl = async (chart, key) => {
-      const cacheKey = this.account.url + '_' + this.account.email + key;
+    const getUrl = async (chart) => {
       const parmas = encodeURIComponent(chart);
       const url = `https://quickchart.io/chart?w=${size}&h=${size}&f=png&c=${parmas}`;
-      let file = await $http.download({ url });
-      if (requestFailed(file)) {
-        file = $cache.get(cacheKey);
-      } else {
-        $cache.set(cacheKey, file);
+      let file;
+      file = cacheRequest(url, file);
+      if (!file) {
+        file = await $http.download({ url, timeout: 2 });
+        file = cacheRequest(url, file);
       }
       return file.data.image;
     };

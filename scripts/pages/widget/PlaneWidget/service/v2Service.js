@@ -52,21 +52,25 @@ class Service {
       email: this.account.email,
       password: this.account.password,
     };
-    let res = await $http.post({ url, form: data, timeout: 2 });
+    let res;
+    if ($device.networkType)
+      res = await $http.post({ url, form: data, timeout: 2 });
     res = cacheRequest(`${this.account.url}_cookie_${this.account.email}`, res);
     if (!res.data.errors) this.cookies = res.response.headers['Set-Cookie'];
   };
 
   getSubscribe = async (url) => {
-    let res = await $http.get({
-      url,
-      timeout: 2,
-      header: {
-        cookie: this.cookies,
-        referer: `${this.account.url}/`,
-        'accept-language': 'zh-CN,zh;q=0.9',
-      },
-    });
+    let res;
+    if ($device.networkType)
+      res = await $http.get({
+        url,
+        timeout: 2,
+        header: {
+          cookie: this.cookies,
+          referer: `${this.account.url}/`,
+          'accept-language': 'zh-CN,zh;q=0.9',
+        },
+      });
     res = cacheRequest(
       `${this.account.url}_subscribe_${this.account.email}`,
       res,
@@ -104,12 +108,15 @@ class Service {
       this.fontColor,
     );
 
-    const getUrl = async (chart, key) => {
-      const cacheKey = this.account.url + '_' + this.account.email + key;
+    const getUrl = async (chart) => {
       const parmas = encodeURIComponent(chart);
       const url = `https://quickchart.io/chart?w=${size}&h=${size}&f=png&c=${parmas}`;
-      let file = await $http.download({ url, timeout: 2 });
-      file = cacheRequest(cacheKey, file);
+      let file;
+      file = cacheRequest(url, file);
+      if (!file) {
+        file = await $http.download({ url, timeout: 2 });
+        file = cacheRequest(url, file);
+      }
       return file.data.image;
     };
 

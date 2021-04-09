@@ -1,6 +1,10 @@
 function requestFailed(resp) {
   return (
-    resp == null || resp.response == null || resp.response.statusCode != 200
+    resp == null ||
+    !resp ||
+    resp.response == null ||
+    resp.response.statusCode != 200 ||
+    !$device.networkType
   );
 }
 

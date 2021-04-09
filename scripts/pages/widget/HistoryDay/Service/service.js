@@ -20,7 +20,8 @@ class Service {
 
   getHistoryList = async () => {
     const url = `http://code.lssdjt.com/jsondata/history.${this.today}.js`;
-    let response = await $http.get({ url, timeout: 2 });
+    let response;
+    if ($device.networkType) response = await $http.get({ url, timeout: 2 });
     response = cacheRequest(`history_day`, response);
     console.log(response);
     response = response.data;

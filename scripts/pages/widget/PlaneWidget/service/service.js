@@ -48,7 +48,8 @@ class Service {
   };
 
   async getdata(url) {
-    let req = await $http.get({ url });
+    let req;
+    if ($device.networkType) req = await $http.get({ url, timeout: 2 });
     req = cacheRequest(this.account.url, req);
     let resp = req.response.headers['subscription-userinfo'];
     resp = [
@@ -98,12 +99,15 @@ class Service {
       this.fontColor,
     );
 
-    const getUrl = async (chart, key) => {
-      const cacheKey = this.account.url + '_' + key;
+    const getUrl = async (chart) => {
       const parmas = encodeURIComponent(chart);
       const url = `https://quickchart.io/chart?w=${size}&h=${size}&f=png&c=${parmas}`;
-      let file = await $http.download({ url });
-      file = cacheRequest(cacheKey, file);
+      let file;
+      file = cacheRequest(url, file);
+      if (!file) {
+        file = await $http.download({ url, timeout: 2 });
+        file = cacheRequest(url, file);
+      }
       return file.data.image;
     };
 

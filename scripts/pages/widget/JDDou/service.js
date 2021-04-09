@@ -41,7 +41,6 @@ class Service {
         return;
       }
       await this.TotalBean();
-      await this.getMainData();
       const key = `jddouK_${this.cookie}`;
       const charts = $cache.get(key);
       Object.keys(this.state.charts).forEach((ckey) => {
@@ -51,10 +50,10 @@ class Service {
           this.timerKeys.splice(index, 1);
         }
       });
-      await this.getAmountData();
       $cache.set(key, this.state.charts);
-      await this.createChart();
-      console.log(this.state);
+      await this.getAmountData();
+      await this.getMainData();
+      if (this.ctType) await this.createChart();
     } catch (e) {
       console.log(e);
     }
@@ -65,13 +64,8 @@ class Service {
       page = 1;
     do {
       const response = await this.getJingBeanBalanceDetail(page);
-      console.log(
-        `第${page}页：${response.code === '0' ? '请求成功' : '请求失败'}`,
-      );
-      if (response.code === '3') {
-        i = 1;
-        console.log(response);
-      }
+      console.log(`超时：${page} 页`);
+      if (response.code === '3') i = 1;
       if (response && response.code === '0') {
         page++;
         let detailList = response.jingDetailList;
@@ -139,11 +133,11 @@ class Service {
     };
 
     const key = `${this.cookie}_new_total`;
-    let response = await $http.get(options);
+    let response;
+    if ($device.networkType) response = await $http.get(options);
     response = cacheRequest(key, response);
-    const JDData = response.data.data;
-    console.log(JDData);
-    if (JDData.userInfo) {
+    try {
+      const JDData = response.data.data;
       const baseInfo = JDData.userInfo.baseInfo;
       baseInfo.xbScore = JDData.userInfo.xbScore;
       const beanCount = JDData.assetInfo.beanNum;
@@ -152,9 +146,15 @@ class Service {
       this.set('userInfo', baseInfo);
       this.set('isPlusVip', isPlusVip);
       const avatar = baseInfo.headImageUrl || this.headImageUrl;
-      let file = await $http.download({ url: avatar });
-      file = cacheRequest(avatar, file);
+      let file;
+      if ($cache.get(avatar)) file = $cache.get(avatar);
+      if (!file) {
+        file = await $http.download({ url: avatar, timeout: 2 });
+        file = cacheRequest(avatar, file);
+      }
       this.state.userInfo.headImageUrl = file.data.image;
+    } catch (e) {
+      console.log(e);
     }
   }
 
@@ -177,8 +177,9 @@ class Service {
         Accept: `application/json, text/javascript, */*; q=0.01`,
       },
     };
-    let response = await $http.post(options);
-    response = cacheRequest(`jddou_${this.cookie}_${page}`, response);
+    let response = null;
+    if ($device.networkType) response = await $http.post(options);
+    response = cacheRequest(`jddou_${this.cookie}_pages-${page}`, response);
     return response.data;
   }
 
@@ -192,7 +193,8 @@ class Service {
         Referer: 'https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&',
       },
     };
-    let JTData = await $http.post(JTReq_opt);
+    let JTData;
+    if ($device.networkType) JTData = await $http.post(JTReq_opt);
     JTData = cacheRequest(`JTData_${this.cookie}`, JTData);
     //钢镚查询
     const gb_opt = {
@@ -203,7 +205,8 @@ class Service {
         Referer: 'https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&',
       },
     };
-    let GBData = await $http.post(gb_opt);
+    let GBData;
+    if ($device.networkType) GBData = await $http.post(gb_opt);
     GBData = cacheRequest(`GBData_${this.cookie}`, GBData);
     if (JTData.data) {
       this.set('jt_and_gb', {
@@ -311,9 +314,12 @@ class Service {
     const url = `https://quickchart.io/chart?w=580&h=190&f=png&c=${encodeURIComponent(
       chartStr,
     )}`;
-    console.log(url);
-    let file = await $http.download({ url, timeout: 2 });
-    file = cacheRequest(`jddouchart_${this.cookie}`, file);
+    let file;
+    if ($cache.get(chartStr)) file = $cache.get(chartStr);
+    if (!file) {
+      file = await $http.download({ url, timeout: 2 });
+      file = cacheRequest(chartStr, file);
+    }
     this.state.chart = file.data.image;
   };
 }

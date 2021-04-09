@@ -44,7 +44,8 @@ class Service {
       const data = { ...paramter };
       const params = Object.keys(data).map((key) => `${key}=${data[key]}`);
       const url = `${baseApi}/${key}?${params.join('&')}`;
-      let response = await $http.get({ url, timeout: 2 });
+      let response;
+      if ($device.networkType) response = await $http.get({ url, timeout: 2 });
       response = cacheRequest(
         `youtube_${key}_${this.id}_${params.join('&')}`,
         response,
