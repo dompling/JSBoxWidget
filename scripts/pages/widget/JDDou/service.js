@@ -35,6 +35,8 @@ class Service {
   };
 
   fetch = async () => {
+    const netStatus = { 0: '网络中断', 1: 'WI-FI', 2: '蜂窝' };
+    console.log(`当前网络状况：${netStatus[$device.networkType]}`);
     try {
       if (!this.cookie) {
         $ui.toast('请填写京东 CK 信息');
