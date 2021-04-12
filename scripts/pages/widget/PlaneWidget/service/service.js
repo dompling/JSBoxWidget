@@ -30,7 +30,31 @@ class Service {
   color2 = ['#ff54fa', '#fad126'];
   color3 = ['#28cfb3', '#72d7cc'];
 
+  dataKey = `dataSource_${this.account.url}`;
+
   fetch = async () => {
+    try {
+      if ($cache.get(this.dataKey)) {
+        this.dataSource = $cache.get(this.dataKey);
+      } else {
+        await this.init();
+      }
+      this.init();
+
+      const image1 = $cache.get(this.account.url + '_' + 1);
+      const image2 = $cache.get(this.account.url + '_' + 2);
+      const image3 = $cache.get(this.account.url + '_' + 3);
+      if (image1 && image2 && image3) {
+        this.chart1 = image1.data.image;
+        this.chart2 = image2.data.image;
+        this.chart3 = image3.data.image;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  init = async () => {
     const data = await this.getdata(this.account.url);
     const total = data[2];
     const today = data[0];
@@ -40,13 +64,16 @@ class Service {
     this.dataSource.totalData = total;
     this.dataSource.usedData = use;
     this.dataSource.todayData = today;
+    $cache.set(this.dataKey, this.dataSource);
     await this.createChart(360);
+    console.log('接口数据调用');
   };
 
   async getdata(url) {
     let req;
     if ($device.networkType) req = await $http.get({ url, timeout: 2 });
     req = cacheRequest(this.account.url, req);
+    console.log(req);
     let resp = req.response.headers['subscription-userinfo'];
     resp = [
       parseInt(resp.match(/upload=([0-9]+);?/)[1]).toFixed(2),
@@ -108,17 +135,9 @@ class Service {
       return file.data.image;
     };
 
-    const image1 = $cache.get(this.account.url + '_' + 1);
-    const image2 = $cache.get(this.account.url + '_' + 2);
-    const image3 = $cache.get(this.account.url + '_' + 3);
-    if (image1 && image2 && image3) {
-      this.chart1 = image1.data.image;
-      this.chart2 = image2.data.image;
-      this.chart3 = image3.data.image;
-    }
-    this.chart1 = await getUrl(template1, 1);
-    this.chart2 = await getUrl(template2, 2);
-    this.chart3 = await getUrl(template3, 3);
+    await getUrl(template1, 1);
+    await getUrl(template2, 2);
+    await getUrl(template3, 3);
   };
 }
 

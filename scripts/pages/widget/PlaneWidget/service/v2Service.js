@@ -36,10 +36,36 @@ class Service {
     password: '',
   };
 
+  dataKey = `v2_${this.account.url}_${this.account.email}`;
+
   fetch = async () => {
-    await this.login(`${this.account.url}/api/v1/passport/auth/login`);
-    await this.getSubscribe(`${this.account.url}/api/v1/user/getSubscribe`);
-    await this.createChart(360);
+    if ($cache.get(this.dataKey)) {
+      this.dataSource = $cache.get(this.dataKey);
+    } else {
+      await this.init();
+    }
+    this.init();
+
+    const image1 = $cache.get(this.account.url + this.account.email + '_' + 1);
+    const image2 = $cache.get(this.account.url + this.account.email + '_' + 2);
+    const image3 = $cache.get(this.account.url + this.account.email + '_' + 3);
+
+    if (image1 && image2 && image3) {
+      this.chart1 = image1.data.image;
+      this.chart2 = image2.data.image;
+      this.chart3 = image3.data.image;
+    }
+  };
+
+  init = () => {
+    this.login(`${this.account.url}/api/v1/passport/auth/login`).then(
+      async () => {
+        await this.getSubscribe(`${this.account.url}/api/v1/user/getSubscribe`);
+        await this.createChart(360);
+        $cache.set(this.dataKey, this.dataSource);
+        console.log('接口数据调用');
+      },
+    );
   };
 
   login = async (url) => {
@@ -106,22 +132,15 @@ class Service {
       let file;
       if (!$device.networkType) file = cacheRequest(cacheKey, file);
       if (!file) {
-        file = await $http.download({ url, timeout: 2 });
+        file = await $http.download({ url });
         file = cacheRequest(cacheKey, file);
       }
       return file.data.image;
     };
-    const image1 = $cache.get(this.account.url + this.account.email + '_' + 1);
-    const image2 = $cache.get(this.account.url + this.account.email + '_' + 2);
-    const image3 = $cache.get(this.account.url + this.account.email + '_' + 3);
-    if (image1 && image2 && image3) {
-      this.chart1 = image1.data.image;
-      this.chart2 = image2.data.image;
-      this.chart3 = image3.data.image;
-    }
-    this.chart1 = await getUrl(template1, 1);
-    this.chart2 = await getUrl(template2, 2);
-    this.chart3 = await getUrl(template3, 3);
+
+    await getUrl(template1, 1);
+    await getUrl(template2, 2);
+    await getUrl(template3, 3);
   };
 
   formatFileSize(fileSize) {

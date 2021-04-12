@@ -1,5 +1,5 @@
 const { cacheRequest } = require('../../../utils/index');
-const jdk = `jdk_${this.cookie}`;
+
 class Service {
   constructor(setting) {
     this.setting = setting;
@@ -26,6 +26,9 @@ class Service {
     },
   };
 
+  dataKey = `jddou_datas_${this.cookie}`;
+  chartKey = `jddou_${this.cookie}_chart_ks`;
+
   set = (key, value) => {
     this.state[key] = value;
   };
@@ -37,30 +40,35 @@ class Service {
   fetch = async () => {
     const netStatus = { 0: '网络中断', 1: 'WI-FI', 2: '蜂窝' };
     console.log(`当前网络状况：${netStatus[$device.networkType]}`);
+    if ($cache.get(this.dataKey)) {
+      this.state = $cache.get(this.dataKey);
+    } else {
+      await this.init();
+    }
+    this.init();
+  };
+
+  init = async () => {
     try {
-      if (!this.cookie) {
-        $ui.toast('请填写京东 CK 信息');
-        return;
-      }
       await this.TotalBean();
-      const key = `jddouK_${this.cookie}_chart`;
-      const charts = $cache.get(key);
-      Object.keys(this.state.charts).forEach((ckey) => {
-        if (charts && charts[ckey] !== undefined && ckey !== this.now) {
-          this.state.charts[ckey] = charts[ckey];
-          const index = this.timerKeys.indexOf(ckey);
+      const charts = $cache.get(this.chartKey) || {};
+      const timerData = [...this.timerKeys];
+      this.state.charts = {};
+      timerData.map((date) => {
+        if (charts[date] !== undefined && date !== this.now) {
+          this.state.charts[date] = charts[date];
+          const index = this.timerKeys.indexOf(date);
           this.timerKeys.splice(index, 1);
+        } else {
+          this.state.charts[date] = 0;
         }
       });
       await this.getAmountData();
-      $cache.set(key, this.state.charts);
       await this.getMainData();
-      let file;
-      if ($cache.get(jdk)) {
-        file = $cache.get(jdk);
-        this.state.chart = file.data.image;
-      }
-      if (this.ctType) this.createChart();
+      if (this.ctType) await this.createChart();
+      $cache.set(this.dataKey, this.state);
+      $cache.set(this.chartKey, this.state.charts);
+      console.log('接口数据调用');
     } catch (e) {
       console.log(e);
     }
@@ -116,7 +124,6 @@ class Service {
       today.setTime(targetday_milliseconds); //注意，这行是关键代码
       const key = this.format(today);
       data.push(key);
-      this.state.charts[key] = 0;
       i--;
     } while (i >= 0);
     return data;
@@ -321,9 +328,7 @@ class Service {
     const url = `https://quickchart.io/chart?w=580&h=190&f=png&c=${encodeURIComponent(
       chartStr,
     )}`;
-    let file;
-    file = await $http.download({ url, timeout: 2 });
-    file = cacheRequest(jdk, file);
+    const file = await $http.download({ url });
     this.state.chart = file.data.image;
   };
 }
