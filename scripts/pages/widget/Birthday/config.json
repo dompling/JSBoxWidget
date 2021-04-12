@@ -1,5 +1,6 @@
 {
-    "title": "生日计时",
-    "describe": "生日的倒计时",
-    "icon":  "@/icon.png"
+  "title": "生日计时",
+  "describe": "生日的倒计时",
+  "icon": "@/icon.png",
+  "source": "Birthday"
 }

@@ -1,6 +1,6 @@
 {
-    "title": "机场流量",
-    "describe": "查看当月机场流量使用情况，使用前请先查看组件信息",
-    "icon": "@/icon.gif"
-  }
-  
+  "title": "机场流量",
+  "describe": "查看当月机场流量使用情况，使用前请先查看组件信息",
+  "icon": "@/icon.gif",
+  "source": "PlaneWidget"
+}

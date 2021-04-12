@@ -64,8 +64,8 @@ class Service {
     this.dataSource.totalData = total;
     this.dataSource.usedData = use;
     this.dataSource.todayData = today;
-    $cache.set(this.dataKey, this.dataSource);
     await this.createChart(360);
+    $cache.set(this.dataKey, this.dataSource);
     console.log('接口数据调用');
   };
 
@@ -73,7 +73,6 @@ class Service {
     let req;
     if ($device.networkType) req = await $http.get({ url, timeout: 2 });
     req = cacheRequest(this.account.url, req);
-    console.log(req);
     let resp = req.response.headers['subscription-userinfo'];
     resp = [
       parseInt(resp.match(/upload=([0-9]+);?/)[1]).toFixed(2),

@@ -1,5 +1,6 @@
 {
   "title": "油管订阅",
   "describe": "查看油管订阅频道",
-  "icon": "@/icon.png"
+  "icon": "@/icon.png",
+  "source": "YouTube"
 }

@@ -157,10 +157,21 @@ class HomeUI {
                       ).string,
                     );
                     config.title = newName;
+
                     $file.write({
                       data: $data({ string: JSON.stringify(config) }),
                       path: `${this.kernel.widgetRootPath}/${newName}/config.json`,
                     });
+
+                    if (!$file.exists(`${this.kernel.copyPath}/${newName}`)) {
+                      $file.mkdir(`${this.kernel.copyPath}/${newName}`);
+                    }
+
+                    $file.write({
+                      data: $data({ string: JSON.stringify(config) }),
+                      path: `${this.kernel.copyPath}/${newName}/config.json`,
+                    });
+
                     // 更新列表
                     setTimeout(() => {
                       sender.data = this.getWidgetListView();
@@ -192,6 +203,10 @@ class HomeUI {
                           $file.delete(
                             `${this.kernel.widgetAssetsPath}/${widgetName}`,
                           );
+
+                          // 删除 copyPath
+                          $file.delete(`${this.kernel.copyPath}/${widgetName}`);
+
                           sender.delete(indexPath);
                         },
                       },

@@ -1,5 +1,6 @@
 {
-    "title": "京东豆",
-    "describe": "预览昨日京东豆情况",
-    "icon":  "@/icon.png"
+  "title": "京东豆",
+  "describe": "预览昨日京东豆情况",
+  "icon": "@/icon.png",
+  "source": "JDDou"
 }

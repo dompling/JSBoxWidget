@@ -1,7 +1,8 @@
 const { Kernel } = require('../EasyJsBox/src/kernel');
 const widgetRootPath = '/scripts/pages/widget';
-const widgetAssetsPath = '/assets/widget';
-const backupPath = '/assets/backup';
+const widgetAssetsPath = 'drive://widgetStore/assets/widget';
+const backupPath = 'drive://widgetStore/assets/backup';
+const copyPath = 'drive://widgetStore/widget';
 
 /**
  * 实例化一个小组件
@@ -32,6 +33,8 @@ class AppKernel extends Kernel {
     this.widgetAssetsPath = widgetAssetsPath;
     // backup
     this.backupPath = backupPath;
+    // 复制文件
+    this.copyPath = copyPath;
     // 检查是否携带URL scheme
     if (this.query['url-scheme']) {
       // 延时500ms后跳转
@@ -286,6 +289,22 @@ class AppKernel extends Kernel {
                             data: $data({ string: JSON.stringify(newConfig) }),
                             path: `${this.widgetRootPath}/${newName}/config.json`,
                           });
+
+                          if ($file.exists(`/assets/widget/${newName}`)) {
+                            $file.copy({
+                              src: `/assets/widget/${widgetName}`,
+                              dst: `${this.widgetAssetsPath}/${newName}`,
+                            });
+                          }
+
+                          if (!$file.exists(`${this.copyPath}/${newName}`)) {
+                            $file.mkdir(`${this.copyPath}/${newName}`);
+                          }
+
+                          $file.write({
+                            data: $data({ string: JSON.stringify(config) }),
+                            path: `${this.copyPath}/${newName}/config.json`,
+                          });
                         }
                       }
                     });
@@ -317,29 +336,83 @@ class AppKernel extends Kernel {
   getWidgetList() {
     let data = [];
     let widgets = $file.list(this.widgetRootPath);
+    const copyWidgets = $file.list(this.copyPath) || [];
+    const copyList = copyWidgets.filter((item) => widgets.indexOf(item) === -1);
+
+    const forFun = (widgetPath, widget, config) => {
+      if (typeof config.icon !== 'object') {
+        config.icon = [config.icon, config.icon];
+      }
+      config.icon = config.icon.map((icon) =>
+        icon[0] === '@' ? icon.replace('@', widgetPath) : icon,
+      );
+      data.push({
+        title: config.title,
+        describe: config.describe,
+        name: widget,
+        icon: config.icon,
+      });
+    };
+
     for (let widget of widgets) {
       let widgetPath = `${this.widgetRootPath}/${widget}`;
       if ($file.exists(`${widgetPath}/config.json`)) {
-        let config = JSON.parse($file.read(`${widgetPath}/config.json`).string);
-        if (typeof config.icon !== 'object') {
-          config.icon = [config.icon, config.icon];
-        }
-        config.icon = config.icon.map((icon) =>
-          icon[0] === '@' ? icon.replace('@', widgetPath) : icon,
+        const config = JSON.parse(
+          $file.read(`${widgetPath}/config.json`).string,
         );
-        data.push({
-          title: config.title,
-          describe: config.describe,
-          name: widget,
-          icon: config.icon,
-        });
+        forFun(widgetPath, widget, config);
+        if (!$file.exists(`${widgetPath}/setting.js`)) {
+          this.createCopyWidget(config);
+        }
       } else {
         // 没有config.json文件则跳过
         continue;
       }
     }
+
+    for (const widget of copyList) {
+      let widgetPath = `${this.copyPath}/${widget}`;
+      if ($file.exists(`${widgetPath}/config.json`)) {
+        const config = JSON.parse(
+          $file.read(`${widgetPath}/config.json`).string,
+        );
+        forFun(widgetPath, widget, config);
+        this.createCopyWidget(config);
+      } else {
+        // 没有config.json文件则跳过
+        continue;
+      }
+    }
+
     return data;
   }
+
+  createCopyWidget = (config) => {
+    let newName = config.title;
+    const newPath = `${this.widgetRootPath}/${newName}`;
+    $file.copy({
+      src: `${this.widgetRootPath}/${config.source}`,
+      dst: newPath,
+    });
+
+    // 更新设置文件中的NAME常量
+    let settingjs = $file.read(`${newPath}/setting.js`).string;
+    let firstLine = settingjs.split('\n')[0];
+    let newFirstLine = `const NAME = "${newName}"`;
+    settingjs = settingjs.replace(firstLine, newFirstLine);
+    $file.write({
+      data: $data({ string: settingjs }),
+      path: `${newPath}/setting.js`,
+    });
+    // 更新config.json
+    let _config = JSON.parse($file.read(`${newPath}/config.json`).string);
+    _config.title = newName;
+
+    $file.write({
+      data: $data({ string: JSON.stringify(_config) }),
+      path: `${newPath}/config.json`,
+    });
+  };
 }
 
 class WidgetKernel extends Kernel {
