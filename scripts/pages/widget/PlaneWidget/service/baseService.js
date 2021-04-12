@@ -3,6 +3,7 @@ const { cacheRequest } = require('../../../../utils/index');
 class Service {
   constructor(account) {
     this.account = account;
+    this.dataKey = `base_${this.account.url}_${this.account.email}`;
   }
 
   chart1 = '';
@@ -36,8 +37,6 @@ class Service {
     email: '',
     password: '',
   };
-
-  dataKey = `base_${this.account.url}_${this.account.email}`;
 
   fetch = async () => {
     if ($cache.get(this.dataKey)) {

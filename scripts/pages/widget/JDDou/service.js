@@ -7,6 +7,8 @@ class Service {
     this.ctType = setting.get('ctType');
     this.timerKeys = this.getDay(this.ctType ? 4 : 0);
     this.now = this.format(new Date());
+    this.dataKey = `jddou_datas_${this.cookie}`;
+    this.chartKey = `jddou_${this.cookie}_chart_ks`;
   }
 
   headImageUrl =
@@ -25,9 +27,6 @@ class Service {
       gangbeng: 0,
     },
   };
-
-  dataKey = `jddou_datas_${this.cookie}`;
-  chartKey = `jddou_${this.cookie}_chart_ks`;
 
   set = (key, value) => {
     this.state[key] = value;
@@ -63,6 +62,8 @@ class Service {
           this.state.charts[date] = 0;
         }
       });
+      this.state.incomeBean = 0;
+      this.state.expenseBean = 0;
       await this.getAmountData();
       await this.getMainData();
       if (this.ctType) await this.createChart();

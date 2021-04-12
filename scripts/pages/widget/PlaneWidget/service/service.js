@@ -3,6 +3,7 @@ const { cacheRequest } = require('../../../../utils/index');
 class Service {
   constructor(account) {
     this.account = account;
+    this.dataKey = `dataSource_${this.account.url}`;
   }
 
   dataSource = {
@@ -29,8 +30,6 @@ class Service {
   color1 = ['#ef0a6a', '#b6359c'];
   color2 = ['#ff54fa', '#fad126'];
   color3 = ['#28cfb3', '#72d7cc'];
-
-  dataKey = `dataSource_${this.account.url}`;
 
   fetch = async () => {
     try {
