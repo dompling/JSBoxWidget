@@ -217,11 +217,15 @@ class Actions {
           },
           views: [
             this.avatar(),
-            this.iconText('person.circle', '#f95e4c', userInfo.nickname),
+            this.iconText(
+              'person.circle',
+              '#f95e4c',
+              userInfo.nickname || '未知用户',
+            ),
             this.iconText(
               'creditcard.circle',
               '#f7de65',
-              `${userInfo.xbScore}信用`,
+              `${userInfo.xbScore || 0}信用`,
             ),
           ],
         },
@@ -476,7 +480,7 @@ class Actions {
                     {
                       type: 'text',
                       props: {
-                        text: this.state.userInfo.nickname,
+                        text: this.state.userInfo.nickname || '未知用户',
                         color: this.fontColor,
                         lineLimit: 1,
                         minimumScaleFactor,
