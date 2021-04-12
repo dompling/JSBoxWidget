@@ -37,12 +37,8 @@ class Service {
   };
 
   fetch = async () => {
-    try {
-      await this.login(`${this.account.url}/api/v1/passport/auth/login`);
-      await this.getSubscribe(`${this.account.url}/api/v1/user/getSubscribe`);
-    } catch (e) {
-      console.log(e);
-    }
+    await this.login(`${this.account.url}/api/v1/passport/auth/login`);
+    await this.getSubscribe(`${this.account.url}/api/v1/user/getSubscribe`);
     await this.createChart(360);
   };
 
@@ -51,25 +47,21 @@ class Service {
       email: this.account.email,
       password: this.account.password,
     };
-    let res;
-    if ($device.networkType)
-      res = await $http.post({ url, form: data, timeout: 2 });
+    let res = await $http.post({ url, form: data, timeout: 2 });
     res = cacheRequest(`${this.account.url}_cookie_${this.account.email}`, res);
     if (!res.data.errors) this.cookies = res.response.headers['Set-Cookie'];
   };
 
   getSubscribe = async (url) => {
-    let res;
-    if ($device.networkType)
-      res = await $http.get({
-        url,
-        timeout: 2,
-        header: {
-          cookie: this.cookies,
-          referer: `${this.account.url}/`,
-          'accept-language': 'zh-CN,zh;q=0.9',
-        },
-      });
+    let res = await $http.get({
+      url,
+      timeout: 2,
+      header: {
+        cookie: this.cookies,
+        referer: `${this.account.url}/`,
+        'accept-language': 'zh-CN,zh;q=0.9',
+      },
+    });
     res = cacheRequest(
       `${this.account.url}_subscribe_${this.account.email}`,
       res,
@@ -108,7 +100,7 @@ class Service {
     );
 
     const getUrl = async (chart, key) => {
-      const cacheKey = this.account.url + '_' + this.account.email + key;
+      const cacheKey = this.account.url + this.account.email + '_' + key;
       const parmas = encodeURIComponent(chart);
       const url = `https://quickchart.io/chart?w=${size}&h=${size}&f=png&c=${parmas}`;
       let file;
@@ -119,7 +111,14 @@ class Service {
       }
       return file.data.image;
     };
-
+    const image1 = $cache.get(this.account.url + this.account.email + '_' + 1);
+    const image2 = $cache.get(this.account.url + this.account.email + '_' + 2);
+    const image3 = $cache.get(this.account.url + this.account.email + '_' + 3);
+    if (image1 && image2 && image3) {
+      this.chart1 = image1.data.image;
+      this.chart2 = image2.data.image;
+      this.chart3 = image3.data.image;
+    }
     this.chart1 = await getUrl(template1, 1);
     this.chart2 = await getUrl(template2, 2);
     this.chart3 = await getUrl(template3, 3);

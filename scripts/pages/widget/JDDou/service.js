@@ -1,5 +1,5 @@
 const { cacheRequest } = require('../../../utils/index');
-
+const jdk = `jdk_${this.cookie}`;
 class Service {
   constructor(setting) {
     this.setting = setting;
@@ -55,7 +55,12 @@ class Service {
       await this.getAmountData();
       $cache.set(key, this.state.charts);
       await this.getMainData();
-      if (this.ctType) await this.createChart();
+      let file;
+      if ($cache.get(jdk)) {
+        file = $cache.get(jdk);
+        this.state.chart = file.data.image;
+      }
+      if (this.ctType) this.createChart();
     } catch (e) {
       console.log(e);
     }
@@ -317,13 +322,8 @@ class Service {
       chartStr,
     )}`;
     let file;
-    const key = `jdk_${this.cookie}`;
-    if ($cache.get(key)) file = $cache.get(key);
-    console.log(file);
-    if (!file) {
-      file = await $http.download({ url, timeout: 2 });
-      file = cacheRequest(key, file);
-    }
+    file = await $http.download({ url, timeout: 2 });
+    file = cacheRequest(jdk, file);
     this.state.chart = file.data.image;
   };
 }

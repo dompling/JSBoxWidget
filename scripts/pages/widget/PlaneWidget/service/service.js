@@ -31,20 +31,16 @@ class Service {
   color3 = ['#28cfb3', '#72d7cc'];
 
   fetch = async () => {
-    try {
-      const data = await this.getdata(this.account.url);
-      const total = data[2];
-      const today = data[0];
-      const remain = data[2] - data[0] - data[1];
-      const use = total - remain;
-      this.dataSource.restData = remain;
-      this.dataSource.totalData = total;
-      this.dataSource.usedData = use;
-      this.dataSource.todayData = today;
-      await this.createChart(360);
-    } catch (e) {
-      console.log(e);
-    }
+    const data = await this.getdata(this.account.url);
+    const total = data[2];
+    const today = data[0];
+    const remain = data[2] - data[0] - data[1];
+    const use = total - remain;
+    this.dataSource.restData = remain;
+    this.dataSource.totalData = total;
+    this.dataSource.usedData = use;
+    this.dataSource.todayData = today;
+    await this.createChart(360);
   };
 
   async getdata(url) {
@@ -112,6 +108,14 @@ class Service {
       return file.data.image;
     };
 
+    const image1 = $cache.get(this.account.url + '_' + 1);
+    const image2 = $cache.get(this.account.url + '_' + 2);
+    const image3 = $cache.get(this.account.url + '_' + 3);
+    if (image1 && image2 && image3) {
+      this.chart1 = image1.data.image;
+      this.chart2 = image2.data.image;
+      this.chart3 = image3.data.image;
+    }
     this.chart1 = await getUrl(template1, 1);
     this.chart2 = await getUrl(template2, 2);
     this.chart3 = await getUrl(template3, 3);

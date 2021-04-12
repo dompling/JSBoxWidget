@@ -57,7 +57,6 @@ class Service {
         url.replace(/(auth|user)\/login(.php)*/g, '') +
         loginPath +
         `?email=${this.account.email}&passwd=${this.account.password}&rumber-me=week`,
-      timeout: 2,
     };
     const data = (await $http.post(table)).data;
     try {
@@ -80,7 +79,6 @@ class Service {
       url.indexOf('auth/login') != -1 ? 'user/checkin' : 'user/_checkin.php';
     const checkinreqest = {
       url: url.replace(/(auth|user)\/login(.php)*/g, '') + checkinPath,
-      timeout: 2,
     };
     return await $http.post(checkinreqest);
   }
@@ -92,11 +90,8 @@ class Service {
         url.indexOf('auth/login') != -1 ? 'user' : 'user/index.php';
       const datarequest = {
         url: url.replace(/(auth|user)\/login(.php)*/g, '') + userPath,
-        timeout: 2,
       };
-      let data;
-      if ($device.networkType) data = (await $http.get(datarequest)).data;
-      data = cacheRequest(`${this.account.url}_${this.account.email}`, data);
+      const data = (await $http.get(datarequest)).data;
       if (data.match(/login|请填写邮箱|登陆/)) {
         this.loginok = false;
       } else {
@@ -216,12 +211,8 @@ class Service {
       const cacheKey = this.account.url + '_' + this.account.email + key;
       const parmas = encodeURIComponent(chart);
       const url = `https://quickchart.io/chart?w=${size}&h=${size}&f=png&c=${parmas}`;
-      let file;
-      if (!$device.networkType) file = cacheRequest(cacheKey, file);
-      if (!file) {
-        file = await $http.download({ url, timeout: 2 });
-        file = cacheRequest(cacheKey, file);
-      }
+      let file = await $http.download({ url });
+      file = cacheRequest(cacheKey, file);
       return file.data.image;
     };
 
