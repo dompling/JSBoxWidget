@@ -1,8 +1,10 @@
 const { Kernel } = require('../EasyJsBox/src/kernel');
 const widgetRootPath = '/scripts/pages/widget';
-const widgetAssetsPath = 'drive://widgetStore/assets/widget';
-const backupPath = 'drive://widgetStore/assets/backup';
-const copyPath = 'drive://widgetStore/widget';
+
+const jSboxName = `drive://${$addin.current.name}`;
+const widgetAssetsPath = `${jSboxName}/assets/widget`;
+const backupPath = `${jSboxName}/assets/backup`;
+const copyPath = `${jSboxName}/widget`;
 
 /**
  * 实例化一个小组件
