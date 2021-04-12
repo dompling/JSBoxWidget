@@ -232,6 +232,8 @@ class Service {
   }
 
   chartConfig = (labels = [], datas = []) => {
+    const chart_color = this.setting.get('chartColor');
+    console.log(chart_color);
     let template = `
 {
   'type': 'bar',
@@ -241,7 +243,7 @@ class Service {
       {
         type: 'line',
         backgroundColor: '#fff',
-        borderColor: getGradientFillHelper('vertical', ['#c8e3fa', '#e62490']),
+        borderColor: getGradientFillHelper('vertical', ['#c8e3fa', '${chart_color}']),
         'borderWidth': 6,
         pointRadius: 10,
         'fill': false,

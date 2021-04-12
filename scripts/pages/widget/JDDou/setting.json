@@ -49,6 +49,13 @@
     "title": "组件设置",
     "items": [
       {
+        "icon": ["chart.pie", "#40a9ff"],
+        "title": "折线颜色",
+        "type": "color",
+        "key": "chartColor",
+        "value": "#e62490"
+      },
+      {
         "icon": ["pencil.circle", "#40a9ff"],
         "title": "白天字体",
         "type": "color",
@@ -62,6 +69,7 @@
         "key": "nightFont",
         "value": "#f5f5f5"
       },
+
       {
         "icon": ["rectangle.split.3x1.fill", "#FF6666"],
         "title": "刷新时间",
