@@ -173,69 +173,61 @@ class Actions {
           type: 'vstack',
           props: {
             alignment: $widget.horizontalAlignment.center,
+            padding: $insets(30, 0, 0, 0),
           },
           views: [
             {
-              type: 'zstack',
+              type: 'image',
               props: {
-                alignment: $widget.alignment.center,
+                image: image,
+                frame: {
+                  width: this.ringStackSize,
+                  height: this.ringStackSize,
+                },
+                scaledToFit: true,
+                resizable: true,
+              },
+            },
+            {
+              type: 'vstack',
+              props: {
+                offset: $point(0, -this.ringStackSize / 1.3),
+                spacing: 2,
               },
               views: [
                 {
                   type: 'image',
                   props: {
-                    image: image,
-                    frame: {
-                      width: this.ringStackSize,
-                      height: this.ringStackSize,
+                    color: data.FGColor,
+                    symbol: {
+                      glyph: data.icon,
+                      size: 10,
                     },
-                    scaledToFit: true,
-                    resizable: true,
                   },
                 },
                 {
-                  type: 'vstack',
+                  type: 'text',
                   props: {
-                    alignment: $widget.horizontalAlignment.center,
-                    spacing: 2,
+                    bold: true,
+                    text: `${data.percent || 0}`,
+                    font: { size: 12 },
+                    color: data.FGColor,
                   },
-                  views: [
-                    {
-                      type: 'image',
-                      props: {
-                        color: data.FGColor,
-                        symbol: {
-                          glyph: data.icon,
-                          size: 10,
-                        },
-                      },
-                    },
-                    {
-                      type: 'text',
-                      props: {
-                        bold: true,
-                        text: `${data.percent || 0}`,
-                        font: { size: 12 },
-                        color: data.FGColor,
-                      },
-                    },
-                    {
-                      type: 'text',
-                      props: {
-                        text: '%',
-                        font: { size: 10 },
-                        color: data.FGColor,
-                      },
-                    },
-                  ],
+                },
+                {
+                  type: 'text',
+                  props: {
+                    text: '%',
+                    font: { size: 10 },
+                    color: data.FGColor,
+                  },
                 },
               ],
             },
             {
               type: 'vstack',
               props: {
-                alignment: $widget.horizontalAlignment.center,
-                spacing: 2,
+                offset: $point(0, -this.ringStackSize / 2.5),
               },
               views: [
                 {
@@ -281,61 +273,51 @@ class Actions {
           type: 'vstack',
           props: {
             alignment: $widget.horizontalAlignment.center,
-            spacing: 15,
+            spacing: 10,
+            padding: $insets(10, 0, 0, 0),
           },
           views: [
             {
-              type: 'vstack',
+              type: 'image',
               props: {
-                spacing: 10,
+                frame: {
+                  width: 45,
+                  height: 45,
+                },
+                image: this.logo,
+                scaledToFit: true,
+                resizable: true,
+              },
+            },
+            {
+              type: 'hstack',
+              props: {
+                alignment: $widget.verticalAlignment.center,
               },
               views: [
                 {
                   type: 'image',
                   props: {
-                    frame: {
-                      width: 50,
-                      height: 50,
+                    color: textColor,
+                    symbol: {
+                      glyph: 'arrow.2.circlepath',
+                      size: 12,
                     },
-                    image: this.logo,
-                    scaledToFit: true,
-                    resizable: true,
                   },
                 },
                 {
-                  type: 'hstack',
+                  type: 'text',
                   props: {
-                    alignment: $widget.verticalAlignment.center,
+                    date: new Date(),
+                    style: $widget.dateStyle.time,
+                    color: textColor,
+                    font: { size: 12 },
                   },
-                  views: [
-                    {
-                      type: 'image',
-                      props: {
-                        color: textColor,
-                        symbol: {
-                          glyph: 'arrow.2.circlepath',
-                          size: 12,
-                        },
-                      },
-                    },
-                    {
-                      type: 'text',
-                      props: {
-                        date: new Date(),
-                        style: $widget.dateStyle.time,
-                        color: textColor,
-                        font: { size: 12 },
-                      },
-                    },
-                  ],
                 },
               ],
             },
             {
               type: 'vstack',
-              props: {
-                spacing: 2,
-              },
               views: [
                 {
                   type: 'text',
@@ -461,21 +443,26 @@ class Actions {
       type: 'zstack',
       props: this.containerProps(),
       views: [
-        {
-          type: 'zstack',
-          props: this.contentProps(),
-          views: [
-            {
-              type: 'hstack',
-              props: {
-                alignment: $widget.verticalAlignment.center,
+        ...(this.is_bg
+          ? [
+              {
+                type: 'color',
+                props: {
+                  color: $color('#000'),
+                  opacity: this.opacity,
+                },
               },
-              views: [
-                this.feeCell(this.dataSource.fee),
-                this.imageCell(this.dataSource.flow),
-                this.imageCell(this.dataSource.voice),
-              ],
-            },
+            ]
+          : []),
+        {
+          type: 'hstack',
+          props: {
+            alignment: $widget.verticalAlignment.center,
+          },
+          views: [
+            this.feeCell(this.dataSource.fee),
+            this.imageCell(this.dataSource.flow),
+            this.imageCell(this.dataSource.voice),
           ],
         },
       ],

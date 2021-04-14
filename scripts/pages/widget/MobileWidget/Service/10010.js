@@ -59,7 +59,8 @@ class Service {
 
   init = async () => {
     await this.getData();
-    $cache.set(this.dataKey, this.dataSource);
+    if (this.dataSource.fee.number !== 0)
+      $cache.set(this.dataKey, this.dataSource);
   };
 
   async login() {
