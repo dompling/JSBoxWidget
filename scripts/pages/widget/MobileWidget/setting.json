@@ -1,0 +1,156 @@
+[
+  {
+    "title": "基础",
+    "items": [
+      {
+        "icon": ["rectangle.3.offgrid.fill"],
+        "title": "预览",
+        "type": "script",
+        "key": "preview",
+        "value": "this.controller.preview"
+      }
+    ]
+  },
+  {
+    "title": "组件设置",
+    "items": [
+      {
+        "icon": ["phone.down.circle", "#FFCC00"],
+        "title": "运营商",
+        "type": "tab",
+        "key": "ctType",
+        "items": ["中国电信", "中国联通"],
+        "value": 0
+      },
+      {
+        "icon": ["opticaldiscdrive"],
+        "title": "cookie",
+        "type": "input",
+        "key": "cookie",
+        "value": ""
+      },
+      {
+        "icon": ["shippingbox", "#ffd666"],
+        "title": "代理缓存",
+        "type": "script",
+        "key": "vpnCache",
+        "value": "this.controller.getBoxJsData"
+      }
+    ]
+  },
+  {
+    "title": "组件配置",
+    "items": [
+      {
+        "icon": ["pencil.circle", "#40a9ff"],
+        "title": "小号亮色字体",
+        "type": "color",
+        "key": "lightFont",
+        "value": "#000"
+      },
+      {
+        "icon": ["pencil.circle.fill", "#595959"],
+        "title": "小号暗色字体",
+        "type": "color",
+        "key": "nightFont",
+        "value": "#fff"
+      },
+      {
+        "icon": ["antenna.radiowaves.left.and.right", "#40a9ff"],
+        "title": "流量进度色",
+        "type": "color",
+        "key": "step1",
+        "value": "#FF6620"
+      },
+      {
+        "icon": ["slider.horizontal.below.rectangle", "#40a9ff"],
+        "title": "流量底圈色",
+        "type": "color",
+        "key": "inner1",
+        "value": "#FF6620"
+      },
+      {
+        "icon": ["phone.fill", "#595959"],
+        "title": "语音进度色",
+        "type": "color",
+        "key": "step2",
+        "value": "#78C100"
+      },
+      {
+        "icon": ["slider.horizontal.below.rectangle", "#595959"],
+        "title": "语音低圈色",
+        "type": "color",
+        "key": "inner2",
+        "value": "#78C100"
+      }
+    ]
+  },
+  {
+    "title": "主题设置",
+    "items": [
+      {
+        "icon": ["rectangle.split.3x1.fill", "#FF6666"],
+        "title": "刷新时间",
+        "type": "stepper",
+        "key": "switchInterval",
+        "min": 10,
+        "max": 60,
+        "value": 30
+      },
+      {
+        "icon": ["circle.lefthalf.fill", "#5cdbd3"],
+        "title": "遮罩透明",
+        "type": "slider",
+        "key": "opacity",
+        "value": 0.5
+      },
+      {
+        "icon": ["photo", "#40a9ff"],
+        "title": "背景图片",
+        "type": "script",
+        "key": "background",
+        "value": "this.controller.background"
+      },
+      {
+        "icon": ["photo.on.rectangle.angled"],
+        "title": "透明背景",
+        "type": "script",
+        "key": "shotBackground",
+        "value": "this.controller.getWidgetScreenShot"
+      },
+      {
+        "icon": ["eyedropper", "#87e8de"],
+        "title": "白天背景色",
+        "type": "color",
+        "key": "lightColor",
+        "value": "#fff"
+      },
+      {
+        "icon": ["eyedropper", "#595959"],
+        "title": "夜间背景色",
+        "type": "color",
+        "key": "nightColor",
+        "value": "#000"
+      }
+    ]
+  },
+  {
+    "title": "关于",
+    "items": [
+      {
+        "icon": ["trash", "#CC3333"],
+        "title": "清空缓存",
+        "type": "script",
+        "key": "clearCache",
+        "value": "this.controller.clearCache"
+      },
+      {
+        "icon": ["book.fill", "#A569BD"],
+        "title": "组件信息",
+        "type": "script",
+        "key": "componentInfo",
+        "value": "this.controller.readme"
+      }
+    ]
+  }
+]
