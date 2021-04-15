@@ -19,13 +19,20 @@
 # quantumultx
  [rewrite_local]
  ^https?:\/\/e\.189\.cn\/store\/user\/package_detail\.do url script-request-header telecomInfinity.js
- # MITM = e.189.cn
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Loon
+[Script]
+http-request ^https?:\/\/e\.189\.cn\/store\/user\/package_detail\.do script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/telecomSky.js, timeout=10, tag=中国电信套餐
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  
 # Surge 4.0 :
 [Script]
 电信套餐查询 = script-path=https://raw.githubusercontent.com/Sunert/Scripts/master/Task/telecomInfinity.js,type=http-request,pattern=https?:\/\/e\.189\.cn\/store\/user\/package_detail\.do
 ~~~~~~~~~~~~~~~~~~~~~
+
+
  # MITM
 hostname = e.189.cn
 ```
