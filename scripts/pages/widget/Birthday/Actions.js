@@ -69,6 +69,23 @@ class Actions {
     };
   };
 
+  backgroundView = () => {
+    return this.is_bg
+      ? [
+          {
+            type: 'color',
+            props: {
+              frame: {
+                ...this.config.displaySize,
+              },
+              color: $color('#000'),
+              opacity: this.opacity,
+            },
+          },
+        ]
+      : [];
+  };
+
   small = () => {
     const { avatar, name, birthday, next } = this.service.dataSource;
     const { width, height } = this.config.displaySize;
@@ -76,17 +93,7 @@ class Actions {
       type: 'zstack',
       props: this.containerProps(),
       views: [
-        ...(this.is_bg
-          ? [
-              {
-                type: 'color',
-                props: {
-                  color: $color('#000'),
-                  opacity: this.opacity,
-                },
-              },
-            ]
-          : []),
+        ...this.backgroundView(),
         {
           type: 'vstack',
           props: {
@@ -177,17 +184,7 @@ class Actions {
       type: 'zstack',
       props: this.containerProps(),
       views: [
-        ...(this.is_bg
-          ? [
-              {
-                type: 'color',
-                props: {
-                  color: $color('#000'),
-                  opacity: this.opacity,
-                },
-              },
-            ]
-          : []),
+        ...this.backgroundView(),
         {
           type: 'hstack',
           props: { alignment: $widget.verticalAlignment.center, spacing: 10 },

@@ -59,7 +59,7 @@ class Service {
 
   init = async () => {
     await this.getData();
-    if (this.dataSource.fee.number !== 0)
+    if (this.dataSource.fee.number !== 0 && this.dataSource.flow.number !== 0)
       $cache.set(this.dataKey, this.dataSource);
   };
 

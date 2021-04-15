@@ -438,22 +438,29 @@ class Actions {
     };
   };
 
+  backgroundView = () => {
+    return this.is_bg
+      ? [
+          {
+            type: 'color',
+            props: {
+              frame: {
+                ...this.config.displaySize,
+              },
+              color: $color('#000'),
+              opacity: this.opacity,
+            },
+          },
+        ]
+      : [];
+  };
+
   medium = () => {
     return {
       type: 'zstack',
       props: this.containerProps(),
       views: [
-        ...(this.is_bg
-          ? [
-              {
-                type: 'color',
-                props: {
-                  color: $color('#000'),
-                  opacity: this.opacity,
-                },
-              },
-            ]
-          : []),
+        ...this.backgroundView(),
         {
           type: 'hstack',
           props: {

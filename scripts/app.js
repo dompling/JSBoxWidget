@@ -390,30 +390,34 @@ class AppKernel extends Kernel {
   }
 
   createCopyWidget = (config) => {
-    let newName = config.title;
-    const newPath = `${this.widgetRootPath}/${newName}`;
-    $file.copy({
-      src: `${this.widgetRootPath}/${config.source}`,
-      dst: newPath,
-    });
+    try {
+      let newName = config.title;
+      const newPath = `${this.widgetRootPath}/${newName}`;
+      $file.copy({
+        src: `${this.widgetRootPath}/${config.source}`,
+        dst: newPath,
+      });
 
-    // 更新设置文件中的NAME常量
-    let settingjs = $file.read(`${newPath}/setting.js`).string;
-    let firstLine = settingjs.split('\n')[0];
-    let newFirstLine = `const NAME = "${newName}"`;
-    settingjs = settingjs.replace(firstLine, newFirstLine);
-    $file.write({
-      data: $data({ string: settingjs }),
-      path: `${newPath}/setting.js`,
-    });
-    // 更新config.json
-    let _config = JSON.parse($file.read(`${newPath}/config.json`).string);
-    _config.title = newName;
+      // 更新设置文件中的NAME常量
+      let settingjs = $file.read(`${newPath}/setting.js`).string;
+      let firstLine = settingjs.split('\n')[0];
+      let newFirstLine = `const NAME = "${newName}"`;
+      settingjs = settingjs.replace(firstLine, newFirstLine);
+      $file.write({
+        data: $data({ string: settingjs }),
+        path: `${newPath}/setting.js`,
+      });
+      // 更新config.json
+      let _config = JSON.parse($file.read(`${newPath}/config.json`).string);
+      _config.title = newName;
 
-    $file.write({
-      data: $data({ string: JSON.stringify(_config) }),
-      path: `${newPath}/config.json`,
-    });
+      $file.write({
+        data: $data({ string: JSON.stringify(_config) }),
+        path: `${newPath}/config.json`,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 }
 

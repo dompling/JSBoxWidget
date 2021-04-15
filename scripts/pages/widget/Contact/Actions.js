@@ -172,18 +172,7 @@ class Actions {
       type: 'zstack',
       props: this.containerProps(),
       views: [
-        ...(!this.is_bg
-          ? [
-              {
-                type: 'color',
-                props: {
-                  color: this.bgColor,
-                  cornerRadius: 12,
-                  frame: { width: width - 15, height: height - 15 },
-                },
-              },
-            ]
-          : []),
+        ...this.backgroundView(),
         {
           type: 'vstack',
           props: this.contentProps(10),
@@ -215,8 +204,24 @@ class Actions {
     };
   };
 
+  backgroundView = () => {
+    return this.is_bg
+      ? [
+          {
+            type: 'color',
+            props: {
+              frame: {
+                ...this.config.displaySize,
+              },
+              color: $color('#000'),
+              opacity: this.opacity,
+            },
+          },
+        ]
+      : [];
+  };
+
   medium = () => {
-    const { width, height } = this.config.displaySize;
     const { phoneNumbers, emailAddresses, note } = this.service.dataSource;
     const phone = phoneNumbers[0] || {};
     const phoneNum = phone.content.split(' ').join('');
@@ -225,18 +230,7 @@ class Actions {
       type: 'zstack',
       props: this.containerProps(),
       views: [
-        ...(!this.is_bg
-          ? [
-              {
-                type: 'color',
-                props: {
-                  color: this.bgColor,
-                  cornerRadius: 12,
-                  frame: { width: width - 15, height: height - 15 },
-                },
-              },
-            ]
-          : []),
+        ...this.backgroundView(),
         {
           type: 'vstack',
           props: this.contentProps(10),
