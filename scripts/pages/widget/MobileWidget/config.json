@@ -2,5 +2,5 @@
   "title": "MobileOperator",
   "describe": "中国电信、中国联通",
   "icon": "@/icon.png",
-  "source": "MobileOperator"
+  "source": "MobileWidget"
 }
