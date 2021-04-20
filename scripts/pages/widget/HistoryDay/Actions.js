@@ -104,7 +104,6 @@ class Actions {
   }
 
   listItemCell = (data) => {
-    console.log(data);
     return {
       type: 'zstack',
       props: {

@@ -21,8 +21,11 @@ class Service {
 
   init = async () => {
     await this.getHistoryList();
-    if (this.dataSource && this.dataSource.length)
+    if (this.dataSource && this.dataSource.length) {
       $cache.set(this.dataKey, this.dataSource);
+    } else {
+      console.log('接口数据异常');
+    }
   };
 
   getHistoryList = async () => {
