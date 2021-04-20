@@ -24,8 +24,8 @@ class Index extends Widget {
     return render;
   };
 
-  view2x2(config) {
-    return this.getActions(config).small();
+  view4x4(config) {
+    return this.getActions(config).large();
   }
 
   view2x4(config) {
@@ -48,10 +48,10 @@ class Index extends Widget {
       render: (config) => {
         this.printTimeConsuming();
         switch (config.family) {
-          case 0:
-            return this.view2x2(config);
           case 1:
             return this.view2x4(config);
+          case 2:
+            return this.view4x4(config);
           default:
             return this.errorView;
         }

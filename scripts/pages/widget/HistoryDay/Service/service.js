@@ -1,35 +1,34 @@
 const { cacheRequest } = require('../../../../utils/index');
 
 class Service {
-  constructor() {}
-
-  fetch = async () => {
-    try {
-      const today = new Date();
-      const month = today.getMonth() + 1;
-      const day = today.getDate();
-      this.today = `${month}.${day}`;
-      await this.getHistoryList();
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  constructor() {
+    this.dataKey = '_historyToday_';
+  }
 
   dataSource = [];
   imgUri = 'http://img.lssdjt.com';
 
-  getHistoryList = async () => {
-    const url = `http://code.lssdjt.com/jsondata/history.${this.today}.js`;
-    let response;
-    if ($device.networkType) response = await $http.get({ url, timeout: 2 });
-    response = cacheRequest(`history_day`, response);
-    response = response.data;
-    if (response && response.d.length > 0) {
-      const dataSource = response.d;
-      this.dataSource = dataSource
-        .filter((item) => item.j[0])
-        .map((item) => ({ ...item, j: item.j[0] }));
+  fetch = async () => {
+    const netStatus = { 0: '网络中断', 1: 'WI-FI', 2: '蜂窝' };
+    console.log(`当前网络状况：${netStatus[$device.networkType]}`);
+    if ($cache.get(this.dataKey)) {
+      this.dataSource = $cache.get(this.dataKey);
+    } else {
+      await this.init();
     }
+    this.init();
+  };
+
+  init = async () => {
+    await this.getHistoryList();
+    if (this.dataSource && this.dataSource.length)
+      $cache.set(this.dataKey, this.dataSource);
+  };
+
+  getHistoryList = async () => {
+    const url = `http://api.sodion.net/api_v1/grap/todayinhistory`;
+    const response = await $http.get({ url, timeout: 2 });
+    this.dataSource = response.data;
   };
 }
 

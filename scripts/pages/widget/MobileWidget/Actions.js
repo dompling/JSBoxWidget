@@ -69,7 +69,7 @@ class Actions {
 
   canvSize = 100;
   canvRadius = 50;
-  canvWidth = 10;
+  canvWidth = 8;
   ringStackSize = 80;
 
   init = () => {
@@ -301,7 +301,7 @@ class Actions {
                     color: textColor,
                     symbol: {
                       glyph: 'arrow.2.circlepath',
-                      size: 12,
+                      size: 10,
                     },
                   },
                 },
