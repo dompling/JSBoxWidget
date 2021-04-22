@@ -133,12 +133,6 @@ class Service {
   async TotalBean() {
     const headers = {
       Cookie: this.cookie,
-      Accept: `*/*`,
-      Connection: `keep-alive`,
-      'Accept-Encoding': `gzip, deflate, br`,
-      Host: `me-api.jd.com`,
-      'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 14_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1 Mobile/15E148 Safari/604.1`,
-      'Accept-Language': `zh-cn`,
     };
     const options = {
       url: 'https://me-api.jd.com/user_new/info/GetJDUserInfoUnion',
@@ -232,7 +226,6 @@ class Service {
 
   chartConfig = (labels = [], datas = []) => {
     const chart_color = this.setting.get('chartColor');
-    console.log(chart_color);
     let template = `
 {
   'type': 'bar',
