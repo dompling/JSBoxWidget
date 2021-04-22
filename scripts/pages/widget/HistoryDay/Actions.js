@@ -197,7 +197,10 @@ class Actions {
         ...this.backgroundView(),
         {
           type: 'vstack',
-          props: { alignment: $widget.horizontalAlignment, spacing: 40 },
+          props: {
+            alignment: $widget.horizontalAlignment,
+            spacing: 10,
+          },
           views: [
             {
               type: 'hstack',
@@ -207,6 +210,15 @@ class Actions {
                 this.listItemCell(this.data[1]),
                 this.listItemCell(this.data[2]),
               ],
+            },
+            {
+              type: 'text',
+              props: {
+                date: new Date(),
+                style: $widget.dateStyle.date,
+                padding: $insets(0, 0, 20, 0),
+                color: this.fontColor,
+              },
             },
             {
               type: 'hstack',
