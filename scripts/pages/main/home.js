@@ -167,7 +167,9 @@ class HomeUI {
       // 水平安全距离手动设置，因为需要设置背景色
       {
         type: 'view',
-        layout: $layout.fill,
+        layout: (make, view) => {
+          make.edges.equalTo(view.super.safeArea);
+        },
         views: [
           {
             // 顶部按钮栏
