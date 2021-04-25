@@ -47,7 +47,7 @@
 "VERSION" = "Version";
 "AUTHOR" = "作者";
 "AT_BOTTOM" = "已经到底啦~";
-
+"SEARCH" = "请输入小组件名称";
 
 "FAMILY_SMALL" = "小尺寸Widget";
 "SHOW_MODE" = "显示模式";

@@ -340,7 +340,6 @@ class AppKernel extends Kernel {
     let widgets = $file.list(this.widgetRootPath);
     const copyWidgets = $file.list(this.copyPath) || [];
     const copyList = copyWidgets.filter((item) => widgets.indexOf(item) === -1);
-
     const forFun = (widgetPath, widget, config) => {
       if (typeof config.icon !== 'object') {
         config.icon = [config.icon, config.icon];
