@@ -19,6 +19,7 @@ class HomeUI {
   }
 
   initData = () => {
+    if ($(`${this.matrixId}-input`)) $(`${this.matrixId}-input`).text = '';
     this.widgetList = this.kernel.getWidgetList();
     this.dataSource = this.actionsToData(this.widgetList);
   };
@@ -309,7 +310,6 @@ class HomeUI {
               },
               willEndDragging: (sender) => {
                 this.initData();
-                $(`${this.matrixId}-input`).text = '';
               },
             },
             layout: (make, view) => {
