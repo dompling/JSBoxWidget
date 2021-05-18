@@ -120,6 +120,13 @@
     "title": "关于",
     "items": [
       {
+        "icon": ["trash", "#5cdbd3"],
+        "title": "清空数据",
+        "type": "script",
+        "key": "clearData",
+        "value": "this.controller.clearData"
+      },
+      {
         "icon": ["trash", "#CC3333"],
         "title": "清空缓存",
         "type": "script",

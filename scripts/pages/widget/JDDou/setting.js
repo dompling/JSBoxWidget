@@ -1,5 +1,6 @@
 const NAME = 'JDDou';
 const Setting = require('../setting');
+const Service = require('./service');
 
 class CurrentSetting extends Setting {
   constructor(kernel) {
@@ -7,6 +8,8 @@ class CurrentSetting extends Setting {
     this.path = `${this.kernel.widgetAssetsPath}/${NAME}`;
     if (!$file.exists(this.path)) $file.mkdir(this.path);
     this.prefix = this.get('boxjs');
+    this.service = new Service(this);
+    console.log();
   }
 
   clearBackgroundImage() {
@@ -147,11 +150,18 @@ class CurrentSetting extends Setting {
       this.getWidgetScreenShot();
       animate.actionDone();
     };
+
+    this.setting.clearData = () => {
+      $cache.remove(this.service.dataKey);
+      $cache.remove(this.service.chartKey);
+      $ui.toast('数据缓存清除成功！');
+    };
   }
 
   generateAlert = async (_, options) => {
     return $ui.menu({ items: options });
   };
+
   async getWidgetScreenShot(title = null) {
     // Crop an image into the specified rect.
     function cropImage(img, rect) {
