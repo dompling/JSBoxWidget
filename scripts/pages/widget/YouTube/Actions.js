@@ -1,33 +1,33 @@
-const minimumScaleFactor = 0.5;
-const border = { width: 1, color: $color('red') };
-const label = ['viewCount', 'subscriberCount', 'videoCount'];
+const minimumScaleFactor = 0.5
+const border = { width: 1, color: $color('red') }
+const label = ['viewCount', 'subscriberCount', 'videoCount']
 
 class Actions {
   constructor(setting, config, service) {
-    this.setting = setting;
+    this.setting = setting
     this.fontColor = $color({
       light: setting.get('lightFont'),
       dark: setting.get('nightFont'),
-    });
-    this.backgroundImage = this.setting.getBackgroundImage();
-    this.is_bg = $file.exists(this.backgroundImage);
-    this.opacity = setting.get('opacity');
-    this.service = service;
-    this.config = config;
+    })
+    this.backgroundImage = this.setting.getBackgroundImage()
+    this.is_bg = $file.exists(this.backgroundImage)
+    this.opacity = setting.get('opacity')
+    this.service = service
+    this.config = config
     this.bgColor = $color({
       light: setting.get('lightColor'),
       dark: setting.get('nightColor'),
-    });
+    })
   }
 
-  service = {};
-  config = {};
+  service = {}
+  config = {}
 
   init = () => {
-    this.counterView();
-  };
+    this.counterView()
+  }
 
-  video_view = [];
+  video_view = []
 
   spacerMaker(height, width) {
     return {
@@ -38,7 +38,7 @@ class Actions {
           height: height,
         },
       },
-    };
+    }
   }
 
   containerProps = () => {
@@ -56,14 +56,14 @@ class Actions {
           props: {
             color: this.bgColor,
           },
-        };
+        }
 
     return {
       frame: this.config.displaySize,
       alignment: $widget.alignment.center,
       background,
-    };
-  };
+    }
+  }
 
   contentProps = (spacing = 20) => {
     return {
@@ -79,8 +79,8 @@ class Actions {
           },
         },
       }),
-    };
-  };
+    }
+  }
 
   avatar = () => {
     return {
@@ -95,18 +95,18 @@ class Actions {
         },
         frame: { width: 20, height: 20 },
       },
-    };
-  };
+    }
+  }
 
   abbreviateNumber(num, fixed) {
-    num = Number(num);
+    num = Number(num)
     if (num === null) {
-      return null;
+      return null
     } // terminate early
     if (num === 0) {
-      return '0';
+      return '0'
     } // terminate early
-    fixed = !fixed || fixed < 0 ? 0 : fixed; // number of decimal places to show
+    fixed = !fixed || fixed < 0 ? 0 : fixed // number of decimal places to show
     var b = num.toPrecision(2).split('e'), // get power
       k = b.length === 1 ? 0 : Math.floor(Math.min(b[1].slice(1), 14) / 3), // floor at decimals, ceiling at trillions
       c =
@@ -114,15 +114,23 @@ class Actions {
           ? num.toFixed(0 + fixed)
           : (num / Math.pow(10, k * 3)).toFixed(1 + fixed), // divide by power
       d = c < 0 ? c : Math.abs(c), // enforce -0 is 0
-      e = d + ['', 'K', 'M', 'B', 'T'][k]; // append power
-    return e;
+      e = d + ['', 'K', 'M', 'B', 'T'][k] // append power
+    return e
   }
 
   counterView = () => {
-    const { videos } = this.service;
+    const { videos } = this.service
     videos.items.forEach((item, index) => {
-      if (index >= 3) return;
-      const publishedAt = new Date(item.snippet.publishedAt);
+      if (index >= 3) return
+      const publishedAt = new Date(item.snippet.publishedAt)
+      const thumbnails = item.snippet.thumbnails
+      const thumb =
+        thumbnails.standard ||
+        thumbnails.default ||
+        thumbnails.high ||
+        thumbnails.medium
+
+    
       this.video_view.push({
         type: 'hstack',
         props: {
@@ -135,7 +143,7 @@ class Actions {
           {
             type: 'image',
             props: {
-              uri: item.snippet.thumbnails.standard.url,
+              uri: thumb.url,
               resizable: true,
               scaledToFill: true,
               frame: { width: 64, height: 40 },
@@ -177,16 +185,16 @@ class Actions {
             ],
           },
         ],
-      });
-    });
-  };
+      })
+    })
+  }
 
   content = (width, height) => {
-    const counters = this.service.channel.statistics;
-    let today = new Date();
+    const counters = this.service.channel.statistics
+    let today = new Date()
     let updateTime = `${today.getMonth() + 1}/${today.getDate()} ${this.zeroPad(
-      today.getHours(),
-    )}:${this.zeroPad(today.getMinutes())}`;
+      today.getHours()
+    )}:${this.zeroPad(today.getMinutes())}`
     return {
       type: 'vstack',
       props: {
@@ -317,8 +325,8 @@ class Actions {
           ],
         },
       ],
-    };
-  };
+    }
+  }
 
   right = () => {
     return {
@@ -329,28 +337,28 @@ class Actions {
         alignment: $widget.horizontalAlignment.leading,
       },
       views: this.video_view,
-    };
-  };
+    }
+  }
 
   zeroPad(numToPad) {
     if (numToPad > 9) {
-      return numToPad;
+      return numToPad
     } else {
-      return `0${numToPad}`;
+      return `0${numToPad}`
     }
   }
 
   small = () => {
-    const { width, height } = this.config.displaySize;
+    const { width, height } = this.config.displaySize
     return {
       type: 'zstack',
       props: this.containerProps(),
       views: [this.content(width, height)],
-    };
-  };
+    }
+  }
 
   medium = () => {
-    const { height } = this.config.displaySize;
+    const { height } = this.config.displaySize
     return {
       type: 'zstack',
       props: this.containerProps(),
@@ -373,8 +381,8 @@ class Actions {
           ],
         },
       ],
-    };
-  };
+    }
+  }
 }
 
-module.exports = Actions;
+module.exports = Actions
