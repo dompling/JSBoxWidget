@@ -107,7 +107,9 @@ class Service {
     await this.updateCookie(this.china_telecom_url);
     const detail = await $http.get({
       url: this.fetchUrl.detail,
-      ...this.options,
+      headers: {
+        Cookie: this.cookie,
+      },
     });
 
     let flows = {
@@ -120,8 +122,8 @@ class Service {
         usageAmount: 0,
         ratableAmount: 0,
       };
-
-    detail.items?.forEach((data) => {
+    console.log(detail);
+    detail.data.items?.forEach((data) => {
       data.items.forEach((item) => {
         if (item.balanceAmount != "999999999999" && item.unitTypeId === "3") {
           Object.keys(flows).forEach((key) => {
@@ -156,11 +158,15 @@ class Service {
 
     const balance = await $http.get({
       url: this.fetchUrl.balance,
-      ...this.options,
+      headers: {
+        Cookie: this.cookie,
+      },
     });
 
-    balance.totalBalanceAvailable = Number(balance.totalBalanceAvailable);
-    this.dataSource.fee.number = balance.totalBalanceAvailable / 100;
+    balance.data.totalBalanceAvailable = Number(
+      balance.data.totalBalanceAvailable
+    );
+    this.dataSource.fee.number = balance.data.totalBalanceAvailable / 100;
   };
 }
 
